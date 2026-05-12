@@ -1,1 +1,3 @@
-# библиотеки
+fastapi
+uvicorn
+passlib[bcrypt]
