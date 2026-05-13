@@ -6,12 +6,16 @@
     <title>Проекты — МосПолиФизикс</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../figma.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
         <div class="container header__container">
-            <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            <div class="header__left">
+                <button type="button" class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
+                <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            </div>
             <nav class="nav">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
@@ -21,17 +25,19 @@
                     <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
                 </ul>
             </nav>
-            <button class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
-            <button class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+            <div class="header__actions">
+                <a href="account.html" class="header-profile" aria-label="Кабинет"><img src="../media/icons/user-circle.svg" alt=""></a>
+                <button type="button" class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+            </div>
         </div>
     </header>
 
-    <main class="content-page">
+    <main class="content-page surface-deco">
         <h1 class="page-title">Проекты</h1>
-        <div class="tests-grid-api">
-            <a class="test-card-api" href="video.html"><strong>Видео</strong><p>Ролики и записи лекций</p></a>
-            <a class="test-card-api" href="calendar.html"><strong>Календарь</strong><p>События и даты релизов</p></a>
-            <a class="test-card-api" href="novel.html"><strong>Визуальная новелла</strong><p>Дневник разработки и материалы</p></a>
+        <div class="project-grid-figma choice-grid">
+            <a class="test-card-api choice-card" href="video.html"><strong>Видео</strong><p>Ролики и записи лекций</p></a>
+            <a class="test-card-api choice-card" href="calendar.html"><strong>Календари</strong><p>События и даты релизов</p></a>
+            <a class="test-card-api choice-card" href="novel.html"><strong>Графическая новелла</strong><p>Сюжет, скриншоты, дневник</p></a>
         </div>
     </main>
 

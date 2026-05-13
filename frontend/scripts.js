@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav__link');
 
     function toggleMenu() {
+        if (!nav || !mobileMenuBtn) return;
         nav.classList.toggle('active');
         const icon = mobileMenuBtn.querySelector('i');
         if (nav.classList.contains('active')) {
@@ -58,13 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (mobileMenuBtn) {
+    if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', toggleMenu);
     }
 
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            if (nav.classList.contains('active')) {
+            if (nav && nav.classList.contains('active')) {
                 toggleMenu();
             }
         });

@@ -20,6 +20,7 @@
     
     <!-- Подключение стилей -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="figma.css">
     
     <!-- Иконки для соцсетей (оставим FontAwesome для мелких иконок интерфейса, основные - SVG) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -29,12 +30,14 @@
     <!-- Шапка сайта (Header) -->
     <header class="header">
         <div class="container header__container">
-            <!-- Логотип (Новый SVG файл) -->
-            <a href="index.html" class="logo">
-                <img src="media/logo.svg" alt="МосПолиФизикс Лого">
-            </a>
-
-            <!-- Навигационное меню -->
+            <div class="header__left">
+                <button class="theme-toggle" type="button" aria-label="Переключить тему">
+                    <i class="fa-regular fa-sun"></i>
+                </button>
+                <a href="index.html" class="logo">
+                    <img src="media/logo.svg" alt="МосПолиФизикс">
+                </a>
+            </div>
             <nav class="nav">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="pages/about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
@@ -44,16 +47,14 @@
                     <li class="nav__item"><a href="pages/account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
                 </ul>
             </nav>
-
-            <!-- Кнопка смены темы (Выровнена вправо) -->
-            <button class="theme-toggle" aria-label="Переключить тему">
-                <i class="fa-regular fa-sun"></i>
-            </button>
-
-            <!-- Кнопка мобильного меню -->
-            <button class="mobile-menu-btn" aria-label="Открыть меню">
-                <i class="fa-solid fa-bars"></i>
-            </button>
+            <div class="header__actions">
+                <a href="pages/account.html" class="header-profile" aria-label="Личный кабинет">
+                    <img src="media/icons/user-circle.svg" alt="">
+                </a>
+                <button class="mobile-menu-btn" type="button" aria-label="Открыть меню">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -95,9 +96,9 @@
                 <div class="bg-icon bg-icon-4"><i class="fa-solid fa-atom"></i></div>
                 <div class="bg-icon bg-icon-5"><i class="fa-solid fa-apple-whole"></i></div>
 
-                <div class="cards-grid">
+                <div class="cards-grid choice-grid">
                     <!-- Карточка 1: О нас (SVG иконка) -->
-                    <a href="pages/about.html" class="card card--accent">
+                    <a href="pages/about.html" class="card card--accent choice-card">
                         <h3 class="card__title">О нас</h3>
                         <div class="card__icon">
                             <img src="media/icon-about.svg" alt="Иконка О нас">
@@ -105,7 +106,7 @@
                     </a>
 
                     <!-- Карточка 2: Новости (SVG иконка) -->
-                    <a href="pages/news.html" class="card card--accent">
+                    <a href="pages/news.html" class="card card--accent choice-card">
                         <h3 class="card__title">Новости</h3>
                         <div class="card__icon">
                             <img src="media/icon-news.svg" alt="Иконка Новости">
@@ -113,7 +114,7 @@
                     </a>
 
                     <!-- Карточка 3: Проекты (SVG иконка) -->
-                    <a href="pages/project.html" class="card card--accent">
+                    <a href="pages/project.html" class="card card--accent choice-card">
                         <h3 class="card__title">Проекты</h3>
                         <div class="card__icon">
                             <img src="media/icon-projects.svg" alt="Иконка Проекты">
@@ -121,7 +122,7 @@
                     </a>
 
                     <!-- Карточка 4: Тесты (SVG иконка) -->
-                    <a href="pages/tests.html" class="card card--accent">
+                    <a href="pages/tests.html" class="card card--accent choice-card">
                         <h3 class="card__title">Тесты</h3>
                         <div class="card__icon">
                             <img src="media/icon-tests.svg" alt="Иконка Тесты">

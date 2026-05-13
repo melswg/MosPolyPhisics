@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   var el = document.getElementById("video-root");
   if (!el || !window.MosAPI) return;
+  el.className = "video-grid-figma";
   window.MosAPI
     .getVideos()
     .then(function (rows) {

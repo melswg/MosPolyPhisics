@@ -6,12 +6,16 @@
     <title>Тесты — МосПолиФизикс</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../figma.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
         <div class="container header__container">
-            <a href="../index.html" class="logo"><img src="../media/logo.svg" alt="МосПолиФизикс"></a>
+            <div class="header__left">
+                <button type="button" class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
+                <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            </div>
             <nav class="nav">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
@@ -21,19 +25,27 @@
                     <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
                 </ul>
             </nav>
-            <button class="theme-toggle" aria-label="Переключить тему"><i class="fa-regular fa-sun"></i></button>
-            <button class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+            <div class="header__actions">
+                <a href="account.html" class="header-profile" aria-label="Кабинет"><img src="../media/icons/user-circle.svg" alt=""></a>
+                <button type="button" class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+            </div>
         </div>
     </header>
 
-    <main class="content-page">
-        <h1 class="page-title">Тесты</h1>
-        <p style="margin-bottom:1.5rem;color:var(--text-muted)">Выберите тест, чтобы начать.</p>
-        <div id="tests-root" class="tests-grid-api"><p>Загрузка…</p></div>
+    <main class="content-page surface-deco">
+        <div class="page-title-bar"><span>Тесты</span></div>
+        <div class="tests-hub choice-grid">
+            <a class="tests-hub__card choice-card" href="test_template.html?id=1">Тест по физике</a>
+            <a class="tests-hub__card choice-card" href="../index.html#">Цитаты</a>
+            <a class="tests-hub__card choice-card" href="../index.html#">Задания из ЕГЭ</a>
+            <a class="tests-hub__card choice-card" href="test_template.html?id=2">Развлекательные</a>
+        </div>
+        <h2 class="page-title" style="font-size:1.25rem;margin-bottom:1rem">С сервера</h2>
+        <div id="tests-root" class="tests-grid-api choice-grid"><p>Загрузка…</p></div>
     </main>
 
     <footer class="footer">
-        <div class="container footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
+        <div class="container footer__bottom"><p>Подвал сайта</p></div>
     </footer>
 
     <script src="../api.js"></script>

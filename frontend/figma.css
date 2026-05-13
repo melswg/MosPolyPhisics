@@ -1,0 +1,699 @@
+/* =========================================
+   Стили по макетам Figma (поверх style.css)
+   ========================================= */
+
+:root {
+    --radius-header: 28px;
+    --radius-xl: 24px;
+    --header-height: 88px;
+    --figma-purple: #7b61ff;
+    --figma-purple-deep: #5b3fd9;
+    --figma-pink-card: #ff2d6a;
+    --figma-blue-header: #4a6edc;
+    --figma-green-card: #69d12d;
+    --figma-wire-bg: #333333;
+    --figma-wire-btn: #cccccc;
+    --figma-wire-input-border: #bdbdbd;
+}
+
+:root,
+:root[data-theme="dark"] {
+    --color-primary: var(--figma-purple);
+    --color-accent: var(--figma-pink-card);
+    --bg-body: #000000;
+    --bg-hero: #000000;
+    --bg-footer: #2d2d2d;
+}
+
+:root[data-theme="light"] {
+    --color-primary: var(--figma-blue-header);
+    --color-accent: var(--figma-green-card);
+    --bg-body: #ffffff;
+    --bg-hero: #ffffff;
+    --bg-footer: #e0e0e0;
+}
+
+/* --- Шапка: скругление снизу --- */
+.header {
+    min-height: var(--header-height);
+    height: auto;
+    padding: 0.35rem 0 0.75rem;
+    border-bottom-left-radius: var(--radius-header);
+    border-bottom-right-radius: var(--radius-header);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.header__container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+}
+
+.header__left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    color: #fff;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.header-profile img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.theme-toggle {
+    margin-left: 0;
+    border-color: rgba(255, 255, 255, 0.85);
+}
+
+.nav__list {
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    justify-content: flex-end;
+}
+
+.nav__link {
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.35rem 0.15rem;
+}
+
+.nav__link.active {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* Паттерн на фоне (путь от корня frontend/) */
+.surface-deco {
+    position: relative;
+}
+
+.surface-deco::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("media/backgrounds/pattern-physics.svg");
+    background-size: 200px;
+    opacity: 0.14;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.surface-deco > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- Блоки выбора (как в Figma): розовый / в светлой теме зелёный --- */
+.choice-grid {
+    display: grid;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    gap: 1.35rem;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.choice-card,
+.card.choice-card,
+.category-card.choice-card,
+.tests-hub__card.choice-card,
+.test-card-api.choice-card {
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    border-radius: 28px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    min-height: 200px;
+    padding: 1.5rem 1.15rem 1.35rem;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.choice-card:hover,
+.card.choice-card:hover,
+.category-card.choice-card:hover,
+.tests-hub__card.choice-card:hover,
+.test-card-api.choice-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.35);
+}
+
+.choice-card .card__title,
+.choice-card .category-card__title {
+    font-family: var(--font-heading), var(--font-main);
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #fff;
+    margin-bottom: 0.75rem;
+    width: 100%;
+}
+
+.tests-hub__card.choice-card {
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.choice-card .card__icon,
+.choice-card .category-card__icon {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+    min-height: 88px;
+    background: transparent;
+}
+
+.choice-card .card__icon img {
+    max-width: 88px;
+    max-height: 88px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.choice-card .category-card__icon {
+    font-size: 3rem;
+    color: #fff;
+}
+
+.test-card-api.choice-card {
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    padding: 1.35rem 1rem;
+}
+
+.test-card-api.choice-card strong {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.test-card-api.choice-card p {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.cards-grid.choice-grid {
+    max-width: 720px;
+}
+
+.categories-grid.choice-grid {
+    max-width: 960px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tests-hub.choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 720px;
+    margin-bottom: 2.5rem;
+}
+
+.tests-grid-api.choice-grid {
+    max-width: 720px;
+}
+
+.project-grid-figma.choice-grid {
+    max-width: 680px;
+}
+
+@media (max-width: 820px) {
+    .categories-grid.choice-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .categories-grid.choice-grid,
+    .tests-hub.choice-grid,
+    .tests-grid-api.choice-grid,
+    .cards-grid.choice-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Новости: цветные карточки */
+.news-card {
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: 1.75rem 2rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.news-card__date {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.news-card__title {
+    color: #fff;
+}
+
+.news-card__body {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.news-card__thumb {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin: 1rem 0;
+}
+
+.tests-grid-api {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.35rem;
+}
+
+.page-title-bar {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.page-title-bar span {
+    display: inline-block;
+    padding: 0.65rem 2.5rem;
+    background: #666666;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.project-grid-figma {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 280px));
+    justify-content: center;
+    gap: 1.25rem;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.project-grid-figma .test-card-api:nth-child(3) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: min(100%, 280px);
+}
+
+.video-grid-figma {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+    .video-grid-figma {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .video-grid-figma {
+        grid-template-columns: 1fr;
+    }
+    .tests-hub.choice-grid,
+    .tests-grid-api.choice-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.test-runner .question-block {
+    background: #555555;
+    color: #fff;
+    border-radius: var(--radius-xl);
+    padding: 1.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.test-runner label.opt {
+    display: block;
+    padding: 0.65rem 0.85rem;
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    margin: 0.4rem 0;
+}
+
+.test-runner label.opt:has(input:checked) {
+    background: var(--color-accent);
+    border-color: transparent;
+    color: #fff;
+}
+
+.test-runner label.opt:has(input:checked) input {
+    accent-color: #fff;
+}
+
+.test-nav-arrows {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.test-nav-arrows button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.calendar-widget {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.calendar-widget__side {
+    flex: 1 1 260px;
+    padding: 1.75rem;
+    min-height: 200px;
+}
+
+.calendar-widget__side--accent {
+    background: linear-gradient(145deg, #ff4d8d, #ff2763);
+    color: #fff;
+}
+
+.calendar-widget__side--light {
+    background: #ffffff;
+    color: #1a1a1a;
+}
+
+.calendar-widget__side--light h3 {
+    margin-bottom: 0.75rem;
+}
+
+.novel-panel {
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.novel-panel h2 {
+    margin-bottom: 1rem;
+    font-size: 1.35rem;
+}
+
+.account-figma {
+    max-width: 720px;
+    margin: 0 auto;
+    background: linear-gradient(160deg, var(--figma-purple-deep), var(--figma-purple));
+    color: #fff;
+    border-radius: var(--radius-xl);
+    padding: 2.5rem 2rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem 2rem;
+    align-items: start;
+}
+
+.account-figma__head {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 800;
+}
+
+.account-figma__avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.35);
+    object-fit: cover;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.account-figma__meta p {
+    margin: 0.35rem 0;
+}
+
+.account-figma__mascot {
+    text-align: center;
+    max-width: 140px;
+}
+
+.account-figma__mascot img {
+    width: 100px;
+    height: auto;
+}
+
+.account-figma .btn-logout {
+    grid-column: 1 / -1;
+    max-width: 220px;
+    padding: 0.65rem 1.25rem;
+    border-radius: 14px;
+    border: none;
+    background: #9bb4ff;
+    color: #1a1a3a;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* --- Вход / регистрация: модальное окно в стиле карточек --- */
+body.auth-modal-page {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--bg-body);
+}
+
+.auth-modal-page__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.58);
+    backdrop-filter: blur(6px);
+}
+
+.auth-modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    width: calc(100% - 2rem);
+    max-width: 420px;
+    padding: 0.35rem;
+    border-radius: 28px;
+    background: var(--color-accent);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.auth-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.auth-modal__close:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.auth-modal__inner {
+    position: relative;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 2.25rem 1.5rem 1.5rem;
+    color: #1a1a1a;
+}
+
+.auth-modal__toolbar {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    z-index: 2;
+}
+
+.auth-modal__toolbar .theme-toggle {
+    width: 38px;
+    height: 38px;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #333;
+}
+
+.auth-modal__inner h1 {
+    font-family: var(--font-heading), var(--font-main);
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    color: #111;
+}
+
+.auth-modal__inner .form-field {
+    margin-bottom: 1rem;
+}
+
+.auth-modal__inner .form-field label {
+    color: #444;
+    font-weight: 600;
+}
+
+.auth-modal__inner .form-field input {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border-radius: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.12);
+    background: #fafafa;
+    color: #111;
+    font-size: 1rem;
+}
+
+.auth-modal__inner .btn-primary {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.8rem;
+    border-radius: 16px;
+    border: none;
+    background: var(--color-accent);
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.auth-modal__inner .btn-secondary {
+    display: block;
+    width: 100%;
+    margin-top: 0.65rem;
+    padding: 0.8rem;
+    border-radius: 16px;
+    border: 2px solid var(--color-accent);
+    background: transparent;
+    color: var(--color-accent);
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.auth-modal__inner .btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.auth-modal__inner .form-msg {
+    margin-top: 0.75rem;
+    text-align: center;
+}
+
+.auth-modal__inner .form-footer {
+    margin-top: 1rem;
+    text-align: center;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.auth-modal__inner .form-footer a {
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+.auth-modal__home {
+    display: block;
+    text-align: center;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.auth-modal__home a {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.page-title {
+    text-align: center;
+    font-weight: 800;
+}
+
+.card {
+    border-radius: var(--radius-xl);
+}
+
+.footer {
+    border-top-left-radius: var(--radius-header);
+    border-top-right-radius: var(--radius-header);
+}
+
+#calendar-accent-events {
+    list-style: disc;
+}
+
+#calendar-accent-events li {
+    margin-bottom: 0.45rem;
+}
+
+.calendar-widget__side--light .simple-list li {
+    color: #1a1a1a;
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+.novel-panel .simple-list li {
+    border-color: rgba(255, 255, 255, 0.28);
+    color: #fff;
+}
+

@@ -6,36 +6,28 @@
     <title>Регистрация — МосПолиФизикс</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../figma.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <header class="header">
-        <div class="container header__container">
-            <a href="../index.html" class="logo"><img src="../media/logo.svg" alt="МосПолиФизикс"></a>
-            <nav class="nav">
-                <ul class="nav__list">
-                    <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
-                    <li class="nav__item"><a href="news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
-                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
-                    <li class="nav__item"><a href="tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
-                    <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
-                </ul>
-            </nav>
-            <button class="theme-toggle" aria-label="Переключить тему"><i class="fa-regular fa-sun"></i></button>
-            <button class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
-        </div>
-    </header>
+<body class="auth-modal-page">
+    <a href="../index.html" class="auth-modal-page__backdrop" aria-label="Закрыть и на главную"></a>
 
-    <main class="form-page">
-        <div class="form-card">
-            <h1>Регистрация</h1>
+    <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-reg-title">
+        <a href="../index.html" class="auth-modal__close" aria-label="Закрыть">&times;</a>
+        <div class="auth-modal__inner">
+            <div class="auth-modal__toolbar">
+                <button type="button" class="theme-toggle" aria-label="Переключить тему">
+                    <i class="fa-regular fa-sun"></i>
+                </button>
+            </div>
+            <h1 id="auth-reg-title">Регистрация</h1>
             <form id="register-form">
                 <div class="form-field">
-                    <label for="reg-user">Имя пользователя</label>
+                    <label for="reg-user">Имя</label>
                     <input id="reg-user" name="username" type="text" autocomplete="username" required>
                 </div>
                 <div class="form-field">
-                    <label for="reg-email">Email</label>
+                    <label for="reg-email">Почта</label>
                     <input id="reg-email" name="email" type="email" autocomplete="email" required>
                 </div>
                 <div class="form-field">
@@ -43,15 +35,12 @@
                     <input id="reg-pass" name="password" type="password" autocomplete="new-password" required>
                 </div>
                 <button type="submit" class="btn-primary">Создать аккаунт</button>
+                <a class="btn-secondary" href="login.html">Уже есть аккаунт — войти</a>
                 <p id="register-msg" class="form-msg" role="status"></p>
             </form>
-            <p class="form-footer">Уже есть аккаунт? <a href="login.html">Вход</a></p>
+            <p class="auth-modal__home"><a href="../index.html">На главную</a></p>
         </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
-    </footer>
+    </div>
 
     <script src="../api.js"></script>
     <script src="../scripts.js"></script>

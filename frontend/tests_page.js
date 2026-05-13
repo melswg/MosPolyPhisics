@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       items.forEach(function (t) {
         var a = document.createElement("a");
-        a.className = "test-card-api";
+        a.className = "test-card-api choice-card";
         a.href = "test_template.html?id=" + encodeURIComponent(t.id);
         a.innerHTML =
           "<strong>" +

@@ -11,15 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
     .me()
     .then(function (user) {
       box.innerHTML =
-        "<p><strong>Имя:</strong> " +
+        "<p style=\"font-size:1.25rem;font-weight:800;margin-bottom:.35rem\">" +
         (user.username || "") +
         "</p>" +
-        "<p><strong>Email:</strong> " +
+        "<p style=\"opacity:.92;margin-bottom:1rem\">Самый умный физик в мире</p>" +
+        "<p><strong>Почта:</strong> " +
         (user.email || "") +
         "</p>" +
-        "<p><strong>ID:</strong> " +
-        (user.id || "") +
-        "</p>";
+        "<p style=\"margin-top:.5rem\"><strong>Пароль:</strong> ••••••••</p>";
     })
     .catch(function () {
       window.MosAPI.logout();

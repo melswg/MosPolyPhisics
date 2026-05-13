@@ -6,12 +6,16 @@
     <title>Личный кабинет — МосПолиФизикс</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../figma.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
         <div class="container header__container">
-            <a href="../index.html" class="logo"><img src="../media/logo.svg" alt="МосПолиФизикс"></a>
+            <div class="header__left">
+                <button type="button" class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
+                <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            </div>
             <nav class="nav">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
@@ -21,18 +25,30 @@
                     <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
                 </ul>
             </nav>
-            <button class="theme-toggle" aria-label="Переключить тему"><i class="fa-regular fa-sun"></i></button>
-            <button class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+            <div class="header__actions">
+                <a href="account.html" class="header-profile" aria-label="Кабинет"><img src="../media/icons/user-circle.svg" alt=""></a>
+                <button type="button" class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+            </div>
         </div>
     </header>
 
-    <main class="content-page">
-        <h1 class="page-title">Личный кабинет</h1>
-        <div class="account-box" id="account-content"><p>Загрузка…</p></div>
-        <p style="text-align:center;margin-top:1.5rem">
-            <button type="button" class="btn-primary" id="logout-btn" style="max-width:280px;margin:0 auto;display:block">Выйти</button>
-        </p>
-        <p class="form-footer" style="text-align:center;margin-top:1rem">
+    <main class="content-page surface-deco">
+        <div class="account-figma" id="account-shell">
+            <div class="account-figma__head">
+                <i class="fa-solid fa-pen" style="opacity:.85"></i>
+                Личный кабинет
+            </div>
+            <div style="display:flex;gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+                <img class="account-figma__avatar" src="../media/icons/user-circle.svg" alt="" id="account-avatar">
+                <div class="account-figma__meta" id="account-content"><p>Загрузка…</p></div>
+            </div>
+            <div class="account-figma__mascot">
+                <img src="../media/mas.svg" alt="Маскот">
+                <p style="margin-top:.5rem;font-size:.9rem;opacity:.95">Это вы!</p>
+            </div>
+            <button type="button" class="btn-logout" id="logout-btn">Выйти</button>
+        </div>
+        <p class="form-footer" style="text-align:center;margin-top:1.5rem">
             <a href="login.html">Вход</a> · <a href="register.html">Регистрация</a>
         </p>
     </main>

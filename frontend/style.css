@@ -89,7 +89,7 @@ ul {
 
 .header {
     background-color: var(--header-bg);
-    height: var(--header-height);
+    min-height: var(--header-height);
     display: flex;
     align-items: center;
     position: sticky;
@@ -473,7 +473,7 @@ ul {
     .nav {
         display: none; 
         position: absolute;
-        top: var(--header-height);
+        top: 100%;
         left: 0;
         width: 100%;
         background-color: var(--header-bg);
@@ -604,6 +604,9 @@ ul {
 }
 
 .news-list {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;

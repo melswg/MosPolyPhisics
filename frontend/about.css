@@ -35,25 +35,7 @@
 }
 
 .category-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 140px;
-    padding: 1.25rem;
-    border-radius: var(--border-radius-card);
-    background: var(--bg-hero);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-:root[data-theme="light"] .category-card {
-    border-color: rgba(0, 0, 0, 0.08);
-}
-
-.category-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
 }
 
 .category-card__title {

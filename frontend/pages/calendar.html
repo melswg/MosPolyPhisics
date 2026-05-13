@@ -6,26 +6,46 @@
     <title>Календарь — МосПолиФизикс</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../figma.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
         <div class="container header__container">
-            <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            <div class="header__left">
+                <button type="button" class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
+                <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            </div>
             <nav class="nav">
                 <ul class="nav__list">
-                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
+                    <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
                     <li class="nav__item"><a href="news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
+                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
+                    <li class="nav__item"><a href="tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
+                    <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
                 </ul>
             </nav>
-            <button class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
-            <button class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+            <div class="header__actions">
+                <a href="account.html" class="header-profile" aria-label="Кабинет"><img src="../media/icons/user-circle.svg" alt=""></a>
+                <button type="button" class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+            </div>
         </div>
     </header>
 
-    <main class="content-page">
-        <h1 class="page-title">Календарь событий</h1>
-        <div id="calendar-root"><p>Загрузка…</p></div>
+    <main class="content-page surface-deco">
+        <h1 class="page-title">Календари</h1>
+        <div class="calendar-widget">
+            <div class="calendar-widget__side calendar-widget__side--accent">
+                <div id="cal-day-num" style="font-size:3rem;font-weight:800;line-height:1">—</div>
+                <div id="cal-weekday" style="opacity:.95;margin-bottom:1.25rem"> </div>
+                <h3 style="font-size:1rem;margin-bottom:.5rem">События</h3>
+                <ul id="calendar-accent-events" style="margin:0;padding-left:1.2rem"></ul>
+            </div>
+            <div class="calendar-widget__side calendar-widget__side--light">
+                <h3>Все даты</h3>
+                <div id="calendar-root"><p>Загрузка…</p></div>
+            </div>
+        </div>
     </main>
 
     <footer class="footer">
