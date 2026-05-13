@@ -97,6 +97,7 @@ ul {
     z-index: 1000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     transition: background-color 0.3s ease;
+    overflow: visible;
 }
 
 .header__container {
@@ -417,6 +418,12 @@ ul {
     color: #FFFFFF;
 }
 
+.social-link[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: default;
+    pointer-events: none;
+}
+
 .footer__title {
     font-size: 1.1rem;
     margin-bottom: 20px;
@@ -479,6 +486,8 @@ ul {
         background-color: var(--header-bg);
         padding: 20px;
         flex-direction: column;
+        z-index: 1100;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
     }
     
     .nav.active {

@@ -41,6 +41,7 @@
     border-bottom-left-radius: var(--radius-header);
     border-bottom-right-radius: var(--radius-header);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    overflow: visible;
 }
 
 .header__container {
