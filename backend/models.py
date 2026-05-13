@@ -4,6 +4,7 @@
 тесты (список, прохождение, проверка ответов), календарь, видео, обновления новеллы.
 """
 from pathlib import Path
+import os
 import sqlite3
 from typing import Union, Optional, Iterator, Dict, Any, List
 import logging
@@ -14,6 +15,10 @@ logging.basicConfig(level=logging.INFO)
 
 
 def get_db_path() -> Path:
+    """Путь к SQLite. Для Docker: MOSPHYSICS_DATABASE=/data/database.sqlite"""
+    override = os.environ.get("MOSPHYSICS_DATABASE", "").strip()
+    if override:
+        return Path(override)
     return Path(__file__).parent / "database.sqlite"
 
 

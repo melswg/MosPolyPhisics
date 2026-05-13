@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-change-me-use-long-random-string}
+      MOSPHYSICS_DATABASE: /data/database.sqlite
+    volumes:
+      - mosphysics_data:/data
+
+volumes:
+  mosphysics_data:
