@@ -11,30 +11,31 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const themeToggleBtn = document.querySelector('.theme-toggle');
     const rootElement = document.documentElement;
-    const themeIcon = themeToggleBtn.querySelector('i');
 
-    // Проверка сохраненной темы в localStorage
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    rootElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
-
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = rootElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        rootElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    });
-
-    function updateThemeIcon(theme) {
+    function updateThemeIcon(theme, iconEl) {
+        if (!iconEl) return;
         if (theme === 'light') {
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
+            iconEl.classList.remove('fa-sun');
+            iconEl.classList.add('fa-moon');
         } else {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+            iconEl.classList.remove('fa-moon');
+            iconEl.classList.add('fa-sun');
         }
+    }
+
+    if (themeToggleBtn) {
+        const themeIcon = themeToggleBtn.querySelector('i');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        rootElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme, themeIcon);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = rootElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            rootElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme, themeIcon);
+        });
     }
 
     // =========================================
@@ -124,14 +125,17 @@ document.addEventListener('DOMContentLoaded', () => {
 // ПОДСВЕТКА АКТИВНОЙ ССЫЛКИ В МЕНЮ
 // =========================================
 
-const currentLocation = location.href;
+const currentPath = location.pathname.replace(/\/$/, '') || '/';
 const menuItems = document.querySelectorAll('.nav__link');
-const menuLength = menuItems.length;
-
-for (let i = 0; i < menuLength; i++) {
-    if (menuItems[i].href === currentLocation) {
-        menuItems[i].classList.add('active');
-        // Добавляем стиль для активной ссылки в CSS
-        // .nav__link.active { text-decoration: underline; opacity: 1; }
+for (let i = 0; i < menuItems.length; i++) {
+    try {
+        const linkPath = new URL(menuItems[i].href, location.origin).pathname.replace(/\/$/, '') || '/';
+        if (linkPath === currentPath) {
+            menuItems[i].classList.add('active');
+        }
+    } catch (_) {
+        if (menuItems[i].href === location.href) {
+            menuItems[i].classList.add('active');
+        }
     }
 }

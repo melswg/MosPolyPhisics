@@ -1,1 +1,42 @@
-<!-- Страница визуальной новеллы с кнопкой скачивания -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Визуальная новелла — МосПолиФизикс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__container">
+            <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            <nav class="nav">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
+                    <li class="nav__item"><a href="novel.html" class="nav__link"><i class="fa-solid fa-book"></i> Новелла</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
+            <button class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="content-page">
+        <h1 class="page-title">Визуальная новелла</h1>
+        <p style="margin-bottom:1.5rem;color:var(--text-muted)">Дневник разработки (данные с сервера).</p>
+        <p style="margin-bottom:1rem"><span class="btn-primary" style="display:inline-block;width:auto;padding:.5rem 1.2rem;opacity:.55;cursor:default">Скачать (скоро)</span></p>
+        <h2 class="section-title" style="text-align:left;margin-top:2rem">Дневник разработки</h2>
+        <div id="novel-updates-root"><p>Загрузка…</p></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
+    </footer>
+
+    <script src="../api.js"></script>
+    <script src="../scripts.js"></script>
+    <script src="../novel_page.js"></script>
+</body>
+</html>

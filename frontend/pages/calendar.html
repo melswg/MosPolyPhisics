@@ -1,1 +1,39 @@
-<!-- Интерактивный календарь -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Календарь — МосПолиФизикс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__container">
+            <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            <nav class="nav">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
+                    <li class="nav__item"><a href="news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
+            <button class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="content-page">
+        <h1 class="page-title">Календарь событий</h1>
+        <div id="calendar-root"><p>Загрузка…</p></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
+    </footer>
+
+    <script src="../api.js"></script>
+    <script src="../scripts.js"></script>
+    <script src="../calendar_page.js"></script>
+</body>
+</html>

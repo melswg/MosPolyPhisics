@@ -30,18 +30,18 @@
     <header class="header">
         <div class="container header__container">
             <!-- Логотип (Новый SVG файл) -->
-            <a href="#" class="logo">
+            <a href="index.html" class="logo">
                 <img src="media/logo.svg" alt="МосПолиФизикс Лого">
             </a>
 
             <!-- Навигационное меню -->
             <nav class="nav">
                 <ul class="nav__list">
-                    <li class="nav__item"><a href="#about" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
-                    <li class="nav__item"><a href="#news" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
-                    <li class="nav__item"><a href="#projects" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
-                    <li class="nav__item"><a href="#tests" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
-                    <li class="nav__item"><a href="#profile" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
+                    <li class="nav__item"><a href="pages/about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
+                    <li class="nav__item"><a href="pages/news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
+                    <li class="nav__item"><a href="pages/project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
+                    <li class="nav__item"><a href="pages/tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
+                    <li class="nav__item"><a href="pages/account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
                 </ul>
             </nav>
 
@@ -97,7 +97,7 @@
 
                 <div class="cards-grid">
                     <!-- Карточка 1: О нас (SVG иконка) -->
-                    <a href="#about" class="card card--accent">
+                    <a href="pages/about.html" class="card card--accent">
                         <h3 class="card__title">О нас</h3>
                         <div class="card__icon">
                             <img src="media/icon-about.svg" alt="Иконка О нас">
@@ -105,7 +105,7 @@
                     </a>
 
                     <!-- Карточка 2: Новости (SVG иконка) -->
-                    <a href="#news" class="card card--accent">
+                    <a href="pages/news.html" class="card card--accent">
                         <h3 class="card__title">Новости</h3>
                         <div class="card__icon">
                             <img src="media/icon-news.svg" alt="Иконка Новости">
@@ -113,7 +113,7 @@
                     </a>
 
                     <!-- Карточка 3: Проекты (SVG иконка) -->
-                    <a href="#projects" class="card card--accent">
+                    <a href="pages/project.html" class="card card--accent">
                         <h3 class="card__title">Проекты</h3>
                         <div class="card__icon">
                             <img src="media/icon-projects.svg" alt="Иконка Проекты">
@@ -121,7 +121,7 @@
                     </a>
 
                     <!-- Карточка 4: Тесты (SVG иконка) -->
-                    <a href="#tests" class="card card--accent">
+                    <a href="pages/tests.html" class="card card--accent">
                         <h3 class="card__title">Тесты</h3>
                         <div class="card__icon">
                             <img src="media/icon-tests.svg" alt="Иконка Тесты">
@@ -157,8 +157,8 @@
             <div class="footer__col">
                 <h4 class="footer__title">О нас</h4>
                 <ul class="footer__list">
-                    <li><a href="#">Политика конфиденциальности</a></li>
-                    <li><a href="#">Контакты</a></li>
+                    <li><a href="pages/news.html">Новости</a></li>
+                    <li><a href="pages/about.html">О проекте</a></li>
                 </ul>
             </div>
 
@@ -166,8 +166,9 @@
             <div class="footer__col">
                 <h4 class="footer__title">Личный кабинет</h4>
                 <ul class="footer__list">
-                    <li><a href="#">Тесты</a></li>
-                    <li><a href="#">Проекты</a></li>
+                    <li><a href="pages/tests.html">Тесты</a></li>
+                    <li><a href="pages/project.html">Проекты</a></li>
+                    <li><a href="pages/account.html">Личный кабинет</a></li>
                 </ul>
             </div>
         </div>
@@ -176,7 +177,8 @@
         </div>
     </footer>
 
-    <!-- Подключение скриптов -->
-    <script src="script.js"></script>
+    <script src="api.js"></script>
+    <script src="scripts.js"></script>
+    <script src="home.js"></script>
 </body>
 </html>

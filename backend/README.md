@@ -14,12 +14,14 @@ pip install -r requirements.txt
 uvicorn backend.main:app --reload
 ```
 
-API (минимальный набор для фронтенда):
-- GET /api/quote -> случайная цитата
-- GET /api/news -> список новостей
-- POST /api/register -> регистрация (json: username,email,password)
-- POST /api/login -> вход (json: username,email,password) — поддерживается username или email
-- GET /api/health -> базовая проверка работоспособности
+API (для фронтенда):
+- `GET /api/quote`, `GET /api/news`, `GET /api/health`
+- `GET /api/tests`, `GET /api/test/{id}`, `POST /api/test/submit` (тело: `test_id`, `answers`)
+- `GET /api/calendar`, `GET /api/videos`, `GET /api/novel/updates`
+- `POST /api/register`, `POST /api/login` (в теле поле `username` — логин **или** email, плюс `password`) → JWT `access_token`
+- `GET /api/user/me` — заголовок `Authorization: Bearer <token>`
+
+Переменная окружения `JWT_SECRET` (см. `backend/.env.example`).
 
 Статика: сервер раздаёт файлы из `../frontend` (если фронтенд в корне проекта).
 

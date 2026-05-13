@@ -1,1 +1,64 @@
-<!-- Раздел «Новости» -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости — МосПолиФизикс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Roboto+Mono:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__container">
+            <a href="../index.html" class="logo">
+                <img src="../media/logo.svg" alt="МосПолиФизикс">
+            </a>
+            <nav class="nav">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
+                    <li class="nav__item"><a href="news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
+                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
+                    <li class="nav__item"><a href="tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
+                    <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" aria-label="Переключить тему"><i class="fa-regular fa-sun"></i></button>
+            <button class="mobile-menu-btn" aria-label="Открыть меню"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="content-page">
+        <h1 class="page-title">Новости</h1>
+        <div id="news-root" class="news-list"><p>Загрузка…</p></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__container">
+            <div class="footer__col footer__col--main">
+                <div class="logo footer__logo">
+                    <img src="../media/logo.svg" alt="" style="filter: brightness(0) invert(1);">
+                </div>
+                <p class="footer__email">@MosPolyPhysics@gmail.com</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" class="social-link" aria-label="VK"><i class="fa-brands fa-vk"></i></a>
+                    <a href="#" class="social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer__col">
+                <h4 class="footer__title">Разделы</h4>
+                <ul class="footer__list">
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="../index.html">Главная</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
+    </footer>
+
+    <script src="../api.js"></script>
+    <script src="../scripts.js"></script>
+    <script src="../news.js"></script>
+</body>
+</html>

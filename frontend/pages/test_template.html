@@ -1,2 +1,39 @@
-<!-- Универсальный шаблон для 
- прохождения самих тестов -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест — МосПолиФизикс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__container">
+            <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
+            <nav class="nav">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> К списку тестов</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
+            <button class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="content-page test-runner">
+        <h1 class="page-title" id="test-title">Тест</h1>
+        <div id="test-runner-root"></div>
+        <div id="test-result" class="result-banner" style="display:none"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
+    </footer>
+
+    <script src="../api.js"></script>
+    <script src="../scripts.js"></script>
+    <script src="../test_run.js"></script>
+</body>
+</html>

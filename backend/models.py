@@ -1,9 +1,7 @@
 """Хелперы БД для бэкенда MosPolyPhisics.
 
-Функции:
-- менеджер контекста для sqlite-подключений (поддерживает ':memory:')
-- init_db с демо-данными
-- хелперы: get_random_quote, get_all_news, create_user, verify_user
+Функции: connect, init_db, get_random_quote, get_all_news, пользователи,
+тесты (список, прохождение, проверка ответов), календарь, видео, обновления новеллы.
 """
 from pathlib import Path
 import sqlite3
@@ -103,6 +101,66 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 """
             )
 
+            cur.execute(
+                """
+                CREATE TABLE IF NOT EXISTS tests (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    description TEXT,
+                    slug TEXT UNIQUE
+                )
+                """
+            )
+
+            cur.execute(
+                """
+                CREATE TABLE IF NOT EXISTS test_questions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    test_id INTEGER NOT NULL,
+                    sort_order INTEGER NOT NULL DEFAULT 0,
+                    prompt TEXT NOT NULL,
+                    option_a TEXT NOT NULL,
+                    option_b TEXT NOT NULL,
+                    option_c TEXT NOT NULL,
+                    option_d TEXT NOT NULL,
+                    correct_index INTEGER NOT NULL,
+                    FOREIGN KEY (test_id) REFERENCES tests(id) ON DELETE CASCADE
+                )
+                """
+            )
+
+            cur.execute(
+                """
+                CREATE TABLE IF NOT EXISTS calendar_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    event_date TEXT NOT NULL,
+                    description TEXT
+                )
+                """
+            )
+
+            cur.execute(
+                """
+                CREATE TABLE IF NOT EXISTS videos (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    url TEXT NOT NULL
+                )
+                """
+            )
+
+            cur.execute(
+                """
+                CREATE TABLE IF NOT EXISTS novel_updates (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    body TEXT,
+                    update_date TEXT NOT NULL
+                )
+                """
+            )
+
             # цитаты
             cur.execute("SELECT COUNT(*) as cnt FROM quotes")
             if cur.fetchone()["cnt"] == 0:
@@ -122,6 +180,69 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                     ("Обновление маскота", "Симплик получил новый дизайн в темной теме.", "2026-05-11"),
                 ]
                 cur.executemany("INSERT INTO news (title, content, date) VALUES (?, ?, ?)", demo_news)
+
+            cur.execute("SELECT COUNT(*) as cnt FROM tests")
+            if cur.fetchone()["cnt"] == 0:
+                cur.execute(
+                    "INSERT INTO tests (title, description, slug) VALUES (?, ?, ?)",
+                    ("Тест по физике", "Базовые вопросы по механике и термодинамике", "physics"),
+                )
+                tid1 = cur.lastrowid
+                cur.execute(
+                    "INSERT INTO tests (title, description, slug) VALUES (?, ?, ?)",
+                    ("Разминка для мозга", "Короткий тест на логику и внимательность", "logic"),
+                )
+                tid2 = cur.lastrowid
+                q1 = [
+                    (tid1, 0, "Скорость света в вакууме (приближённо)?", "3·10⁸ м/с", "3·10⁶ м/с", "3·10¹⁰ м/с", "330 м/с", 0),
+                    (tid1, 1, "Единица силы в СИ?", "Ньютон", "Джоуль", "Паскаль", "Ватт", 0),
+                    (tid1, 2, "Закон всемирного тяготения сформулировал?", "Ньютон", "Эйнштейн", "Галилей", "Кеплер", 0),
+                ]
+                cur.executemany(
+                    """INSERT INTO test_questions
+                    (test_id, sort_order, prompt, option_a, option_b, option_c, option_d, correct_index)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                    q1,
+                )
+                q2 = [
+                    (tid2, 0, "2 + 2 × 2 = ?", "6", "8", "4", "10", 0),
+                    (tid2, 1, "Сколько секунд в одном часе?", "3600", "60", "1000", "600", 0),
+                ]
+                cur.executemany(
+                    """INSERT INTO test_questions
+                    (test_id, sort_order, prompt, option_a, option_b, option_c, option_d, correct_index)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                    q2,
+                )
+
+            cur.execute("SELECT COUNT(*) as cnt FROM calendar_events")
+            if cur.fetchone()["cnt"] == 0:
+                demo_cal = [
+                    ("День космонавтики", "2026-04-12", "Тематический стрим и викторина."),
+                    ("Выпуск нового видео", "2026-05-20", "Разбор задач по оптике."),
+                ]
+                cur.executemany(
+                    "INSERT INTO calendar_events (title, event_date, description) VALUES (?, ?, ?)",
+                    demo_cal,
+                )
+
+            cur.execute("SELECT COUNT(*) as cnt FROM videos")
+            if cur.fetchone()["cnt"] == 0:
+                demo_vid = [
+                    ("Демо: введение в проект", "https://www.youtube.com/embed/dQw4w9WgXcQ"),
+                ]
+                cur.executemany("INSERT INTO videos (title, url) VALUES (?, ?)", demo_vid)
+
+            cur.execute("SELECT COUNT(*) as cnt FROM novel_updates")
+            if cur.fetchone()["cnt"] == 0:
+                demo_novel = [
+                    ("Версия 0.1", "Собран первый билд, добавлены фоны главы 1.", "2026-05-01"),
+                    ("Арт персонажей", "Обновлены спрайты наставника.", "2026-05-08"),
+                ]
+                cur.executemany(
+                    "INSERT INTO novel_updates (title, body, update_date) VALUES (?, ?, ?)",
+                    demo_novel,
+                )
 
             # Если база уже существовала без поля created_at — добавим его
             # (ALTER TABLE ADD COLUMN работает в sqlite)
@@ -221,3 +342,108 @@ def verify_user(identifier: str, password: str, db_path: Optional[Union[str, Pat
     except Exception:
         logger.exception("Password verification error")
         return False
+
+
+def get_user_public_by_identifier(identifier: str, db_path: Optional[Union[str, Path]] = None) -> Optional[Dict[str, Any]]:
+    row = _get_user_row(identifier, db_path)
+    if not row:
+        return None
+    return {"id": row["id"], "username": row["username"], "email": row["email"]}
+
+
+def get_user_by_id(user_id: int, db_path: Optional[Union[str, Path]] = None) -> Optional[Dict[str, Any]]:
+    with connect(db_path) as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id, username, email, created_at FROM users WHERE id = ? LIMIT 1",
+            (user_id,),
+        )
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+
+def get_all_tests(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:
+    with connect(db_path) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT id, title, description, slug FROM tests ORDER BY id ASC")
+        return [dict(r) for r in cur.fetchall()]
+
+
+def get_test_for_player(test_id: int, db_path: Optional[Union[str, Path]] = None) -> Optional[Dict[str, Any]]:
+    with connect(db_path) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT id, title, description, slug FROM tests WHERE id = ?", (test_id,))
+        test_row = cur.fetchone()
+        if not test_row:
+            return None
+        cur.execute(
+            "SELECT id, prompt, option_a, option_b, option_c, option_d FROM test_questions "
+            "WHERE test_id = ? ORDER BY sort_order ASC, id ASC",
+            (test_id,),
+        )
+        questions = []
+        for r in cur.fetchall():
+            questions.append(
+                {
+                    "id": r["id"],
+                    "prompt": r["prompt"],
+                    "options": [r["option_a"], r["option_b"], r["option_c"], r["option_d"]],
+                }
+            )
+        out = dict(test_row)
+        out["questions"] = questions
+        return out
+
+
+def grade_test_submission(
+    test_id: int, answers: Dict[int, int], db_path: Optional[Union[str, Path]] = None
+) -> Optional[Dict[str, Any]]:
+    """answers: question_id -> выбранный индекс варианта (0–3). Возвращает счёт или None, если тест не найден."""
+    with connect(db_path) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT id FROM tests WHERE id = ?", (test_id,))
+        if not cur.fetchone():
+            return None
+        cur.execute(
+            "SELECT id, correct_index FROM test_questions WHERE test_id = ? ORDER BY sort_order ASC, id ASC",
+            (test_id,),
+        )
+        rows = cur.fetchall()
+        if not rows:
+            return {"correct": 0, "total": 0, "percent": 0}
+        correct = 0
+        for r in rows:
+            qid = r["id"]
+            chosen = answers.get(qid)
+            if chosen is None:
+                continue
+            if int(chosen) == int(r["correct_index"]):
+                correct += 1
+        total = len(rows)
+        percent = round(100 * correct / total) if total else 0
+        return {"correct": correct, "total": total, "percent": percent}
+
+
+def get_calendar_events(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:
+    with connect(db_path) as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id, title, event_date, description FROM calendar_events ORDER BY event_date ASC"
+        )
+        return [dict(r) for r in cur.fetchall()]
+
+
+def get_all_videos(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:
+    with connect(db_path) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT id, title, url FROM videos ORDER BY id ASC")
+        return [dict(r) for r in cur.fetchall()]
+
+
+def get_novel_updates(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:
+    with connect(db_path) as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id, title, body, update_date FROM novel_updates ORDER BY update_date DESC"
+        )
+        return [dict(r) for r in cur.fetchall()]

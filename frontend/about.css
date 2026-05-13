@@ -1,0 +1,108 @@
+/* Страница «О нас» */
+.about-hero {
+    padding: 4rem 0 3rem;
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.about-hero__title {
+    font-family: var(--font-heading), var(--font-main);
+    font-size: 2.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-hero__text p {
+    max-width: 900px;
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+.categories {
+    padding: 3rem 0 4rem;
+}
+
+.section-title {
+    font-family: var(--font-heading), var(--font-main);
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.25rem;
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    padding: 1.25rem;
+    border-radius: var(--border-radius-card);
+    background: var(--bg-hero);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+:root[data-theme="light"] .category-card {
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.category-card__title {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.category-card__icon {
+    font-size: 2rem;
+    color: var(--color-accent);
+}
+
+.team {
+    padding: 2rem 0 4rem;
+}
+
+.team-visual {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.member-shape {
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--text-muted), #444);
+}
+
+.team-member--side .member-shape {
+    width: 72px;
+    height: 72px;
+}
+
+.team-member--center .member-shape {
+    width: 110px;
+    height: 110px;
+    background: linear-gradient(145deg, #fff, #ccc);
+}
+
+.team-caption {
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+}
