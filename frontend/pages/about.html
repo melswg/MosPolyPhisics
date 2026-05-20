@@ -10,11 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Roboto+Mono:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
     
     <!-- Подключение стилей -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <!-- Специфичные стили для страницы О нас -->
     <link rel="stylesheet" href="about.css">
     
-    <!-- Иконки -->
+    <!-- Иконки (FontAwesome для интерфейса) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -22,24 +22,30 @@
     <!-- Шапка сайта (Header) -->
     <header class="header">
         <div class="container header__container">
-            <a href="index.html" class="logo">
-                <img src="media/logo.svg" alt="МосПоли ФИЗИКС Лого">
+            <!-- Логотип (ссылка на главную) -->
+            <a href="../index.html" class="logo">
+                <img src="../media/logo.svg" alt="МосПоли ФИЗИКС Лого">
             </a>
 
+            <!-- Навигационное меню -->
             <nav class="nav">
                 <ul class="nav__list">
+                    <!-- Текущая страница (О нас) -->
                     <li class="nav__item"><a href="about.html" class="nav__link active"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
-                    <li class="nav__item"><a href="#news" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
-                    <li class="nav__item"><a href="#projects" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
-                    <li class="nav__item"><a href="#tests" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
-                    <li class="nav__item"><a href="#profile" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
+                    <!-- Остальные разделы (в разработке) -->
+                    <li class="nav__item"><a href="construction.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
+                    <li class="nav__item"><a href="construction.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
+                    <li class="nav__item"><a href="construction.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
+                    <li class="nav__item"><a href="construction.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
                 </ul>
             </nav>
 
+            <!-- Кнопка смены темы -->
             <button class="theme-toggle" aria-label="Переключить тему">
                 <i class="fa-regular fa-sun"></i>
             </button>
 
+            <!-- Кнопка мобильного меню -->
             <button class="mobile-menu-btn" aria-label="Открыть меню">
                 <i class="fa-solid fa-bars"></i>
             </button>
@@ -47,7 +53,7 @@
     </header>
 
     <main>
-        <!-- Секция "О нас" (Purple Block) -->
+        <!-- Секция "О нас" (главное содержание) -->
         <section class="about-hero">
             <div class="container">
                 <h1 class="about-hero__title">О нас</h1>
@@ -57,55 +63,54 @@
             </div>
         </section>
 
-        <!-- Секция "Наши рубрики" (Categories Grid) -->
+        <!-- Секция "Наши рубрики" (категории контента) -->
         <section class="categories">
             <div class="container">
                 <h2 class="section-title">Наши рубрики</h2>
                 
                 <div class="categories-grid">
-                    <!-- Карточка 1: Видео -->
-                    <a href="#" class="category-card">
+                    <!-- Карточка: Видео контент -->
+                    <a href="construction.html" class="category-card">
                         <h3 class="category-card__title">Видео</h3>
                         <div class="category-card__icon">
-                            <!-- SVG Placeholder -->
                             <i class="fa-solid fa-video"></i>
                         </div>
                     </a>
 
-                    <!-- Карточка 2: Комиксы -->
-                    <a href="#" class="category-card">
+                    <!-- Карточка: Комиксы -->
+                    <a href="construction.html" class="category-card">
                         <h3 class="category-card__title">Комиксы</h3>
                         <div class="category-card__icon">
                             <i class="fa-solid fa-book-open"></i>
                         </div>
                     </a>
 
-                    <!-- Карточка 3: Календари -->
-                    <a href="#" class="category-card">
+                    <!-- Карточка: Календари физических событий -->
+                    <a href="construction.html" class="category-card">
                         <h3 class="category-card__title">Календари</h3>
                         <div class="category-card__icon">
                             <i class="fa-regular fa-calendar"></i>
                         </div>
                     </a>
 
-                    <!-- Карточка 4: Дни рождения -->
-                    <a href="#" class="category-card">
+                    <!-- Карточка: Дни рождения великих физиков -->
+                    <a href="construction.html" class="category-card">
                         <h3 class="category-card__title">Дни рождения</h3>
                         <div class="category-card__icon">
                             <i class="fa-solid fa-cake-candles"></i>
                         </div>
                     </a>
 
-                    <!-- Карточка 5: Историческая справка -->
-                    <a href="#" class="category-card">
+                    <!-- Карточка: Исторические факты о физике -->
+                    <a href="construction.html" class="category-card">
                         <h3 class="category-card__title">Историческая справка</h3>
                         <div class="category-card__icon">
                             <i class="fa-solid fa-scroll"></i>
                         </div>
                     </a>
 
-                    <!-- Карточка 6: Физики говорят -->
-                    <a href="#" class="category-card">
+                    <!-- Карточка: Интервью с физиками -->
+                    <a href="construction.html" class="category-card">
                         <h3 class="category-card__title">Физики говорят</h3>
                         <div class="category-card__icon">
                             <i class="fa-solid fa-microphone"></i>
@@ -115,28 +120,30 @@
             </div>
         </section>
 
-        <!-- Секция "Команда проекта" -->
+        <!-- Секция "Команда проекта" (визуальная демонстрация) -->
         <section class="team">
             <div class="container">
                 <h2 class="section-title">Команда проекта</h2>
                 
+                <!-- Визуализация членов команды -->
                 <div class="team-visual">
-                    <!-- Левая фигура (меньше, серая) -->
+                    <!-- Член команды (слева, меньший) -->
                     <div class="team-member team-member--side">
                         <div class="member-shape"></div>
                     </div>
                     
-                    <!-- Центральная фигура (больше, белая) -->
+                    <!-- Лидер команды (центр, больший) -->
                     <div class="team-member team-member--center">
                         <div class="member-shape"></div>
                     </div>
                     
-                    <!-- Правая фигура (меньше, серая) -->
+                    <!-- Член команды (справа, меньший) -->
                     <div class="team-member team-member--side">
                         <div class="member-shape"></div>
                     </div>
                 </div>
 
+                <!-- Руководитель проекта -->
                 <div class="team-caption">
                     <p>&lt;Ксения Гудкова&gt;</p>
                 </div>
@@ -147,11 +154,14 @@
     <!-- Подвал сайта (Footer) -->
     <footer class="footer">
         <div class="container footer__container">
+            <!-- Колонка: Логотип и соцсети -->
             <div class="footer__col footer__col--main">
                 <div class="logo footer__logo">
-                    <img src="media/logo.svg" alt="МосПоли ФИЗИКС Лого" style="filter: brightness(0) invert(1);">
+                    <!-- Логотип в футере с инверсией цветов для видимости -->
+                    <img src="../media/logo.svg" alt="МосПоли ФИЗИКС Лого" style="filter: brightness(0) invert(1);">
                 </div>
                 <p class="footer__email">@MosPolyPhysics@gmail.com</p>
+                <!-- Ссылки на социальные сети -->
                 <div class="social-links">
                     <a href="#" class="social-link" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
                     <a href="#" class="social-link" aria-label="VK"><i class="fa-brands fa-vk"></i></a>
@@ -161,19 +171,22 @@
                 </div>
             </div>
 
+            <!-- Колонка: Информация -->
             <div class="footer__col">
-                <h4 class="footer__title">О нас</h4>
+                <h4 class="footer__title">Информация</h4>
                 <ul class="footer__list">
+                    <li><a href="about.html">О проекте</a></li>
                     <li><a href="#">Политика конфиденциальности</a></li>
                     <li><a href="#">Контакты</a></li>
                 </ul>
             </div>
 
+            <!-- Колонка: Разделы -->
             <div class="footer__col">
-                <h4 class="footer__title">Личный кабинет</h4>
+                <h4 class="footer__title">Разделы</h4>
                 <ul class="footer__list">
-                    <li><a href="#">Тесты</a></li>
-                    <li><a href="#">Проекты</a></li>
+                    <li><a href="construction.html">Тесты</a></li>
+                    <li><a href="construction.html">Проекты</a></li>
                 </ul>
             </div>
         </div>
@@ -182,6 +195,7 @@
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <!-- Подключение основного скрипта -->
+    <script src="../script.js"></script>
 </body>
 </html>
