@@ -21,7 +21,7 @@
     <!-- Подключение стилей -->
     <link rel="stylesheet" href="style.css">
     
-    <!-- Иконки для соцсетей (оставим FontAwesome для мелких иконок интерфейса, основные - SVG) -->
+    <!-- Иконки (FontAwesome для интерфейса, основные элементы используют SVG) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -29,19 +29,21 @@
     <!-- Шапка сайта (Header) -->
     <header class="header">
         <div class="container header__container">
-            <!-- Логотип (Новый SVG файл) -->
-            <a href="#" class="logo">
+            <!-- Логотип (ссылка на главную страницу) -->
+            <a href="index.html" class="logo">
                 <img src="media/logo.svg" alt="МосПолиФизикс Лого">
             </a>
 
             <!-- Навигационное меню -->
             <nav class="nav">
                 <ul class="nav__list">
-                    <li class="nav__item"><a href="#about" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
-                    <li class="nav__item"><a href="#news" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
-                    <li class="nav__item"><a href="#projects" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
-                    <li class="nav__item"><a href="#tests" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
-                    <li class="nav__item"><a href="#profile" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
+                    <!-- Полные ссылки на страницы (раздел О нас - отдельная страница) -->
+                    <li class="nav__item"><a href="pages/about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
+                    <!-- Якорные ссылки на разделы текущей страницы (в разработке) -->
+                    <li class="nav__item"><a href="pages/construction.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
+                    <li class="nav__item"><a href="pages/construction.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
+                    <li class="nav__item"><a href="pages/construction.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
+                    <li class="nav__item"><a href="pages/construction.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
                 </ul>
             </nav>
 
@@ -58,7 +60,7 @@
     </header>
 
     <main>
-        <!-- Секция "Цитата дня" (Hero Section) -->
+        <!-- Hero секция с цитатой дня и маскотом -->
         <section class="hero">
             <div class="container hero__container">
                 <div class="hero__content">
@@ -75,7 +77,7 @@
             </div>
         </section>
 
-        <!-- Секция с описанием миссии (Цветной блок) -->
+        <!-- Секция с описанием миссии (фон основного цвета) -->
         <section class="mission">
             <div class="container">
                 <p class="mission__text">
@@ -84,11 +86,11 @@
             </div>
         </section>
 
-        <!-- Секция навигационных карточек (Grid) -->
+        <!-- Секция с навигационными карточками -->
         <section class="cards-section">
             <div class="container cards-section__container">
                 
-                <!-- Фоновые иконки (декор) -->
+                <!-- Фоновые иконки (декоративные элементы) -->
                 <div class="bg-icon bg-icon-1"><i class="fa-regular fa-lightbulb"></i></div>
                 <div class="bg-icon bg-icon-2"><i class="fa-solid fa-graduation-cap"></i></div>
                 <div class="bg-icon bg-icon-3"><i class="fa-solid fa-book-open"></i></div>
@@ -96,32 +98,32 @@
                 <div class="bg-icon bg-icon-5"><i class="fa-solid fa-apple-whole"></i></div>
 
                 <div class="cards-grid">
-                    <!-- Карточка 1: О нас (SVG иконка) -->
-                    <a href="#about" class="card card--accent">
+                    <!-- Карточка: О нас -->
+                    <a href="pages/about.html" class="card">
                         <h3 class="card__title">О нас</h3>
                         <div class="card__icon">
                             <img src="media/icon-about.svg" alt="Иконка О нас">
                         </div>
                     </a>
 
-                    <!-- Карточка 2: Новости (SVG иконка) -->
-                    <a href="#news" class="card card--accent">
+                    <!-- Карточка: Новости (в разработке) -->
+                    <a href="pages/construction.html" class="card">
                         <h3 class="card__title">Новости</h3>
                         <div class="card__icon">
                             <img src="media/icon-news.svg" alt="Иконка Новости">
                         </div>
                     </a>
 
-                    <!-- Карточка 3: Проекты (SVG иконка) -->
-                    <a href="#projects" class="card card--accent">
+                    <!-- Карточка: Проекты (в разработке) -->
+                    <a href="pages/construction.html" class="card">
                         <h3 class="card__title">Проекты</h3>
                         <div class="card__icon">
                             <img src="media/icon-projects.svg" alt="Иконка Проекты">
                         </div>
                     </a>
 
-                    <!-- Карточка 4: Тесты (SVG иконка) -->
-                    <a href="#tests" class="card card--accent">
+                    <!-- Карточка: Тесты (в разработке) -->
+                    <a href="pages/construction.html" class="card">
                         <h3 class="card__title">Тесты</h3>
                         <div class="card__icon">
                             <img src="media/icon-tests.svg" alt="Иконка Тесты">
@@ -138,10 +140,10 @@
             <!-- Левая колонка: Лого и контакты -->
             <div class="footer__col footer__col--main">
                 <div class="logo footer__logo">
-                    <!-- Используем белый фильтр для логотипа в футере, если он темный -->
+                    <!-- Логотип в футере с инверсией цветов для видимости на темном фоне -->
                     <img src="media/logo.svg" alt="МосПоли ФИЗИКС Лого" style="filter: brightness(0) invert(1);">
                 </div>
-                <p class="footer__email">@MosPolyPhysics@gmail.com</p>
+                <p class="footer__email">MosPolyPhysics@gmail.com</p>
                 
                 <!-- Социальные сети -->
                 <div class="social-links">
@@ -153,21 +155,22 @@
                 </div>
             </div>
 
-            <!-- Средняя колонка: Ссылки -->
+            <!-- Колонка: Информация -->
             <div class="footer__col">
-                <h4 class="footer__title">О нас</h4>
+                <h4 class="footer__title">Информация</h4>
                 <ul class="footer__list">
-                    <li><a href="#">Политика конфиденциальности</a></li>
-                    <li><a href="#">Контакты</a></li>
+                    <li><a href="pages/about.html">О проекте</a></li>
+                    <li><a href="pages/construction.html">Политика конфиденциальности</a></li>
+                    <li><a href="pages/construction.html">Контакты</a></li>
                 </ul>
             </div>
 
-            <!-- Правая колонка: Ссылки -->
+            <!-- Колонка: Разделы (в разработке) -->
             <div class="footer__col">
-                <h4 class="footer__title">Личный кабинет</h4>
+                <h4 class="footer__title">Разделы</h4>
                 <ul class="footer__list">
-                    <li><a href="#">Тесты</a></li>
-                    <li><a href="#">Проекты</a></li>
+                    <li><a href="pages/construction.html">Тесты</a></li>
+                    <li><a href="pages/construction.html">Проекты</a></li>
                 </ul>
             </div>
         </div>
