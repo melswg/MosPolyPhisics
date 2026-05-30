@@ -253,6 +253,146 @@
     max-width: 680px;
 }
 
+/* --- Страница технических работ --- */
+.maintenance-page {
+    min-height: 100vh;
+    background: #000000;
+    color: #ffffff;
+}
+
+.maintenance-shell {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    overflow: hidden;
+}
+
+.maintenance-card {
+    position: relative;
+    width: min(100%, 476px);
+    min-height: 454px;
+    border-radius: 26px;
+    background: var(--figma-purple);
+    box-shadow: 0 24px 70px rgba(123, 97, 255, 0.32);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3rem 1.5rem 2.75rem;
+    text-align: center;
+    z-index: 2;
+}
+
+.maintenance-close {
+    position: absolute;
+    top: 22px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #91a0df;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.maintenance-mascot {
+    width: 260px;
+    max-width: 76%;
+    height: auto;
+    margin-top: -0.75rem;
+    margin-bottom: -0.45rem;
+    animation: float 6s ease-in-out infinite;
+}
+
+.maintenance-card h1 {
+    font-family: var(--font-heading), var(--font-main);
+    font-size: 1.15rem;
+    line-height: 1.05;
+    font-weight: 800;
+    margin: 0 0 1.8rem;
+    color: #ffffff;
+}
+
+.maintenance-home {
+    min-width: 176px;
+    min-height: 64px;
+    border-radius: 10px;
+    background: #91a0df;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem 1rem;
+    font-size: 1.45rem;
+    line-height: 1;
+    font-weight: 800;
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 12px 22px rgba(0, 0, 0, 0.2);
+}
+
+.maintenance-home:hover,
+.maintenance-close:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.maintenance-bg-icon {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.22);
+    filter: blur(1px);
+    font-size: clamp(3.5rem, 8vw, 6.5rem);
+    line-height: 1;
+    z-index: 1;
+}
+
+.maintenance-bg-icon--cap {
+    top: 8%;
+    left: 5%;
+}
+
+.maintenance-bg-icon--book {
+    top: 24%;
+    left: 8%;
+    transform: rotate(14deg);
+}
+
+.maintenance-bg-icon--formula {
+    bottom: 8%;
+    left: 6%;
+    transform: rotate(-18deg);
+    font-family: var(--font-accent), monospace;
+    font-size: clamp(2.7rem, 6.5vw, 5.5rem);
+    font-weight: 700;
+}
+
+.maintenance-bg-icon--apple {
+    top: 8%;
+    right: 8%;
+    transform: rotate(-8deg);
+}
+
+.maintenance-bg-icon--bulb {
+    top: 40%;
+    right: 12%;
+}
+
+.maintenance-bg-icon--phi {
+    right: 6%;
+    bottom: 10%;
+    transform: rotate(28deg);
+    font-family: var(--font-heading), var(--font-main);
+    font-size: clamp(4rem, 8vw, 6.5rem);
+    font-weight: 800;
+}
+
 @media (max-width: 820px) {
     .categories-grid.choice-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -392,12 +532,14 @@
     font-size: 1.5rem;
 }
 
-.test-nav-arrows button {
+.test-nav-arrows button,
+.test-nav-arrows a {
     background: none;
     border: none;
     color: inherit;
     cursor: pointer;
     padding: 0.5rem;
+    font-size: inherit;
 }
 
 .calendar-widget {
@@ -697,4 +839,3 @@ body.auth-modal-page {
     border-color: rgba(255, 255, 255, 0.28);
     color: #fff;
 }
-
