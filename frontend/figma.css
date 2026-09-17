@@ -644,6 +644,62 @@
     cursor: pointer;
 }
 
+.account-figma [hidden] {
+    display: none !important;
+}
+
+.account-member-profile {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.account-guest,
+.account-status {
+    grid-column: 1 / -1;
+}
+
+.account-guest h2 {
+    margin-bottom: 0.5rem;
+}
+
+.account-guest__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.account-guest__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    padding: 0.7rem 1.25rem;
+    border: 2px solid #fff;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.account-guest__link--primary {
+    border-color: #9bb4ff;
+    background: #9bb4ff;
+    color: #1a1a3a;
+}
+
+.account-guest__link:hover,
+.account-guest__link:focus-visible {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.account-guest__link--primary:hover,
+.account-guest__link--primary:focus-visible {
+    background: #b4c5ff;
+}
+
 /* --- Вход / регистрация: модальное окно в стиле карточек --- */
 body.auth-modal-page {
     min-height: 100vh;

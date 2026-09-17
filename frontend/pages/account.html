@@ -6,7 +6,7 @@
     <title>Личный кабинет — МосПолиФизикс</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../figma.css">
+    <link rel="stylesheet" href="../figma.css?v=20260917-account">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -38,19 +38,25 @@
                 <i class="fa-solid fa-pen" style="opacity:.85"></i>
                 Личный кабинет
             </div>
-            <div style="display:flex;gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+            <div class="account-member-profile" id="account-member-profile" hidden>
                 <img class="account-figma__avatar" src="../media/icons/user-circle.svg" alt="" id="account-avatar">
                 <div class="account-figma__meta" id="account-content"><p>Загрузка…</p></div>
             </div>
-            <div class="account-figma__mascot">
+            <div class="account-figma__mascot" id="account-member-mascot" hidden>
                 <img src="../media/mas.svg" alt="Маскот">
                 <p style="margin-top:.5rem;font-size:.9rem;opacity:.95">Это вы!</p>
             </div>
-            <button type="button" class="btn-logout" id="logout-btn">Выйти</button>
+            <div class="account-guest" id="account-guest" hidden>
+                <h2>Войдите в аккаунт</h2>
+                <p>Войдите, если уже зарегистрированы, или создайте новый аккаунт.</p>
+                <div class="account-guest__actions">
+                    <a href="login.html" class="account-guest__link account-guest__link--primary">Войти</a>
+                    <a href="register.html" class="account-guest__link">Зарегистрироваться</a>
+                </div>
+            </div>
+            <div class="account-status" id="account-status" role="status">Загрузка…</div>
+            <button type="button" class="btn-logout" id="logout-btn" hidden>Выйти</button>
         </div>
-        <p class="form-footer" style="text-align:center;margin-top:1.5rem">
-            <a href="login.html">Вход</a> · <a href="register.html">Регистрация</a>
-        </p>
     </main>
 
     <footer class="footer">
@@ -60,6 +66,6 @@
     <script src="../site-config.js"></script>
     <script src="../api.js"></script>
     <script src="../scripts.js"></script>
-    <script src="../account_page.js"></script>
+    <script src="../account_page.js?v=20260917-account"></script>
 </body>
 </html>
