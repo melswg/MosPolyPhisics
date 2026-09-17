@@ -100,35 +100,9 @@
         });
     }
 
-    async function fetchNews() {
-        var container = document.getElementById("news-container");
-        if (!container) return;
-        try {
-            var response = await fetch("/api/news");
-            var news = await response.json();
-            container.innerHTML = "";
-            news.forEach(function (item) {
-                var newsItem = document.createElement("div");
-                newsItem.className = "news-card";
-                newsItem.innerHTML =
-                    "<h3>" +
-                    item.title +
-                    "</h3><p><small>" +
-                    item.date +
-                    "</small></p><p>" +
-                    item.content +
-                    "</p>";
-                container.appendChild(newsItem);
-            });
-        } catch (error) {
-            console.error("Ошибка при загрузке новостей:", error);
-        }
-    }
-
     document.addEventListener("DOMContentLoaded", function () {
         initTheme();
         initMobileMenu();
         applySocialLinks();
-        fetchNews();
     });
 })();

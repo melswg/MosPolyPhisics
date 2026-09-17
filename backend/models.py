@@ -177,15 +177,6 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 ]
                 cur.executemany("INSERT INTO quotes (text, author) VALUES (?, ?)", demo_quotes)
 
-            # новости
-            cur.execute("SELECT COUNT(*) as cnt FROM news")
-            if cur.fetchone()["cnt"] == 0:
-                demo_news = [
-                    ("Запуск проекта", "Сегодня мы запустили прототип МосПолиФизикс!", "2026-05-10"),
-                    ("Обновление маскота", "Симплик получил новый дизайн в темной теме.", "2026-05-11"),
-                ]
-                cur.executemany("INSERT INTO news (title, content, date) VALUES (?, ?, ?)", demo_news)
-
             cur.execute("SELECT COUNT(*) as cnt FROM tests")
             if cur.fetchone()["cnt"] == 0:
                 cur.execute(
@@ -261,7 +252,7 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                     logger.exception("Failed to add created_at to news")
 
             conn.commit()
-        logger.info("DB initialized and demo data added")
+        logger.info("DB initialized")
         return True
     except Exception:
         logger.exception("Failed to init DB")

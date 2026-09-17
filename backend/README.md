@@ -1,11 +1,17 @@
-Как запустить (локально):
+# Backend
+
+Запускайте backend из корня репозитория. Единственный список прямых
+Python-зависимостей находится в корневом `requirements.txt`.
+
+Как запустить локально:
 
 1) Создайте виртуальное окружение и установите зависимости:
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
 2) Запустите сервер (из корня проекта):
@@ -21,8 +27,9 @@ API (для фронтенда):
 - `POST /api/register`, `POST /api/login` (в теле поле `username` — логин **или** email, плюс `password`) → JWT `access_token`
 - `GET /api/user/me` — заголовок `Authorization: Bearer <token>`
 
-Переменная окружения `JWT_SECRET` (см. `backend/.env.example`).
+Путь к SQLite можно задать переменной `MOSPHYSICS_DATABASE`; без неё используется
+`backend/database.sqlite`. Переменная `JWT_SECRET` переопределяет секрет JWT.
 
-Статика: сервер раздаёт файлы из `../frontend` (если фронтенд в корне проекта).
+Статика: сервер раздаёт файлы из `frontend` в корне проекта.
 
 Подсказка: OpenAPI доступен на `/docs` или `/openapi.json`.
