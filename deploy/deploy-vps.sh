@@ -2,10 +2,12 @@
 set -euo pipefail
 
 APP_DIR="${APP_DIR:-/home/hermes/MosPolyPhisics}"
+APP_USER="${APP_USER:-hermes}"
 SERVICE_NAME="${SERVICE_NAME:-mosphysics.service}"
 HEALTH_URL="${HEALTH_URL:-http://127.0.0.1:9090/api/health}"
 
-"${APP_DIR}/.venv/bin/pip" install --disable-pip-version-check -r "${APP_DIR}/requirements.txt"
+runuser -u "${APP_USER}" -- "${APP_DIR}/.venv/bin/pip" install \
+    --disable-pip-version-check -r "${APP_DIR}/requirements.txt"
 systemctl restart "${SERVICE_NAME}"
 
 for attempt in 1 2 3 4 5 6; do
