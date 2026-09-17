@@ -10,8 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var pass = document.getElementById("login-pass").value;
     window.MosAPI
       .login(ident, pass)
-      .then(function (data) {
-        if (data.access_token) window.MosAPI.setToken(data.access_token);
+      .then(function () {
         msg.className = "form-msg form-msg--ok";
         msg.textContent = "Вход выполнен, перенаправление…";
         setTimeout(function () {

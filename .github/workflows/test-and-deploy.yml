@@ -1,0 +1,54 @@
+name: Test and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: pytest -q
+      - run: python -m compileall -q backend
+
+  deploy:
+    needs: test
+    if: ${{ vars.VPS_AUTO_DEPLOY == 'true' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Configure SSH
+        env:
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      - name: Update application
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          port="${VPS_PORT:-22}"
+          ssh -i ~/.ssh/deploy_key -p "$port" "$VPS_USER@$VPS_HOST" \
+            "sudo -u hermes git -C /home/hermes/MosPolyPhisics fetch origin main && \
+             sudo -u hermes git -C /home/hermes/MosPolyPhisics checkout main && \
+             sudo -u hermes git -C /home/hermes/MosPolyPhisics pull --ff-only origin main && \
+             sudo APP_DIR=/home/hermes/MosPolyPhisics /home/hermes/MosPolyPhisics/deploy/deploy-vps.sh"

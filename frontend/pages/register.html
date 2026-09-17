@@ -24,7 +24,7 @@
             <form id="register-form">
                 <div class="form-field">
                     <label for="reg-user">Имя</label>
-                    <input id="reg-user" name="username" type="text" autocomplete="username" required>
+                    <input id="reg-user" name="username" type="text" autocomplete="username" minlength="3" maxlength="32" required>
                 </div>
                 <div class="form-field">
                     <label for="reg-email">Почта</label>
@@ -32,7 +32,8 @@
                 </div>
                 <div class="form-field">
                     <label for="reg-pass">Пароль</label>
-                    <input id="reg-pass" name="password" type="password" autocomplete="new-password" required>
+                    <input id="reg-pass" name="password" type="password" autocomplete="new-password" minlength="10" aria-describedby="reg-pass-help" required>
+                    <small id="reg-pass-help">Не менее 10 символов, включая буквы и цифры.</small>
                 </div>
                 <button type="submit" class="btn-primary">Создать аккаунт</button>
                 <a class="btn-secondary" href="login.html">Уже есть аккаунт — войти</a>

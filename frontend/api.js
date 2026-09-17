@@ -3,10 +3,14 @@
  */
 (function () {
   const API_BASE = "";
+  var csrfToken = sessionStorage.getItem("csrf_token") || "";
 
-  function authHeader() {
-    const t = localStorage.getItem("access_token");
-    return t ? { Authorization: "Bearer " + t } : {};
+  function rememberCsrf(data) {
+    if (data && data.csrf_token) {
+      csrfToken = data.csrf_token;
+      sessionStorage.setItem("csrf_token", csrfToken);
+    }
+    return data;
   }
 
   async function apiFetch(path, options) {
@@ -19,10 +23,13 @@
     ) {
       headers["Content-Type"] = "application/json";
     }
-    if (options.auth !== false) {
-      Object.assign(headers, authHeader());
+    if (options.csrf && csrfToken) {
+      headers["X-CSRF-Token"] = csrfToken;
     }
-    const res = await fetch(API_BASE + path, Object.assign({}, options, { headers }));
+    const res = await fetch(
+      API_BASE + path,
+      Object.assign({}, options, { headers: headers, credentials: "same-origin" })
+    );
     const text = await res.text();
     let data = null;
     try {
@@ -81,29 +88,36 @@
     register: function (username, email, password) {
       return apiFetch("/api/register", {
         method: "POST",
-        auth: false,
         body: JSON.stringify({ username: username, email: email, password: password }),
-      });
+      }).then(rememberCsrf);
     },
     login: function (usernameOrEmail, password) {
       return apiFetch("/api/login", {
         method: "POST",
-        auth: false,
         body: JSON.stringify({ username: usernameOrEmail, password: password }),
-      });
+      }).then(rememberCsrf);
     },
     me: function () {
-      return apiFetch("/api/user/me", { method: "GET", auth: true });
+      return apiFetch("/api/user/me", { method: "GET" }).then(rememberCsrf);
     },
-    setToken: function (token) {
-      if (token) localStorage.setItem("access_token", token);
-      else localStorage.removeItem("access_token");
+    requestPasswordReset: function (email) {
+      return apiFetch("/api/password-reset/request", {
+        method: "POST",
+        body: JSON.stringify({ email: email }),
+      });
+    },
+    confirmPasswordReset: function (token, newPassword) {
+      return apiFetch("/api/password-reset/confirm", {
+        method: "POST",
+        body: JSON.stringify({ token: token, new_password: newPassword }),
+      });
     },
     logout: function () {
-      localStorage.removeItem("access_token");
-    },
-    isLoggedIn: function () {
-      return !!localStorage.getItem("access_token");
+      return apiFetch("/api/logout", { method: "POST", csrf: true }).finally(function () {
+        csrfToken = "";
+        sessionStorage.removeItem("csrf_token");
+        localStorage.removeItem("access_token");
+      });
     },
   };
 })();

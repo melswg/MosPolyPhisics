@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var pass = document.getElementById("reg-pass").value;
     window.MosAPI
       .register(username, email, pass)
-      .then(function (data) {
-        if (data.access_token) window.MosAPI.setToken(data.access_token);
+      .then(function () {
         msg.className = "form-msg form-msg--ok";
         msg.textContent = "Аккаунт создан. Перенаправление…";
         setTimeout(function () {

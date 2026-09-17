@@ -4,6 +4,7 @@
 тесты (список, прохождение, проверка ответов), календарь, видео, обновления новеллы.
 """
 from pathlib import Path
+from datetime import datetime, timezone
 import os
 import sqlite3
 from typing import Union, Optional, Iterator, Dict, Any, List
@@ -57,6 +58,7 @@ def connect(db_path: Optional[Union[str, Path]] = None) -> Iterator[sqlite3.Conn
         conn = sqlite3.connect(str(normalized), detect_types=sqlite3.PARSE_DECLTYPES)
     try:
         conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA foreign_keys = ON")
         yield conn
     finally:
         # не закрываем общее in-memory соединение, чтобы сохранить данные между вызовами;
@@ -105,6 +107,44 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 )
                 """
             )
+
+            cur.execute(
+                """
+                CREATE TABLE IF NOT EXISTS schema_migrations (
+                    version INTEGER PRIMARY KEY,
+                    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+                """
+            )
+            cur.execute("SELECT 1 FROM schema_migrations WHERE version = 1")
+            if not cur.fetchone():
+                cur.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS user_sessions (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER NOT NULL,
+                        token_hash TEXT NOT NULL UNIQUE,
+                        csrf_token TEXT NOT NULL,
+                        expires_at TEXT NOT NULL,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                    )
+                    """
+                )
+                cur.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER NOT NULL,
+                        token_hash TEXT NOT NULL UNIQUE,
+                        expires_at TEXT NOT NULL,
+                        used_at TEXT,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                    )
+                    """
+                )
+                cur.execute("INSERT INTO schema_migrations (version) VALUES (1)")
 
             cur.execute(
                 """
@@ -292,28 +332,38 @@ def get_all_news(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, A
 
 
 def _get_user_row(identifier: str, db_path: Optional[Union[str, Path]] = None) -> Optional[sqlite3.Row]:
+    identifier = identifier.strip()
     with connect(db_path) as conn:
         cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE username = ? OR email = ? LIMIT 1", (identifier, identifier))
+        cur.execute(
+            "SELECT * FROM users WHERE username = ? OR lower(email) = lower(?) LIMIT 1",
+            (identifier, identifier),
+        )
         return cur.fetchone()
+
+
+def _hash_password(password: str) -> str:
+    try:
+        from passlib.hash import argon2 as hasher
+    except Exception:
+        from passlib.hash import pbkdf2_sha256 as hasher
+    return hasher.hash(password)
 
 
 def create_user(username: str, email: str, password: str, db_path: Optional[Union[str, Path]] = None) -> bool:
     try:
-        # предпочитаем argon2, в противном случае используем pbkdf2_sha256
-        try:
-            from passlib.hash import argon2 as _hasher
-        except Exception:
-            from passlib.hash import pbkdf2_sha256 as _hasher
-
-        # убедимся, что пароль — строка
-        if not isinstance(password, (str, bytes)):
-            password = str(password)
-        # вычисляем хэш
-        hashed = _hasher.hash(password)
+        username = username.strip()
+        email = email.strip().lower()
+        hashed = _hash_password(password)
 
         with connect(db_path) as conn:
             cur = conn.cursor()
+            cur.execute(
+                "SELECT 1 FROM users WHERE username = ? OR lower(email) = lower(?) LIMIT 1",
+                (username, email),
+            )
+            if cur.fetchone():
+                return False
             cur.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", (username, email, hashed))
             conn.commit()
         return True
@@ -356,6 +406,92 @@ def get_user_by_id(user_id: int, db_path: Optional[Union[str, Path]] = None) -> 
         )
         row = cur.fetchone()
         return dict(row) if row else None
+
+
+def create_session(
+    user_id: int,
+    token_hash: str,
+    csrf_token: str,
+    expires_at: str,
+    db_path: Optional[Union[str, Path]] = None,
+) -> None:
+    with connect(db_path) as conn:
+        conn.execute(
+            "DELETE FROM user_sessions WHERE expires_at <= ?",
+            (datetime.now(timezone.utc).isoformat(),),
+        )
+        conn.execute(
+            "INSERT INTO user_sessions (user_id, token_hash, csrf_token, expires_at) VALUES (?, ?, ?, ?)",
+            (user_id, token_hash, csrf_token, expires_at),
+        )
+        conn.commit()
+
+
+def get_session_user(
+    token_hash: str, db_path: Optional[Union[str, Path]] = None
+) -> Optional[Dict[str, Any]]:
+    now = datetime.now(timezone.utc).isoformat()
+    with connect(db_path) as conn:
+        row = conn.execute(
+            """
+            SELECT u.id, u.username, u.email, u.created_at, s.csrf_token
+            FROM user_sessions AS s
+            JOIN users AS u ON u.id = s.user_id
+            WHERE s.token_hash = ? AND s.expires_at > ?
+            LIMIT 1
+            """,
+            (token_hash, now),
+        ).fetchone()
+        return dict(row) if row else None
+
+
+def delete_session(token_hash: str, db_path: Optional[Union[str, Path]] = None) -> None:
+    with connect(db_path) as conn:
+        conn.execute("DELETE FROM user_sessions WHERE token_hash = ?", (token_hash,))
+        conn.commit()
+
+
+def create_password_reset_token(
+    user_id: int,
+    token_hash: str,
+    expires_at: str,
+    db_path: Optional[Union[str, Path]] = None,
+) -> None:
+    with connect(db_path) as conn:
+        conn.execute(
+            "UPDATE password_reset_tokens SET used_at = ? WHERE user_id = ? AND used_at IS NULL",
+            (datetime.now(timezone.utc).isoformat(), user_id),
+        )
+        conn.execute(
+            "INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)",
+            (user_id, token_hash, expires_at),
+        )
+        conn.commit()
+
+
+def reset_password_with_token(
+    token_hash: str,
+    new_password: str,
+    db_path: Optional[Union[str, Path]] = None,
+) -> bool:
+    now = datetime.now(timezone.utc).isoformat()
+    with connect(db_path) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute(
+            """
+            SELECT id, user_id FROM password_reset_tokens
+            WHERE token_hash = ? AND used_at IS NULL AND expires_at > ?
+            LIMIT 1
+            """,
+            (token_hash, now),
+        ).fetchone()
+        if not row:
+            return False
+        conn.execute("UPDATE users SET password = ? WHERE id = ?", (_hash_password(new_password), row["user_id"]))
+        conn.execute("UPDATE password_reset_tokens SET used_at = ? WHERE id = ?", (now, row["id"]))
+        conn.execute("DELETE FROM user_sessions WHERE user_id = ?", (row["user_id"],))
+        conn.commit()
+        return True
 
 
 def get_all_tests(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:

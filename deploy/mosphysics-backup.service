@@ -1,0 +1,11 @@
+[Unit]
+Description=Backup MosPolyPhysics SQLite database
+
+[Service]
+Type=oneshot
+User=hermes
+Group=hermes
+ExecStart=/home/hermes/MosPolyPhisics/.venv/bin/python /home/hermes/MosPolyPhisics/backend/backup_database.py --source /home/hermes/MosPolyPhisics/data/database.sqlite --destination /home/hermes/backups/mosphysics --keep 14
+Nice=10
+PrivateTmp=true
+NoNewPrivileges=true

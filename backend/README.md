@@ -24,11 +24,14 @@ API (для фронтенда):
 - `GET /api/quote`, `GET /api/news`, `GET /api/health`
 - `GET /api/tests`, `GET /api/test/{id}`, `POST /api/test/submit` (тело: `test_id`, `answers`)
 - `GET /api/calendar`, `GET /api/videos`, `GET /api/novel/updates`
-- `POST /api/register`, `POST /api/login` (в теле поле `username` — логин **или** email, плюс `password`) → JWT `access_token`
-- `GET /api/user/me` — заголовок `Authorization: Bearer <token>`
+- `POST /api/register`, `POST /api/login` (в теле поле `username` — логин **или** email, плюс `password`) → серверная сессия в `HttpOnly` cookie
+- `GET /api/user/me`, `POST /api/logout`; для выхода нужен `X-CSRF-Token`, полученный при входе или из `/api/user/me`
+- `POST /api/password-reset/request`, `POST /api/password-reset/confirm` — восстановление пароля через одноразовую ссылку
 
 Путь к SQLite можно задать переменной `MOSPHYSICS_DATABASE`; без неё используется
-`backend/database.sqlite`. Переменная `JWT_SECRET` переопределяет секрет JWT.
+`backend/database.sqlite`. Для HTTPS задайте `SESSION_COOKIE_SECURE=true`.
+Письма восстановления требуют переменных `SMTP_*` и `PUBLIC_BASE_URL` из
+`backend/.env.example`; токены восстановления не выводятся в ответ или журнал.
 
 Статика: сервер раздаёт файлы из `frontend` в корне проекта.
 

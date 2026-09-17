@@ -16,6 +16,7 @@ database.sqlite
 
 # Test / cache
 .pytest_cache/
+artifacts/
 
 # Editors
 .vscode/
