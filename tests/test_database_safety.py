@@ -44,3 +44,4 @@ def test_backup_is_valid_and_rotated(tmp_path):
     with sqlite3.connect(backup) as conn:
         assert conn.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
         assert conn.execute("SELECT value FROM sample").fetchone()[0] == "kept"
+    assert backup.stat().st_mode & 0o777 == 0o600

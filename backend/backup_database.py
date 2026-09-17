@@ -19,6 +19,7 @@ def backup_database(source: Path, destination: Path, keep: int) -> Path:
         if not result or result[0] != "ok":
             target.unlink(missing_ok=True)
             raise RuntimeError("Backup integrity check failed")
+    target.chmod(0o600)
 
     backups = sorted(destination.glob("mosphysics-*.sqlite"), reverse=True)
     for old_backup in backups[max(keep, 1) :]:
