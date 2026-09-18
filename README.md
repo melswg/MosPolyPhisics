@@ -42,10 +42,41 @@ cd "/Users/malikamkhadov/Documents/ChatGPT/МосПолиФизикс/hermes-reb
 - `STATUS.md` — живая память между сессиями.
 - `REFERENCE_MAIN.md` — где остановилась рабочая версия `main`.
 
-## Планируемый локальный запуск
+## Локальный запуск
 
-Hermes должен оформить воспроизводимый запуск в корневом `README.md`. До появления
-кода предполагаемый адрес preview — <http://127.0.0.1:8011>.
+Воспроизводимый запуск минимального вертикального сценария (H0):
+
+```bash
+cd "/Users/malikamkhadov/Documents/ChatGPT/МосПолиФизикс/hermes-rebuild"
+python3 -m venv .venv
+./.venv/bin/python -m pip install -r requirements-dev.txt
+./.venv/bin/python -m uvicorn backend.main:app --host 127.0.0.1 --port 8011
+```
+
+Адрес preview — <http://127.0.0.1:8011>. Проверка:
+
+```bash
+curl -s http://127.0.0.1:8011/api/health
+./.venv/bin/python -m pytest
+```
+
+Отдельная БД живёт в игнорируемом каталоге `data/`; путь переопределяется через
+`MOSPHYSICS_DATABASE`. Обычный старт не применяет миграции и не создаёт публичные
+записи, миграции запускаются отдельно:
+
+```bash
+./.venv/bin/python scripts/migrate.py
+```
+
+Запуск в Docker:
+
+```bash
+docker compose up --build
+```
+
+Конфигурация берётся из окружения, пример переменных без реальных значений —
+в `.env.example`. Порт 8011 и каталог `data/` не пересекаются с production-сервисом
+на 9090.
 
 ## Что означает «с нуля»
 

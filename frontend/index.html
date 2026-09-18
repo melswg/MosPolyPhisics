@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>МосПолиФизикс — физика для студентов и абитуриентов</title>
+  <meta name="description" content="Образовательный веб-ресурс по физике Московского политехнического университета для студентов и абитуриентов.">
+  <link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="/static/js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="site-logo" href="/">
+        <span class="site-logo__plate">
+          <img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="251" height="32">
+        </span>
+      </a>
+      <p class="site-header__note">Московский политехнический университет</p>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__text">
+        <p class="badge">Проектная практика 09.03.02</p>
+        <h1 id="hero-title">Физика понятнее, чем кажется</h1>
+        <p class="hero__lead">
+          «МосПолиФизикс» — образовательный веб-ресурс по физике для студентов и
+          абитуриентов. Здесь появятся объяснения явлений, проекты команды,
+          проверочные тесты и новости проекта.
+        </p>
+        <dl class="facts">
+          <div class="facts__item">
+            <dt>Университет</dt>
+            <dd>Московский политехнический университет</dd>
+          </div>
+          <div class="facts__item">
+            <dt>Направление</dt>
+            <dd>09.03.02 «Информационные системы и технологии»</dd>
+          </div>
+          <div class="facts__item">
+            <dt>Куратор практики</dt>
+            <dd>Кореневская Евгения Александровна</dd>
+          </div>
+        </dl>
+      </div>
+      <figure class="hero__mascot">
+        <img src="/assets/brand/mas.svg" alt="Маскот проекта Симплик" width="334" height="334">
+      </figure>
+    </section>
+
+    <section class="panel" aria-labelledby="status-title">
+      <h2 id="status-title">Состояние сервиса</h2>
+      <p class="panel__lead">
+        Ответ приходит напрямую от API проекта по адресу <code>/api/health</code>.
+      </p>
+      <div class="status" id="service-status" data-state="loading" role="status" aria-live="polite">
+        <span class="status__dot" aria-hidden="true"></span>
+        <span class="status__text" id="service-status-text">Проверяем соединение с API…</span>
+      </div>
+      <button class="button" type="button" id="service-status-retry" hidden>
+        Проверить снова
+      </button>
+    </section>
+
+    <section class="panel" aria-labelledby="sections-title">
+      <h2 id="sections-title">Разделы проекта</h2>
+      <p class="panel__lead">
+        Раздел открывается только с настоящими материалами, поэтому ссылок пока нет.
+      </p>
+      <ul class="sections">
+        <li class="sections__item">
+          <img src="/assets/brand/icon-about.svg" alt="" width="28" height="28">
+          <span class="sections__name">О нас</span>
+          <span class="sections__state">материалы готовятся</span>
+        </li>
+        <li class="sections__item">
+          <img src="/assets/brand/icon-news.svg" alt="" width="28" height="28">
+          <span class="sections__name">Новости</span>
+          <span class="sections__state">материалы готовятся</span>
+        </li>
+        <li class="sections__item">
+          <img src="/assets/brand/icon-projects.svg" alt="" width="28" height="28">
+          <span class="sections__name">Проекты</span>
+          <span class="sections__state">материалы готовятся</span>
+        </li>
+        <li class="sections__item">
+          <img src="/assets/brand/icon-tests.svg" alt="" width="28" height="28">
+          <span class="sections__name">Тесты</span>
+          <span class="sections__state">материалы готовятся</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__brand">МосПолиФизикс</p>
+      <p class="site-footer__note">Московский политехнический университет</p>
+    </div>
+  </footer>
+</body>
+</html>

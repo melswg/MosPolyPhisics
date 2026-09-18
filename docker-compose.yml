@@ -1,0 +1,24 @@
+services:
+  app:
+    build: .
+    container_name: mosphysics-hermes-rebuild
+    ports:
+      - "127.0.0.1:8011:8011"
+    environment:
+      MOSPHYSICS_DATABASE: /app/data/mosphysics.sqlite
+      MOSPHYSICS_HOST: 0.0.0.0
+      MOSPHYSICS_PORT: "8011"
+      SESSION_COOKIE_SECURE: "false"
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8011/api/health', timeout=3)
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
