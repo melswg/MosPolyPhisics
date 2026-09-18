@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "generated_on": "2026-09-18",
+  "project": {
+    "name": "МосПолиФизикс",
+    "alternate_name": "МосПоли ФИЗИКС",
+    "description": "Образовательный веб-ресурс по физике для студентов и абитуриентов.",
+    "institution": "Московский политехнический университет",
+    "practice_program": "09.03.02 «Информационные системы и технологии»",
+    "practice_period": {
+      "start": "2025-02-03",
+      "end": "2025-05-24"
+    },
+    "curator": "Кореневская Евгения Александровна",
+    "provenance": "PROJECT_PLAN.md, docs/TASKS.md и frontend/pages/about.html из main commit 24560d7"
+  },
+  "historical_participants": [
+    {
+      "name": "Амхадов Малик Магометович",
+      "group": "251-339",
+      "role": null,
+      "provenance": "frontend/pages/about.html и docs/TASKS.md из main commit 24560d7"
+    },
+    {
+      "name": "Коробейников Матвей Алексеевич",
+      "group": "251-332",
+      "role": null,
+      "provenance": "frontend/pages/about.html и docs/TASKS.md из main commit 24560d7"
+    },
+    {
+      "name": "Ефремов Никита Алексеевич",
+      "group": "251-338",
+      "role": null,
+      "provenance": "frontend/pages/about.html и docs/TASKS.md из main commit 24560d7"
+    }
+  ],
+  "news": [
+    {
+      "source_id": "plan-update-2026-09-14",
+      "title": "МосПолиФизикс обновил план развития",
+      "publication_date": "2026-09-14",
+      "content": "Команда определила ближайшую цель проекта: подготовить наполненные главную страницу, раздел «О нас» и новости для демонстрации куратору. После этого работа продолжится над простым управлением публикациями и одним законченным тестом по физике. Технологическая основа проекта остаётся прежней: FastAPI, SQLite и интерфейс на HTML, CSS и JavaScript.",
+      "provenance": "PROJECT_PLAN.md и backend/import_stage2_news.py из main commit 24560d7"
+    }
+  ],
+  "publication_notes": [
+    "historical_participants не подтверждают текущий состав или роли",
+    "контакты и социальные ссылки не подтверждены",
+    "этот файл импортируется только явной командой, не при обычном startup"
+  ]
+}
