@@ -1,107 +1,191 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>МосПолиФизикс — физика для студентов и абитуриентов</title>
-  <meta name="description" content="Образовательный веб-ресурс по физике Московского политехнического университета для студентов и абитуриентов.">
-  <link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/static/css/styles.css">
-  <script src="/static/js/app.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МосПолиФизикс — образовательный ресурс по физике</title>
+<meta name="description" content="МосПолиФизикс — образовательный ресурс по физике Московского политехнического университета для студентов и абитуриентов.">
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<script src="/static/js/theme-init.js"></script>
+<link rel="stylesheet" href="/static/css/styles.css">
+<script src="/static/js/site.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Перейти к содержимому</a>
+<a class="skip" href="#content">Перейти к содержанию</a>
 
-  <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="site-logo" href="/">
-        <span class="site-logo__plate">
-          <img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="251" height="32">
-        </span>
-      </a>
-      <p class="site-header__note">Московский политехнический университет</p>
+<header class="header">
+  <div class="wrap header__row">
+    <button class="theme" type="button" id="theme-switch" aria-pressed="true" aria-label="Включить светлую тему">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.5"></circle>
+        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"></path>
+      </svg>
+    </button>
+    <a class="logo" href="/" aria-label="МосПолиФизикс, на главную">
+      <span><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="188" height="24"></span>
+    </a>
+    <button class="burger" type="button" id="menu-button" aria-expanded="false" aria-controls="main-menu">Меню</button>
+    <nav class="menu" id="main-menu" aria-label="Разделы сайта">
+      <a href="/" aria-current="page">Главная</a>
+      <a href="/about"><img src="/assets/brand/icon-about.svg" alt=""> О нас</a>
+      <a href="/news"><img src="/assets/brand/icon-news.svg" alt=""> Новости</a>
+      <a href="/projects"><img src="/assets/brand/icon-projects.svg" alt=""> Проекты</a>
+      <a href="/tests"><img src="/assets/brand/icon-tests.svg" alt=""> Тесты</a>
+      <a href="/account"><img src="/assets/brand/icons/user-circle.svg" alt=""> Личный кабинет</a>
+    </nav>
+    <a class="profile" href="/account" aria-label="Личный кабинет">
+      <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="2.4">
+        <circle cx="24" cy="24" r="21"></circle>
+        <circle cx="24" cy="18" r="7" fill="#FFFFFF" stroke="none"></circle>
+        <path d="M10 41c1.6-8.4 8.6-12.6 14-12.6S36.4 32.6 38 41" fill="#FFFFFF" stroke="none"></path>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<main id="content">
+  <section class="hero">
+    <div class="wrap hero__row">
+      <div>
+        <h1>Цитата дня</h1>
+        <blockquote>Цитату публикуем только с указанием источника. Как только команда подтвердит формулировку и автора, она появится здесь.</blockquote>
+        <div class="hero__rule"></div>
+        <cite>Автор и источник указываются вместе с цитатой</cite>
+        <p class="hero__note">«МосПолиФизикс» — образовательный ресурс по физике Московского политехнического университета для студентов и абитуриентов.</p>
+      </div>
+      <div class="hero__graphic">
+        <img src="/assets/brand/mas.svg" alt="Маскот проекта Симплик" width="360" height="360">
+      </div>
     </div>
-  </header>
+  </section>
 
-  <main id="main" class="container">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero__text">
-        <p class="badge">Проектная практика 09.03.02</p>
-        <h1 id="hero-title">Физика понятнее, чем кажется</h1>
-        <p class="hero__lead">
-          «МосПолиФизикс» — образовательный веб-ресурс по физике для студентов и
-          абитуриентов. Здесь появятся объяснения явлений, проекты команды,
-          проверочные тесты и новости проекта.
-        </p>
-        <dl class="facts">
-          <div class="facts__item">
-            <dt>Университет</dt>
-            <dd>Московский политехнический университет</dd>
+  <section class="mission" aria-label="О проекте">
+    <div class="wrap">
+      <p>Физика объясняет бытовые вещи: почему телефон греется, отчего закат красный, как мяч летит по дуге. Здесь собираются объяснения, опыты и задания, чтобы это было понятно с первого раза, без лишних формул и запугивания. Материалы публикуются по мере проверки, а разделы открываются вместе с ними.</p>
+    </div>
+  </section>
+
+  <section class="wrap choices" aria-labelledby="sections-title">
+    <h2 id="sections-title">Разделы проекта</h2>
+    <ul class="cards">
+      <li>
+        <a class="card" href="/about">
+          <div>
+            <h3>О нас</h3>
+            <p>Практика 09.03.02, куратор и команда проекта</p>
           </div>
-          <div class="facts__item">
-            <dt>Направление</dt>
-            <dd>09.03.02 «Информационные системы и технологии»</dd>
+          <span class="card__icon"><img src="/assets/brand/icon-about.svg" alt="" width="40" height="40"></span>
+        </a>
+      </li>
+      <li>
+        <a class="card" href="/news">
+          <div>
+            <h3>Новости</h3>
+            <p>Хроника проекта с подтверждёнными датами</p>
           </div>
-          <div class="facts__item">
-            <dt>Куратор практики</dt>
-            <dd>Кореневская Евгения Александровна</dd>
+          <span class="card__icon"><img src="/assets/brand/icon-news.svg" alt="" width="40" height="40"></span>
+        </a>
+      </li>
+      <li>
+        <a class="card" href="/projects">
+          <div>
+            <h3>Проекты</h3>
+            <p>Видео, календарь событий, визуальная новелла</p>
           </div>
-        </dl>
+          <span class="card__icon"><img src="/assets/brand/icon-projects.svg" alt="" width="40" height="40"></span>
+        </a>
+      </li>
+      <li>
+        <a class="card" href="/tests">
+          <div>
+            <h3>Тесты</h3>
+            <p>Проверка знаний по физике с разбором ответов</p>
+          </div>
+          <span class="card__icon"><img src="/assets/brand/icon-tests.svg" alt="" width="40" height="40"></span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="wrap panel" aria-labelledby="news-title">
+    <h2 id="news-title">Новости проекта</h2>
+    <div data-news>
+      <div class="state">
+        <h3>Пока нет опубликованных записей</h3>
+        <p>Новости появляются здесь только после проверки материала командой.</p>
       </div>
-      <figure class="hero__mascot">
-        <img src="/assets/brand/mas.svg" alt="Маскот проекта Симплик" width="334" height="334">
-      </figure>
-    </section>
+    </div>
+  </section>
 
-    <section class="panel" aria-labelledby="status-title">
-      <h2 id="status-title">Состояние сервиса</h2>
-      <p class="panel__lead">
-        Ответ приходит напрямую от API проекта по адресу <code>/api/health</code>.
-      </p>
-      <div class="status" id="service-status" data-state="loading" role="status" aria-live="polite">
-        <span class="status__dot" aria-hidden="true"></span>
-        <span class="status__text" id="service-status-text">Проверяем соединение с API…</span>
+  <section class="wrap panel" aria-labelledby="materials-title">
+    <h2 id="materials-title">Проекты и материалы</h2>
+    <div class="cols">
+      <div class="state">
+        <h3>Видео и календарь</h3>
+        <p>Записи опытов и события появятся с описаниями и подтверждёнными датами. Пока материалов нет, раздел честно об этом сообщает.</p>
       </div>
-      <button class="button" type="button" id="service-status-retry" hidden>
-        Проверить снова
-      </button>
-    </section>
+      <div class="state">
+        <h3>Визуальная новелла</h3>
+        <p>История о физике получит галерею, лор и дневник разработки. Ссылку на сборку добавим после её готовности.</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="panel" aria-labelledby="sections-title">
-      <h2 id="sections-title">Разделы проекта</h2>
-      <p class="panel__lead">
-        Раздел открывается только с настоящими материалами, поэтому ссылок пока нет.
-      </p>
-      <ul class="sections">
-        <li class="sections__item">
-          <img src="/assets/brand/icon-about.svg" alt="" width="28" height="28">
-          <span class="sections__name">О нас</span>
-          <span class="sections__state">материалы готовятся</span>
-        </li>
-        <li class="sections__item">
-          <img src="/assets/brand/icon-news.svg" alt="" width="28" height="28">
-          <span class="sections__name">Новости</span>
-          <span class="sections__state">материалы готовятся</span>
-        </li>
-        <li class="sections__item">
-          <img src="/assets/brand/icon-projects.svg" alt="" width="28" height="28">
-          <span class="sections__name">Проекты</span>
-          <span class="sections__state">материалы готовятся</span>
-        </li>
-        <li class="sections__item">
-          <img src="/assets/brand/icon-tests.svg" alt="" width="28" height="28">
-          <span class="sections__name">Тесты</span>
-          <span class="sections__state">материалы готовятся</span>
-        </li>
+  <section class="wrap panel" aria-labelledby="tests-title">
+    <h2 id="tests-title">Тесты и задания</h2>
+    <div class="cols">
+      <div class="state">
+        <h3>Тесты по физике</h3>
+        <p>Наборы вопросов готовятся: ищем формулировки и объяснения, которые можно проверить. Тест появится с разбором каждого ответа.</p>
+      </div>
+      <div class="state">
+        <h3>Викторина цитат и ЕГЭ</h3>
+        <p>Здесь будут цитаты учёных с источниками и задачи с решениями. Разделы откроются после проверки формулировок и разборов.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="account">
+      <div>
+        <h2>Личный кабинет</h2>
+        <p>Гостю доступны вход и регистрация, вошедший пользователь увидит свои результаты тестов и кнопку выхода. Раздел аккаунта в разработке.</p>
+      </div>
+      <div class="account__buttons">
+        <a class="btn" href="/login">Войти</a>
+        <a class="btn btn--ghost" href="/register">Зарегистрироваться</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <span class="footer__logo"><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="180" height="23"></span>
+      <p class="footer__about">Образовательный ресурс по физике Московского политехнического университета. Контакты и социальные ссылки появятся после подтверждения владельцем проекта.</p>
+    </div>
+    <div>
+      <h2>Разделы</h2>
+      <ul>
+        <li><a href="/about">О нас</a></li>
+        <li><a href="/news">Новости</a></li>
+        <li><a href="/projects">Проекты</a></li>
       </ul>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container site-footer__inner">
-      <p class="site-footer__brand">МосПолиФизикс</p>
-      <p class="site-footer__note">Московский политехнический университет</p>
     </div>
-  </footer>
+    <div>
+      <h2>Практика</h2>
+      <ul>
+        <li><a href="/tests">Тесты</a></li>
+        <li><a href="/ege">Подготовка к ЕГЭ</a></li>
+        <li><a href="/quotes">Викторина цитат</a></li>
+        <li><a href="/account">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer__bottom">
+    <p>© 2026 МосПолиФизикс. Московский политехнический университет.</p>
+  </div>
+</footer>
 </body>
 </html>
