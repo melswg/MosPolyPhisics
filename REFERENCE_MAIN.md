@@ -15,7 +15,7 @@ Read-only исходник на этой машине:
 - репозиторий: `melswg/MosPolyPhisics`;
 - рабочая ветка: `main`;
 - последний известный commit: `24560d7` (`fix: clarify guest account navigation`);
-- публичный HTTP preview: `http://151.242.88.138:9090/`;
+- публичный HTTP preview: `http://<публичный-IP-VPS>:9090/`;
 - процесс: systemd `mosphysics.service`, не Docker;
 - production SQLite отделена от исходного кода;
 - реализованы server-side cookie sessions, CSRF logout, password reset flow;
