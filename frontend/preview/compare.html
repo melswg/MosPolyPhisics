@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МосПолиФизикс: сравнение старого и нового дизайна</title>
+<style>
+  :root {
+    --bg: #F2F3F5;
+    --surface: #FFFFFF;
+    --ink: #16181D;
+    --muted: #5B616E;
+    --line: #DCDEE4;
+    --old: #8A6D3B;
+    --new: #4B3BD6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  :focus-visible { outline: 3px solid var(--new); outline-offset: 2px; }
+
+  .wrap { max-width: 1560px; margin: 0 auto; padding: 0 22px; }
+
+  header.top { background-color: var(--surface); border-bottom: 1px solid var(--line); padding: 26px 0 20px; }
+  header.top h1 { margin: 0 0 10px; font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -0.02em; }
+  header.top p { margin: 0 0 8px; color: var(--muted); max-width: 96ch; }
+  .notice {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background-color: #FFF7E6;
+    border: 1px solid #E8D9B0;
+    border-radius: 10px;
+    color: #5A4A20;
+    font-size: 15px;
+    max-width: 110ch;
+  }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 16px; font-size: 15px; }
+  nav.toc a { text-decoration: none; color: var(--new); }
+  nav.toc a:hover { text-decoration: underline; }
+
+  main { padding: 26px 0 60px; }
+
+  section.pair { margin-bottom: 34px; }
+  .pair__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 18px; margin-bottom: 12px; }
+  .pair__head h2 { margin: 0; font-size: 21px; font-weight: 800; letter-spacing: -0.015em; }
+  .pair__note { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .column { background-color: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .column__head {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+    padding: 12px 16px; border-bottom: 1px solid var(--line);
+  }
+  .column__label { font-size: 14px; font-weight: 700; }
+  .column--old .column__label { color: var(--old); }
+  .column--new .column__label { color: var(--new); }
+  .column__head a { font-size: 14px; text-decoration: none; color: var(--muted); }
+  .column__head a:hover { color: var(--ink); text-decoration: underline; }
+  .column__scroll { max-height: 1150px; overflow-y: auto; background-color: #EDEEF1; }
+  .column__scroll img { width: 100%; height: auto; }
+  .column__foot { padding: 10px 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+  .single { background-color: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .single h2 { margin: 0 0 8px; font-size: 20px; font-weight: 800; }
+  .single p { margin: 0 0 8px; color: var(--muted); }
+  .single ul { margin: 10px 0 0; padding-left: 20px; color: var(--muted); }
+  .single li { margin-bottom: 6px; }
+
+  footer { border-top: 1px solid var(--line); background-color: var(--surface); padding: 22px 0 34px; color: var(--muted); font-size: 15px; }
+
+  @media (max-width: 1080px) {
+    .columns { grid-template-columns: 1fr; }
+    .column__scroll { max-height: 700px; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>Сравнение экранов: старый дизайн и новая версия</h1>
+    <p>Слева старый сайт, справа новая реализация в выбранном стиле. Оба варианта подняты локально и открываются живьём, снимки полные по высоте страницы, колонки прокручиваются независимо.</p>
+    <div class="notice">
+      Старый сайт открыт без backend, поэтому его динамические блоки (новости, календарь, видео, цитата) показывают своё состояние загрузки или пустоты. Новая версия без API ведёт себя так же честно: пустой раздел сообщает, что материалов пока нет.
+    </div>
+    <nav class="toc" aria-label="Быстрый переход">
+      <a href="#home">Главная</a>
+      <a href="#about">О нас</a>
+      <a href="#news">Новости</a>
+      <a href="#projects">Проекты</a>
+      <a href="#video">Видео</a>
+      <a href="#calendar">Календарь</a>
+      <a href="#novel">Новелла</a>
+      <a href="#tests">Тесты</a>
+      <a href="#test">Прохождение теста</a>
+      <a href="#account">Аккаунт</a>
+      <a href="#login">Вход</a>
+      <a href="#register">Регистрация</a>
+      <a href="#password-reset">Сброс пароля</a>
+      <a href="#password-confirm">Новый пароль</a>
+      <a href="#extra">Новые разделы</a>
+      <a href="#removed">Убрано</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="pair" id="home">
+    <div class="pair__head">
+      <h2>Главная</h2>
+      <p class="pair__note">Композиция сохранена: блок цитаты с маскотом, цветная полоса описания, четыре карточки разделов. Ниже добавились лента новостей и честные состояния.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/index.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/home.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/home.png" alt="Старая главная страница" loading="lazy"></div>
+        <div class="column__foot">index.html, высота 1772 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/home.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/home.png" alt="Новая главная страница" loading="lazy"></div>
+        <div class="column__foot">/, высота 2861 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="about">
+    <div class="pair__head">
+      <h2>О нас</h2>
+      <p class="pair__note">Оставлены только подтверждённые факты: направление практики, период, куратор, исторический состав. Роли и контакты ждут подтверждения.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/about.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/about.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/about.png" alt="Старая страница о нас" loading="lazy"></div>
+        <div class="column__foot">pages/about.html, высота 1745 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/about" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/about.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/about.png" alt="Новая страница о нас" loading="lazy"></div>
+        <div class="column__foot">/about, высота 2657 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="news">
+    <div class="pair__head">
+      <h2>Новости</h2>
+      <p class="pair__note">Лента приходит только из API. Старая версия показывала демонстрационные записи, новая показывает пустое состояние до импорта подтверждённой новости.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/news.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/news.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/news.png" alt="Старая страница новостей" loading="lazy"></div>
+        <div class="column__foot">pages/news.html, высота 850 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/news" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/news.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/news.png" alt="Новая страница новостей" loading="lazy"></div>
+        <div class="column__foot">/news, высота 1313 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="projects">
+    <div class="pair__head">
+      <h2>Проекты</h2>
+      <p class="pair__note">Вместо набора заглушек хаб честно называет состояние каждого направления: видео, календарь, новелла, команда.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/project.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/projects.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/projects.png" alt="Старая страница проектов" loading="lazy"></div>
+        <div class="column__foot">pages/project.html, высота 809 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/projects" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/projects.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/projects.png" alt="Новая страница проектов" loading="lazy"></div>
+        <div class="column__foot">/projects, высота 1625 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="video">
+    <div class="pair__head">
+      <h2>Видео</h2>
+      <p class="pair__note">Старая версия показывала деморолик с обложкой-заглушкой. Новая ждёт реальные записи и объясняет правила публикации.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/video.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/video.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/video.png" alt="Старая страница видео" loading="lazy"></div>
+        <div class="column__foot">pages/video.html, высота 504 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/video" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/video.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/video.png" alt="Новая страница видео" loading="lazy"></div>
+        <div class="column__foot">/video, высота 1340 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="calendar">
+    <div class="pair__head">
+      <h2>Календарь</h2>
+      <p class="pair__note">Был список событий из демо-записей, стал календарь месяца с переключением и честным пустым состоянием.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/calendar.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/calendar.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/calendar.png" alt="Старая страница календаря" loading="lazy"></div>
+        <div class="column__foot">pages/calendar.html, высота 669 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/calendar" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/calendar.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/calendar.png" alt="Новая страница календаря" loading="lazy"></div>
+        <div class="column__foot">/calendar, высота 1704 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="novel">
+    <div class="pair__head">
+      <h2>Визуальная новелла</h2>
+      <p class="pair__note">Структура сохранена: описание, лор, галерея, дневник, сборка. Убраны подписи-заглушки и кнопка скачивания без файла.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/novel.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/novel.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/novel.png" alt="Старая страница новеллы" loading="lazy"></div>
+        <div class="column__foot">pages/novel.html, высота 1401 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/novel" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/novel.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/novel.png" alt="Новая страница новеллы" loading="lazy"></div>
+        <div class="column__foot">/novel, высота 1688 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="tests">
+    <div class="pair__head">
+      <h2>Каталог тестов</h2>
+      <p class="pair__note">Четыре направления сохранены. Часть старых карточек вела на страницу «в разработке», теперь у каждой честно указано состояние набора вопросов.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/tests.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/tests.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/tests.png" alt="Старая страница тестов" loading="lazy"></div>
+        <div class="column__foot">pages/tests.html, высота 1016 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/tests" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/tests.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/tests.png" alt="Новая страница тестов" loading="lazy"></div>
+        <div class="column__foot">/tests, высота 1859 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="test">
+    <div class="pair__head">
+      <h2>Прохождение теста</h2>
+      <p class="pair__note">Экран сохранён: вопросы с вариантами, отправка, результат. Правильные ответы не показываются до отправки, добавлены состояния пустоты и ошибки.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/test_template.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/test.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/test.png" alt="Старый экран прохождения теста" loading="lazy"></div>
+        <div class="column__foot">pages/test_template.html, высота 584 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/test" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/test.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/test.png" alt="Новый экран прохождения теста" loading="lazy"></div>
+        <div class="column__foot">/test, высота 1379 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="account">
+    <div class="pair__head">
+      <h2>Личный кабинет</h2>
+      <p class="pair__note">Гость видит выбор «Войти» и «Зарегистрироваться», вошедший получит свои данные и выход. Техническая ошибка не выдаётся за отсутствие входа.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/account.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/account.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/account.png" alt="Старая страница кабинета" loading="lazy"></div>
+        <div class="column__foot">pages/account.html, высота 568 px</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/account" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/account.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/account.png" alt="Новая страница кабинета" loading="lazy"></div>
+        <div class="column__foot">/account, высота 1554 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="login">
+    <div class="pair__head">
+      <h2>Вход</h2>
+      <p class="pair__note">Форма, правила пароля и понятные сообщения. Отправка появится вместе с backend-частью аккаунтов.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/login.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/login.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/login.png" alt="Старая страница входа" loading="lazy"></div>
+        <div class="column__foot">pages/login.html</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/login" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/login.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/login.png" alt="Новая страница входа" loading="lazy"></div>
+        <div class="column__foot">/login, высота 1448 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="register">
+    <div class="pair__head">
+      <h2>Регистрация</h2>
+      <p class="pair__note">Требования к полям вынесены в подсказки, у каждого поля корректный autocomplete, права администратора регистрация не даёт.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/register.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/register.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/register.png" alt="Старая страница регистрации" loading="lazy"></div>
+        <div class="column__foot">pages/register.html</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/register" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/register.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/register.png" alt="Новая страница регистрации" loading="lazy"></div>
+        <div class="column__foot">/register, высота 1784 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="password-reset">
+    <div class="pair__head">
+      <h2>Запрос смены пароля</h2>
+      <p class="pair__note">Ответ одинаковый для существующего и неизвестного адреса, код восстановления не показывается на странице.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/forgot_password.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/password-reset.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/password-reset.png" alt="Старая страница запроса пароля" loading="lazy"></div>
+        <div class="column__foot">pages/forgot_password.html</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/password-reset" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/password-reset.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/password-reset.png" alt="Новая страница запроса пароля" loading="lazy"></div>
+        <div class="column__foot">/password-reset, высота 1506 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="password-confirm">
+    <div class="pair__head">
+      <h2>Новый пароль</h2>
+      <p class="pair__note">Токен приходит из ссылки и не выводится в интерфейсе. После смены пароля активные входы завершатся.</p>
+    </div>
+    <div class="columns">
+      <div class="column column--old">
+        <div class="column__head"><span class="column__label">Старый дизайн</span><a href="http://127.0.0.1:8012/pages/reset_password.html" target="_blank" rel="noopener">открыть живьём</a><a href="compare/old/password-confirm.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/old/password-confirm.png" alt="Старая страница нового пароля" loading="lazy"></div>
+        <div class="column__foot">pages/reset_password.html</div>
+      </div>
+      <div class="column column--new">
+        <div class="column__head"><span class="column__label">Новая версия</span><a href="http://127.0.0.1:8011/password-reset/confirm" target="_blank" rel="noopener">открыть живьём</a><a href="compare/new/password-confirm.png" target="_blank" rel="noopener">полный снимок</a></div>
+        <div class="column__scroll"><img src="compare/new/password-confirm.png" alt="Новая страница нового пароля" loading="lazy"></div>
+        <div class="column__foot">/password-reset/confirm, высота 1232 px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pair" id="extra">
+    <div class="single">
+      <h2>Новые разделы без старого аналога</h2>
+      <p>В старом сайте эти направления жили только карточками внутри каталога тестов.</p>
+      <ul>
+        <li><a href="http://127.0.0.1:8011/ege" target="_blank" rel="noopener">/ege</a> — задания ЕГЭ с разбором: <a href="compare/new/ege.png" target="_blank" rel="noopener">снимок</a></li>
+        <li><a href="http://127.0.0.1:8011/quotes" target="_blank" rel="noopener">/quotes</a> — викторина цитат с источниками: <a href="compare/new/quotes.png" target="_blank" rel="noopener">снимок</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="pair" id="removed">
+    <div class="single">
+      <h2>Убрано из публичного пути</h2>
+      <p>Старая страница «в разработке» была общей заглушкой для неготовых разделов. В новой версии она не нужна: каждый раздел сам сообщает состояние, а заглушек в публичном пути нет.</p>
+      <ul>
+        <li><a href="http://127.0.0.1:8012/pages/maintenance.html" target="_blank" rel="noopener">старая pages/maintenance.html</a>: <a href="compare/old/maintenance.png" target="_blank" rel="noopener">снимок</a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Обе версии открыты локально: старый сайт на порту 8012 (копия исходников без backend), новая версия на порту 8011. Снимки сделаны на ширине 1440 px с полной высотой страницы.
+  </div>
+</footer>
+</body>
+</html>

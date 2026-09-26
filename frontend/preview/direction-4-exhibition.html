@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МосПолиФизикс — направление 4: научная выставка</title>
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<style>
+  :root {
+    --wall: #F1F1EC;
+    --wall-alt: #E4E4DC;
+    --hall: #191A20;
+    --hall-ink: #EDEEF4;
+    --ink: #14161C;
+    --muted: #5D6169;
+    --line: #C9C9BF;
+    --indigo: #2E2AC4;
+    --sage: #5E7A54;
+    --plate: #14161D;
+    --sans: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  }
+
+  [data-theme="dark"] {
+    --wall: #101116;
+    --wall-alt: #17181E;
+    --hall: #05060A;
+    --hall-ink: #EDEEF4;
+    --ink: #ECEDF2;
+    --muted: #9A9DA8;
+    --line: #2A2C35;
+    --indigo: #9FA4FF;
+    --sage: #A9C79B;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--wall);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.6;
+    transition: background-color 0.3s ease;
+  }
+
+  img { max-width: 100%; height: auto; }
+  a { color: inherit; }
+
+  :focus-visible { outline: 3px solid var(--indigo); outline-offset: 4px; }
+
+  .skip { position: absolute; left: -9999px; background-color: var(--wall); padding: 10px 16px; z-index: 40; }
+  .skip:focus { left: 12px; top: 12px; }
+
+  .band { width: 100%; }
+  .inner { max-width: 1360px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 76px); }
+
+  .topbar { border-bottom: 1px solid var(--line); background-color: var(--wall); position: sticky; top: 0; z-index: 10; }
+
+  .topbar__row { display: flex; align-items: center; gap: 28px; padding-top: 16px; padding-bottom: 16px; }
+
+  .brand { display: inline-flex; text-decoration: none; }
+  .brand span { display: inline-flex; padding: 8px 13px; border-radius: 2px; background-color: var(--plate); }
+  .brand img { width: 184px; height: 23px; }
+
+  .topbar nav { display: flex; flex-wrap: wrap; gap: 2px 20px; margin-left: auto; font-size: 16px; }
+  .topbar nav a { text-decoration: none; padding: 6px 0; color: var(--muted); border-bottom: 2px solid transparent; }
+  .topbar nav a:hover { color: var(--ink); border-color: var(--indigo); }
+  .topbar nav a[aria-current="page"] { color: var(--ink); border-color: var(--ink); }
+
+  .toggle {
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background-color: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    padding: 9px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .toggle:hover { border-color: var(--indigo); color: var(--indigo); }
+
+  .entrance { padding: clamp(54px, 9vw, 128px) 0 clamp(40px, 6vw, 80px); }
+
+  .entrance__title {
+    margin: 0 0 26px;
+    font-size: clamp(46px, 8vw, 122px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    max-width: 20ch;
+  }
+
+  .entrance__title b { display: block; font-size: 0.52em; font-weight: 700; letter-spacing: -0.02em; }
+
+  .entrance__lead { margin: 0 0 40px; max-width: 58ch; font-size: 20px; color: var(--muted); }
+
+  .entrance__facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 26px; border-top: 1px solid var(--line); padding-top: 26px; max-width: 1000px; }
+  .entrance__facts div { padding-right: 20px; }
+  .entrance__facts dt { font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+  .entrance__facts dd { margin: 0; font-size: 17px; font-weight: 500; }
+
+  .hang {
+    margin-top: clamp(30px, 5vw, 60px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    align-items: end;
+    gap: clamp(24px, 5vw, 70px);
+  }
+
+  .hang svg { width: 100%; height: auto; overflow: visible; }
+  .stroke-warm { fill: none; stroke: var(--sage); stroke-width: 1.6; }
+  .stroke-cool { fill: none; stroke: var(--indigo); stroke-width: 1.6; }
+  .stroke-faint { fill: none; stroke: var(--line); stroke-width: 1.2; stroke-dasharray: 7 7; }
+  .dot { fill: var(--indigo); }
+  .note { fill: var(--muted); font-family: var(--sans); font-size: 13px; }
+  .note-strong { fill: var(--ink); font-family: var(--sans); font-size: 13px; font-weight: 600; }
+
+  .hang__label { border-top: 3px solid var(--ink); padding-top: 14px; font-size: 15px; color: var(--muted); }
+  .hang__label strong { display: block; margin-bottom: 6px; color: var(--ink); font-size: 17px; }
+  .hang__mascot { margin: 0 0 16px; }
+  .hang__mascot img { width: min(150px, 46%); }
+
+  .hall { padding: clamp(56px, 8vw, 120px) 0; }
+  .hall--alt { background-color: var(--wall-alt); }
+  .hall--dark { background-color: var(--hall); color: var(--hall-ink); }
+  .hall--dark .hall__number { color: var(--wall-alt); opacity: 0.5; }
+  .hall--dark .hall__label { color: #B9BCC7; }
+  .hall--dark .hall__label strong { color: var(--hall-ink); }
+  .hall--dark .hall__lead { color: #C6C9D4; }
+  .hall--dark .stroke-faint { stroke: #3A3D48; }
+  .hall--dark .note { fill: #9EA2AF; }
+  .hall--dark .note-strong { fill: var(--hall-ink); }
+
+  .hall__grid { display: grid; grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); align-items: center; }
+
+  .hall__number {
+    font-size: clamp(72px, 12vw, 190px);
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--wall-alt);
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hall__body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(24px, 4vw, 70px); align-items: center; }
+
+  .hall h2 { margin: 0 0 18px; font-size: clamp(28px, 3.6vw, 48px); font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; }
+  .hall__lead { margin: 0 0 18px; max-width: 46ch; color: var(--muted); font-size: 19px; }
+  .hall__label { border-top: 3px solid currentColor; padding-top: 12px; font-size: 15px; color: var(--muted); max-width: 34ch; }
+  .hall__label strong { display: block; margin-bottom: 6px; color: var(--ink); font-size: 16px; }
+
+  .exhibit { margin: 0; display: grid; gap: 16px; }
+  .exhibit svg { width: 100%; height: auto; overflow: visible; }
+  .exhibit figcaption { font-size: 15px; color: var(--muted); max-width: 44ch; }
+
+  .news { padding: clamp(50px, 7vw, 100px) 0; border-top: 1px solid var(--line); }
+  .news__grid { display: grid; grid-template-columns: minmax(0, 0.35fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 70px); }
+  .news h2 { margin: 0 0 12px; font-size: clamp(24px, 2.6vw, 34px); font-weight: 700; letter-spacing: -0.02em; }
+  .news__hint { margin: 0; color: var(--muted); font-size: 16px; max-width: 30ch; }
+
+  .record__date { margin: 0 0 12px; font-size: 15px; color: var(--indigo); font-weight: 600; }
+  .record h3 { margin: 0 0 16px; font-size: clamp(24px, 3vw, 38px); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; max-width: 30ch; }
+  .record p { margin: 0 0 14px; max-width: 66ch; }
+  .record p.muted { color: var(--muted); }
+
+  .routes { padding: clamp(50px, 7vw, 100px) 0 clamp(30px, 4vw, 50px); border-top: 1px solid var(--line); }
+  .routes h2 { margin: 0 0 26px; font-size: clamp(24px, 2.6vw, 34px); font-weight: 700; letter-spacing: -0.02em; }
+
+  .route { display: grid; grid-template-columns: minmax(0, 0.28fr) minmax(0, 1fr) auto; align-items: baseline; gap: 18px; padding: 24px 0; border-top: 1px solid var(--line); text-decoration: none; }
+  .route:last-of-type { border-bottom: 1px solid var(--line); }
+  .route:hover .route__name { color: var(--indigo); }
+  .route__name { font-size: clamp(22px, 2.6vw, 34px); font-weight: 700; letter-spacing: -0.02em; }
+  .route__about { color: var(--muted); font-size: 16px; max-width: 62ch; }
+  .route__go { color: var(--muted); font-size: 15px; white-space: nowrap; }
+
+  .account { padding: clamp(44px, 6vw, 84px) 0; background-color: var(--wall-alt); }
+  .account__grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 26px; }
+  .account h2 { margin: 0 0 10px; font-size: clamp(24px, 2.8vw, 36px); font-weight: 700; letter-spacing: -0.02em; }
+  .account p { margin: 0; max-width: 58ch; color: var(--muted); }
+  .account__buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .act {
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    background-color: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-weight: 600;
+    padding: 12px 22px;
+    cursor: pointer;
+  }
+  .act:hover { background-color: var(--ink); color: var(--wall); }
+  .act--solid { background-color: var(--ink); color: var(--wall); }
+  .answer { margin: 18px 0 0; color: var(--muted); font-size: 16px; }
+  .answer:empty { display: none; }
+
+  .footer { border-top: 1px solid var(--line); padding: 30px 0 44px; }
+  .footer__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 15px; color: var(--muted); }
+  .footer nav { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+  .footer a { text-decoration: none; }
+  .footer a:hover { color: var(--ink); }
+
+  .reveal { animation: rise 0.9s ease-out both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 1080px) {
+    .hang, .hall__grid, .hall__body, .news__grid { grid-template-columns: minmax(0, 1fr); }
+    .hall__number { font-size: clamp(56px, 16vw, 110px); }
+    .route { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .account__grid { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 17px; }
+    .topbar__row { flex-wrap: wrap; gap: 12px; }
+    .topbar nav { order: 3; width: 100%; margin-left: 0; overflow-x: auto; flex-wrap: nowrap; font-size: 15px; }
+    .topbar nav a { white-space: nowrap; }
+    .brand img { width: 156px; height: auto; }
+    .entrance__title { font-size: clamp(38px, 12vw, 64px); }
+    .hall__number { font-size: 64px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { animation: none; }
+    body { transition: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Перейти к содержанию</a>
+
+<header class="topbar">
+  <div class="inner topbar__row">
+    <a class="brand" href="direction-4-exhibition.html" aria-label="МосПолиФизикс, на главную">
+      <span><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="184" height="23"></span>
+    </a>
+    <nav aria-label="Разделы ресурса">
+      <a href="direction-4-exhibition.html" aria-current="page">Главная</a>
+      <a href="#about">О нас</a>
+      <a href="#news">Новости</a>
+      <a href="#projects">Проекты</a>
+      <a href="#tests">Тесты</a>
+      <a href="#account">Аккаунт</a>
+    </nav>
+    <button class="toggle" type="button" id="theme-switch" aria-pressed="false">Тёмный зал</button>
+  </div>
+</header>
+
+<main id="content">
+  <section class="band entrance">
+    <div class="inner">
+      <h1 class="entrance__title reveal">Постоянная экспозиция о физике<b>для студентов и абитуриентов</b></h1>
+      <p class="entrance__lead reveal">«МосПолиФизикс» — образовательный ресурс Московского политехнического университета. Мы показываем явление, объясняем его моделью и проверяем понимание задачей: от первого зала до последнего.</p>
+      <dl class="entrance__facts reveal">
+        <div>
+          <dt>Университет</dt>
+          <dd>Московский политехнический</dd>
+        </div>
+        <div>
+          <dt>Направление практики</dt>
+          <dd>09.03.02 «Информационные системы и технологии»</dd>
+        </div>
+        <div>
+          <dt>Куратор</dt>
+          <dd>Кореневская Евгения Александровна</dd>
+        </div>
+      </dl>
+
+      <div class="hang">
+        <figure class="exhibit">
+          <svg viewBox="0 0 720 380" role="img" aria-label="Схема дисперсии света в призме">
+            <path class="stroke-faint" d="M40 330 L680 330"></path>
+            <path class="stroke-warm" d="M40 190 L330 190"></path>
+            <polygon points="330,90 430,300 230,300" fill="none" stroke="var(--indigo)" stroke-width="2"></polygon>
+            <path class="stroke-warm" d="M430 235 L690 150"></path>
+            <path class="stroke-warm" d="M430 250 L690 250"></path>
+            <path class="stroke-warm" d="M430 262 L690 345"></path>
+            <circle class="dot" cx="330" cy="190" r="4"></circle>
+            <text class="note-strong" x="44" y="176">белый свет</text>
+            <text class="note" x="452" y="140">спектр: от красного</text>
+            <text class="note" x="452" y="360">к фиолетовому</text>
+            <text class="note" x="238" y="326">стекло</text>
+          </svg>
+          <figcaption>Экспонат зала объяснений: белый свет раскладывается в спектр, потому что разные длины волн преломляются по-разному.</figcaption>
+        </figure>
+        <div class="hang__label">
+          <figure class="hang__mascot">
+            <img src="/assets/brand/mas.svg" alt="Маскот проекта Симплик" width="150" height="150">
+          </figure>
+          <strong>Что мы показываем</strong>
+          Явления, которые легко увидеть самому: радугу, тени, отражение в лужах, полёт мяча.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band hall hall--alt" id="about">
+    <div class="inner hall__grid">
+      <p class="hall__number">01</p>
+      <div class="hall__body">
+        <div>
+          <h2>Явление</h2>
+          <p class="hall__lead">Начинаем с того, что видно без приборов. Смотрим внимательно и задаём вопрос: почему это происходит именно так?</p>
+          <div class="hall__label">
+            <strong>Зал I</strong>
+            Наблюдение и вопрос
+          </div>
+        </div>
+        <figure class="exhibit">
+          <svg viewBox="0 0 520 300" role="img" aria-label="Схема тени от непрозрачного предмета">
+            <path class="stroke-faint" d="M20 250 L500 250"></path>
+            <circle cx="80" cy="90" r="26" fill="none" stroke="var(--sage)" stroke-width="1.6"></circle>
+            <path class="stroke-warm" d="M60 74 L400 30 M100 74 L420 150"></path>
+            <rect x="200" y="120" width="70" height="130" fill="none" stroke="var(--indigo)" stroke-width="2"></rect>
+            <path d="M270 120 L430 96 L430 244 L270 250 Z" fill="var(--indigo)" opacity="0.12"></path>
+            <text class="note-strong" x="46" y="46">источник</text>
+            <text class="note" x="196" y="112">предмет</text>
+            <text class="note" x="330" y="272">тень</text>
+          </svg>
+          <figcaption>Тень повторяет форму предмета, потому что свет распространяется прямолинейно.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band hall">
+    <div class="inner hall__grid">
+      <p class="hall__number">02</p>
+      <div class="hall__body">
+        <div>
+          <h2>Объяснение</h2>
+          <p class="hall__lead">Явление превращается в модель: появляются величины, формулы и график. Модель объясняет не один случай, а целый класс похожих.</p>
+          <div class="hall__label">
+            <strong>Зал II</strong>
+            Модель и формула
+          </div>
+        </div>
+        <figure class="exhibit">
+          <svg viewBox="0 0 520 300" role="img" aria-label="График зависимости координаты от времени">
+            <path class="stroke-faint" d="M60 40 L60 250 L490 250"></path>
+            <path class="stroke-cool" d="M60 250 C 180 250, 220 60, 470 60"></path>
+            <path class="stroke-faint" d="M60 250 L60 250 M150 250 L150 210 M240 250 L240 168 M330 250 L330 126 M420 250 L420 84"></path>
+            <line class="stroke-warm" x1="240" y1="168" x2="240" y2="250" stroke-dasharray="4 4"></line>
+            <circle class="dot" cx="240" cy="168" r="4"></circle>
+            <text class="note" x="24" y="46">x</text>
+            <text class="note" x="466" y="272">t</text>
+            <text class="note-strong" x="196" y="196">точка на графике</text>
+          </svg>
+          <figcaption>График показывает, как меняется координата со временем: по наклону читается скорость.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band hall hall--dark" id="projects">
+    <div class="inner hall__grid">
+      <p class="hall__number">03</p>
+      <div class="hall__body">
+        <div>
+          <h2>Эксперимент</h2>
+          <p class="hall__lead">Собираем установку, измеряем, сравниваем с моделью. Здесь появятся записи опытов и проекты студентов: видео, календарь встреч и визуальная новелла о физике.</p>
+          <div class="hall__label">
+            <strong>Зал III</strong>
+            Материалы приглашаются: без записей и подтверждённых дат зал останется закрытым
+          </div>
+        </div>
+        <figure class="exhibit">
+          <svg viewBox="0 0 520 300" role="img" aria-label="Схема математического маятника">
+            <path class="stroke-faint" d="M60 60 L460 60"></path>
+            <line class="stroke-cool" x1="260" y1="60" x2="404" y2="196"></line>
+            <circle cx="404" cy="196" r="14" fill="none" stroke="var(--indigo)" stroke-width="2"></circle>
+            <path class="stroke-faint" d="M260 60 L260 250"></path>
+            <path class="stroke-warm" d="M260 130 A 70 70 0 0 1 300 176"></path>
+            <text class="note" x="266" y="112">нить</text>
+            <text class="note-strong" x="420" y="200">груз</text>
+            <text class="note" x="196" y="150">угол отклонения</text>
+            <text class="note" x="330" y="266">период зависит от длины</text>
+          </svg>
+          <figcaption>Маятник: измеряем период при разной длине нити и сверяем с формулой.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band hall hall--alt" id="tests">
+    <div class="inner hall__grid">
+      <p class="hall__number">04</p>
+      <div class="hall__body">
+        <div>
+          <h2>Проверка знаний</h2>
+          <p class="hall__lead">Короткий тест после каждого объяснения и задачи для подготовки. Правильные варианты не показываются до отправки, а после неё приходит разбор каждого вопроса.</p>
+          <div class="hall__label">
+            <strong>Зал IV</strong>
+            Наборы вопросов готовятся: формулировки и объяснения проверяются
+          </div>
+        </div>
+        <figure class="exhibit">
+          <svg viewBox="0 0 520 300" role="img" aria-label="Схема электрической цепи с лампой">
+            <rect x="90" y="70" width="340" height="160" fill="none" stroke="var(--indigo)" stroke-width="1.6"></rect>
+            <line class="stroke-faint" x1="90" y1="150" x2="30" y2="150"></line>
+            <line class="stroke-faint" x1="430" y1="150" x2="490" y2="150"></line>
+            <circle cx="260" cy="70" r="18" fill="none" stroke="var(--sage)" stroke-width="2"></circle>
+            <path class="stroke-warm" d="M232 70 L288 70 M260 42 L260 98"></path>
+            <text class="note-strong" x="236" y="34">лампа</text>
+            <text class="note" x="20" y="140">источник</text>
+            <text class="note" x="446" y="140">ключ</text>
+          </svg>
+          <figcaption>Простая цепь: проверяем, сходится ли расчёт тока с показаниями прибора.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band news" id="news">
+    <div class="inner news__grid">
+      <div>
+        <h2>Что нового в проекте</h2>
+        <p class="news__hint">Одна подтверждённая запись. Остальные появятся с датами и текстом от команды.</p>
+      </div>
+      <article class="record">
+        <p class="record__date">14 сентября 2026</p>
+        <h3>МосПолиФизикс обновил план развития</h3>
+        <p>Команда определила ближайшую цель проекта: наполненные главная страница, раздел «О нас» и новости для демонстрации куратору. Дальше работа продолжается над простым управлением публикациями и одним законченным тестом по физике.</p>
+        <p class="muted">Технологическая основа остаётся прежней: FastAPI, SQLite и интерфейс на HTML, CSS и JavaScript.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="band routes">
+    <div class="inner">
+      <h2>Дальше по маршруту</h2>
+      <a class="route" href="#about">
+        <span class="route__name">О нас</span>
+        <span class="route__about">Как устроена практика и кто работает над проектом. Состав и роли появятся после подтверждения командой.</span>
+        <span class="route__go">раздел готовится</span>
+      </a>
+      <a class="route" href="#projects">
+        <span class="route__name">Проекты</span>
+        <span class="route__about">Видео опытов, календарь подтверждённых событий и визуальная новелла с дневником разработки.</span>
+        <span class="route__go">материалы приглашаются</span>
+      </a>
+      <a class="route" href="#tests">
+        <span class="route__name">Тесты</span>
+        <span class="route__about">Тест по физике с разбором, викторина цитат с источниками и задания ЕГЭ с решениями.</span>
+        <span class="route__go">вопросы готовятся</span>
+      </a>
+      <a class="route" href="#news">
+        <span class="route__name">Новости</span>
+        <span class="route__about">Хроника проекта: что сделано и что дальше. Публикуем только записи с подтверждённым источником.</span>
+        <span class="route__go">одна запись</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="band account" id="account">
+    <div class="inner account__grid">
+      <div>
+        <h2>Личный кабинет</h2>
+        <p>Гостю будут доступны вход и регистрация, вошедший пользователь увидит результаты своих тестов и кнопку выхода. Раздел аккаунта ещё в разработке.</p>
+      </div>
+      <div class="account__buttons">
+        <button class="act act--solid" type="button" data-answer="Вход появится вместе с разделом аккаунта: по имени или почте.">Войти</button>
+        <button class="act" type="button" data-answer="Регистрация появится вместе с разделом аккаунта: имя, почта и пароль. Права администратора регистрация не выдаёт.">Зарегистрироваться</button>
+      </div>
+      <p class="answer" id="answer" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="inner footer__row">
+    <p>МосПолиФизикс — образовательный ресурс по физике Московского политехнического университета</p>
+    <nav aria-label="Разделы в подвале">
+      <a href="#about">О нас</a>
+      <a href="#news">Новости</a>
+      <a href="#projects">Проекты</a>
+      <a href="#tests">Тесты</a>
+      <a href="#account">Аккаунт</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const switchButton = document.getElementById("theme-switch");
+  const stored = localStorage.getItem("mosphysics-preview-theme-exhibition");
+
+  function paint(theme) {
+    root.dataset.theme = theme;
+    switchButton.setAttribute("aria-pressed", String(theme === "dark"));
+    switchButton.textContent = theme === "dark" ? "Светлый зал" : "Тёмный зал";
+  }
+
+  paint(stored === "dark" ? "dark" : "light");
+
+  switchButton.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.setItem("mosphysics-preview-theme-exhibition", next);
+    paint(next);
+  });
+
+  const answer = document.getElementById("answer");
+  document.querySelectorAll("[data-answer]").forEach((control) => {
+    control.addEventListener("click", () => {
+      answer.textContent = control.dataset.answer;
+    });
+  });
+</script>
+</body>
+</html>

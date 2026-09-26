@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МосПолиФизикс — направление 2: портал</title>
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<style>
+  :root {
+    --bg: #F3F6FF;
+    --surface: #FFFFFF;
+    --ink: #111731;
+    --muted: #5B6480;
+    --line: #DCE3F5;
+    --blue: #2347E0;
+    --blue-soft: #E4EAFF;
+    --yellow: #FFC23D;
+    --yellow-soft: #FFF3D6;
+    --coral: #FF6A5C;
+    --coral-soft: #FFEBE8;
+    --mint: #17B978;
+    --mint-soft: #DFF7EC;
+    --plate: #14161D;
+    --display: "Avenir Next", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    --text: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0D1120;
+    --surface: #161B2E;
+    --ink: #EDF1FF;
+    --muted: #A4ADC8;
+    --line: #273050;
+    --blue: #8CA4FF;
+    --blue-soft: #1C2444;
+    --yellow: #FFD264;
+    --yellow-soft: #2C2716;
+    --coral: #FF9084;
+    --coral-soft: #33201F;
+    --mint: #4BD9A2;
+    --mint-soft: #12301F;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--text);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  img { max-width: 100%; height: auto; }
+  a { color: inherit; }
+
+  :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+  .skip { position: absolute; left: -9999px; background-color: var(--surface); padding: 10px 16px; z-index: 30; }
+  .skip:focus { left: 12px; top: 12px; }
+
+  .wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 26px; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topbar__row {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  .brand { display: inline-flex; text-decoration: none; }
+  .brand__plate { display: inline-flex; padding: 8px 13px; border-radius: 10px; background-color: var(--plate); }
+  .brand img { width: 196px; height: 25px; }
+
+  .menu { display: flex; gap: 4px; margin-left: 8px; }
+  .menu a, .menu span {
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-size: 16px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .menu a:hover { background-color: var(--blue-soft); }
+  .menu span { color: var(--muted); }
+
+  .topbar__actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+  .pill {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background-color: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    padding: 9px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .pill:hover { background-color: var(--blue-soft); border-color: var(--blue); }
+
+  .pill--solid {
+    background-color: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+    font-weight: 600;
+  }
+  .pill--solid:hover { background-color: var(--blue); }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: 34px;
+    padding: 46px 44px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background-color: var(--surface);
+  }
+
+  .hero__decor { position: absolute; inset: 0; pointer-events: none; }
+
+  .hero__shape {
+    position: absolute;
+    top: -110px;
+    right: -70px;
+    width: 430px;
+    height: 430px;
+    border-radius: 50%;
+    background-color: var(--yellow-soft);
+  }
+
+  .hero__bar { display: none; }
+
+  .hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 34px;
+  }
+
+  .hero h1 {
+    margin: 0 0 16px;
+    font-family: var(--display);
+    font-size: clamp(34px, 4.6vw, 56px);
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .hero__lead { margin: 0 0 26px; max-width: 46ch; font-size: 19px; color: var(--muted); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+
+  .chips a {
+    display: inline-block;
+    padding: 11px 18px;
+    border: 2px solid var(--line);
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .chips a:hover { border-color: var(--blue); color: var(--blue); }
+  .chips li:first-child a { border-color: var(--blue); color: var(--blue); }
+
+  .hero__mascot { justify-self: center; margin: 0; width: min(300px, 74%); }
+  .hero__mascot img { display: block; width: 100%; }
+
+  .bubble {
+    position: relative;
+    z-index: 1;
+    margin: 12px auto 0;
+    max-width: 300px;
+    padding: 14px 18px;
+    border-radius: 14px 14px 14px 4px;
+    background-color: var(--blue-soft);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .block { margin-top: 52px; }
+
+  .block__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .block h2 {
+    margin: 0 0 20px;
+    font-family: var(--display);
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+  .block__link { color: var(--muted); font-size: 16px; margin: 0; }
+
+  .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+
+  .tile {
+    padding: 26px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background-color: var(--surface);
+  }
+  .tile img { width: 34px; height: 34px; }
+  .tile h3 { margin: 14px 0 8px; font-family: var(--display); font-size: 21px; font-weight: 700; }
+  .tile p { margin: 0; color: var(--muted); font-size: 16px; }
+
+  .tile--news { grid-column: span 4; }
+  .tile--projects { grid-column: span 2; background-color: var(--yellow-soft); border-color: transparent; }
+  .tile--tests { grid-column: span 3; background-color: var(--mint-soft); border-color: transparent; }
+  .tile--about { grid-column: span 3; background-color: var(--coral-soft); border-color: transparent; }
+
+  .story__date { margin: 0 0 6px; color: var(--blue); font-size: 15px; font-weight: 600; }
+  .story h3 { margin: 0 0 10px; font-family: var(--display); font-size: clamp(22px, 2.4vw, 27px); font-weight: 700; line-height: 1.2; }
+  .story p { margin: 0 0 12px; max-width: 64ch; color: var(--ink); font-size: 17px; }
+  .story p:last-child { color: var(--muted); }
+
+  .newslist { display: grid; grid-template-columns: 7fr 5fr; gap: 34px; margin-top: 6px; }
+  .todo { margin: 0; padding: 0; list-style: none; }
+  .todo li { display: flex; gap: 12px; padding: 13px 0; border-bottom: 1px dashed var(--line); font-size: 16px; }
+  .todo li::before { content: ""; width: 10px; height: 10px; margin-top: 9px; border-radius: 3px; background-color: var(--yellow); flex: 0 0 auto; }
+  .todo span { color: var(--muted); }
+
+  .where { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .where article { padding: 22px; border-radius: 14px; border: 1px solid var(--line); background-color: var(--surface); }
+  .where h3 { margin: 0 0 6px; font-size: 18px; font-family: var(--display); font-weight: 700; }
+  .where p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .account {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 30px;
+    margin-top: 52px;
+    padding: 34px 38px;
+    border-radius: 14px;
+    border: 1px dashed var(--blue);
+    background-color: var(--blue-soft);
+  }
+  .account h2 { margin: 0 0 8px; font-family: var(--display); font-size: 26px; font-weight: 800; }
+  .account p { margin: 0; max-width: 56ch; font-size: 16px; color: var(--ink); }
+  .account__buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .notice {
+    margin: 18px 0 0;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background-color: var(--surface);
+    border: 1px solid var(--line);
+    font-size: 16px;
+  }
+  .notice:empty { display: none; }
+
+  .site-footer { margin-top: 56px; background-color: var(--surface); border-top: 1px solid var(--line); }
+  .site-footer__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    padding-top: 34px;
+    padding-bottom: 40px;
+  }
+  .site-footer p { margin: 0; font-size: 15px; }
+  .site-footer .muted { color: var(--muted); }
+  .site-footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 16px; justify-content: flex-end; }
+  .site-footer a { text-decoration: none; }
+  .site-footer a:hover { color: var(--blue); }
+
+  @media (max-width: 1000px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .tile--news { grid-column: span 2; }
+    .tile--projects, .tile--tests, .tile--about { grid-column: span 1; }
+    .newslist, .where { grid-template-columns: 1fr; }
+    .account { grid-template-columns: 1fr; }
+    .site-footer__row { grid-template-columns: 1fr; }
+    .site-footer nav { justify-content: flex-start; }
+  }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 0 18px; }
+    .topbar__row { flex-wrap: wrap; gap: 12px; }
+    .menu { order: 3; width: 100%; overflow-x: auto; margin-left: 0; padding-bottom: 4px; }
+    .menu a, .menu span { white-space: nowrap; }
+    .topbar__actions { margin-left: auto; }
+    .hero { padding: 28px 22px; border-radius: 12px; }
+    .hero__grid { grid-template-columns: 1fr; gap: 22px; }
+    .hero__shape { width: 260px; height: 260px; top: -130px; right: -90px; }
+    .hero__bar { display: none; }
+    .hero__mascot { width: min(240px, 66%); }
+    .bento { grid-template-columns: 1fr; gap: 14px; }
+    .tile--news, .tile--projects, .tile--tests, .tile--about { grid-column: span 1; }
+    .account { padding: 26px 22px; }
+    .brand img { width: 168px; height: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Перейти к содержанию</a>
+
+<header class="topbar">
+  <div class="wrap topbar__row">
+    <a class="brand" href="direction-2-portal.html" aria-label="МосПолиФизикс, на главную">
+      <span class="brand__plate"><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="196" height="25"></span>
+    </a>
+    <nav class="menu" aria-label="Разделы ресурса">
+      <a href="#news">Новости</a>
+      <a href="#projects">Проекты</a>
+      <a href="#tests">Тесты</a>
+      <span aria-disabled="true">О нас — готовится</span>
+    </nav>
+    <div class="topbar__actions">
+      <button class="pill" type="button" id="theme-switch" aria-pressed="false">Тёмная тема</button>
+      <button class="pill pill--solid" type="button" data-soon="Раздел аккаунта в разработке: сначала вход и регистрация с проверкой на сервере.">Личный кабинет</button>
+    </div>
+  </div>
+</header>
+
+<main id="content" class="wrap">
+  <section class="hero">
+    <div class="hero__decor" aria-hidden="true">
+      <span class="hero__shape"></span>
+      <span class="hero__bar"></span>
+    </div>
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <h1>Физика до экзамена и после него</h1>
+        <p class="hero__lead">Объяснения без воды, тесты с разбором ответов и проекты студентов Московского политехнического университета. Материалы появляются по мере проверки.</p>
+        <ul class="chips">
+          <li><a href="#news">Что нового</a></li>
+          <li><a href="#projects">Проекты</a></li>
+          <li><a href="#tests">Тесты</a></li>
+          <li><a href="#where">Как всё устроено</a></li>
+        </ul>
+      </div>
+      <figure class="hero__mascot">
+        <img src="/assets/brand/mas.svg" alt="Маскот проекта Симплик" width="320" height="320">
+        <figcaption class="bubble">Привет! Я Симплик. Покажу, где физика встречается в обычных делах.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="block" id="news">
+    <div class="block__head">
+      <h2>Обновления проекта</h2>
+      <p class="block__link">Одна подтверждённая запись</p>
+    </div>
+    <div class="bento">
+      <article class="tile tile--news">
+        <img src="/assets/brand/icon-news.svg" alt="" width="34" height="34">
+        <div class="story">
+          <p class="story__date">14 сентября 2026</p>
+          <h3>МосПолиФизикс обновил план развития</h3>
+          <p>Команда определила ближайшую цель проекта: наполненные главная страница, раздел «О нас» и новости для демонстрации куратору. Дальше работа продолжается над простым управлением публикациями и одним законченным тестом по физике.</p>
+          <p>Технологическая основа остаётся прежней: FastAPI, SQLite и интерфейс на HTML, CSS и JavaScript.</p>
+        </div>
+      </article>
+      <article class="tile tile--projects">
+        <img src="/assets/brand/icon-projects.svg" alt="" width="34" height="34">
+        <h3>Проекты</h3>
+        <p>Видео, календарь подтверждённых событий и визуальная новелла с галереей и дневником разработки. Раздел откроется целиком, когда по каждому направлению появится материал.</p>
+      </article>
+      <article class="tile tile--tests">
+        <img src="/assets/brand/icon-tests.svg" alt="" width="34" height="34">
+        <h3>Тесты</h3>
+        <p>Вопросы приходят с сервера, ответы проверяются там же, поэтому подсказок в браузере нет.</p>
+      </article>
+      <article class="tile tile--about">
+        <img src="/assets/brand/icon-about.svg" alt="" width="34" height="34">
+        <h3>О проекте</h3>
+        <p>Практика по направлению 09.03.02, куратор — Кореневская Евгения Александровна.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="projects">
+    <h2>Проекты студентов</h2>
+    <div class="newslist">
+      <div class="story">
+        <h3>Что появится в этом разделе</h3>
+        <p>Раздел собирает четыре направления практики: записи о проекте, календарь подтверждённых событий, визуальную новеллу с галереей и дневником разработки, а также материалы о команде.</p>
+        <p>Раздел откроется целиком, когда по каждому направлению будет что показать. Ссылку на сборку новеллы добавим только после её готовности.</p>
+      </div>
+      <ul class="todo">
+        <li><span>Видео: нужны записи и описания</span></li>
+        <li><span>Календарь: нужны три подтверждённые даты</span></li>
+        <li><span>Новелла: нужны галерея, лор и сборка</span></li>
+        <li><span>Команда: нужны текущие роли участников</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="tests">
+    <h2>Разминка и подготовка</h2>
+    <div class="where">
+      <article>
+        <h3>Тест по физике</h3>
+        <p>Пять проверенных вопросов с объяснением каждого ответа.</p>
+      </article>
+      <article>
+        <h3>Викторина цитат</h3>
+        <p>Цитаты учёных с указанием источника. Формулировки подтверждаются.</p>
+      </article>
+      <article>
+        <h3>Задания ЕГЭ</h3>
+        <p>Задачи с серверной проверкой и разбором решения.</p>
+      </article>
+      <article>
+        <h3>Развлекательные</h3>
+        <p>Короткие тесты для паузы между парами.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="where">
+    <h2>Как всё устроено</h2>
+    <div class="where">
+      <article>
+        <h3>Материал из проверенного источника</h3>
+        <p>Ничего не публикуется «для наполнения»: если источника нет, раздел остаётся закрытым.</p>
+      </article>
+      <article>
+        <h3>Проверка на сервере</h3>
+        <p>Тесты и формы обрабатывает backend: браузер не знает правильных ответов заранее.</p>
+      </article>
+      <article>
+        <h3>Светлая и тёмная тема</h3>
+        <p>Тема выбирается один раз и сохраняется, текст читается в обеих.</p>
+      </article>
+      <article>
+        <h3>Работает с телефона</h3>
+        <p>Вёрстка рассчитана и на экран около 390 пикселей, и на широкий монитор.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="account" id="account">
+    <div>
+      <h2>Личный кабинет</h2>
+      <p>Гостю доступны вход и регистрация, вошедший пользователь увидит свои результаты тестов и кнопку выхода. Сейчас раздел аккаунта в разработке.</p>
+    </div>
+    <div class="account__buttons">
+      <button class="pill pill--solid" type="button" data-soon="Вход откроется с разделом аккаунта: вход по имени или почте, сессия хранится в серверной cookie.">Войти</button>
+      <button class="pill" type="button" data-soon="Регистрация откроется с разделом аккаунта: имя, почта и пароль проверяются на сервере.">Зарегистрироваться</button>
+    </div>
+  </section>
+  <p class="notice" id="notice" role="status" aria-live="polite"></p>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__row">
+    <div>
+      <p><strong>МосПолиФизикс</strong></p>
+      <p class="muted">Московский политехнический университет</p>
+      <p class="muted">Проектная практика 09.03.02 «Информационные системы и технологии»</p>
+    </div>
+    <nav aria-label="Разделы в подвале">
+      <a href="#news">Новости</a>
+      <a href="#projects">Проекты</a>
+      <a href="#tests">Тесты</a>
+      <a href="#where">О проекте</a>
+      <a href="#account">Личный кабинет</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const switchButton = document.getElementById("theme-switch");
+  const saved = localStorage.getItem("mosphysics-preview-theme-portal");
+
+  function applyTheme(theme) {
+    root.dataset.theme = theme;
+    switchButton.setAttribute("aria-pressed", String(theme === "dark"));
+    switchButton.textContent = theme === "dark" ? "Светлая тема" : "Тёмная тема";
+  }
+
+  applyTheme(saved === "dark" ? "dark" : "light");
+
+  switchButton.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.setItem("mosphysics-preview-theme-portal", next);
+    applyTheme(next);
+  });
+
+  const notice = document.getElementById("notice");
+  document.querySelectorAll("[data-soon]").forEach((control) => {
+    control.addEventListener("click", () => {
+      notice.textContent = control.dataset.soon;
+    });
+  });
+</script>
+</body>
+</html>

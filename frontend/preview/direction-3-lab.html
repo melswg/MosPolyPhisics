@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МосПолиФизикс — направление 3: обсерватория</title>
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<style>
+  :root {
+    --sky: #080B18;
+    --sky-soft: #0D1226;
+    --ink: #EDEFF7;
+    --muted: #9098B4;
+    --line: #1E2540;
+    --violet: #7C4DFF;
+    --violet-soft: #241C46;
+    --amber: #FFB25E;
+    --blue: #6FA8FF;
+    --plate: #14161D;
+    --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --display: "Helvetica Neue", "Arial Black", system-ui, sans-serif;
+  }
+
+  [data-theme="light"] {
+    --sky: #EFF1F7;
+    --sky-soft: #FFFFFF;
+    --ink: #12172B;
+    --muted: #5A6280;
+    --line: #D8DDEC;
+    --violet: #5B27D6;
+    --violet-soft: #E7E1FB;
+    --amber: #A85C00;
+    --blue: #1E56C8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--sky);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  img { max-width: 100%; height: auto; }
+  a { color: inherit; }
+
+  :focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; }
+
+  .skip { position: absolute; left: -9999px; background-color: var(--sky-soft); padding: 10px 16px; z-index: 40; }
+  .skip:focus { left: 12px; top: 12px; }
+
+  .bar {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    padding: 20px clamp(18px, 5vw, 72px);
+  }
+
+  .bar__logo { display: inline-flex; text-decoration: none; }
+  .bar__logo span { display: inline-flex; padding: 8px 14px; border-radius: 2px; background-color: var(--plate); }
+  .bar__logo img { width: 186px; height: 24px; }
+
+  .bar nav { display: flex; flex-wrap: wrap; gap: 4px 22px; margin-left: auto; font-size: 16px; }
+  .bar nav a { text-decoration: none; color: var(--muted); padding: 4px 0; border-bottom: 1px solid transparent; }
+  .bar nav a:hover { color: var(--ink); border-color: var(--violet); }
+  .bar nav a[aria-current="page"] { color: var(--ink); border-color: var(--amber); }
+
+  .toggle {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background-color: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    padding: 8px 15px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .toggle:hover { border-color: var(--violet); color: var(--violet); }
+
+  .field {
+    position: relative;
+    padding: 0 clamp(18px, 5vw, 72px);
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .opening { padding-top: 40px; padding-bottom: 120px; }
+
+  .opening__text { position: relative; z-index: 2; max-width: 660px; }
+
+  .opening h1 {
+    margin: 0 0 26px;
+    font-family: var(--display);
+    font-size: clamp(42px, 7vw, 100px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+  }
+
+  .opening h1 em { display: block; font-style: normal; font-size: 0.6em; letter-spacing: -0.02em; color: var(--violet); }
+
+  .opening__lead { margin: 0 0 30px; max-width: 52ch; font-size: 20px; color: var(--muted); }
+
+  .opening__nav { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 0; padding: 0; list-style: none; font-size: 17px; }
+  .opening__nav a { text-decoration: none; border-bottom: 2px solid var(--line); padding-bottom: 3px; }
+  .opening__nav a:hover { border-color: var(--amber); }
+
+  .system { position: absolute; right: clamp(-90px, -2vw, 20px); top: -10px; width: min(760px, 62vw); pointer-events: none; }
+
+  .system ellipse {
+    fill: none;
+    stroke-width: 1.3;
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1400;
+    animation: trace 2.2s ease-out forwards;
+  }
+  .system ellipse:nth-of-type(2) { animation-delay: 0.25s; }
+  .system ellipse:nth-of-type(3) { animation-delay: 0.5s; }
+  .system ellipse:nth-of-type(4) { animation-delay: 0.75s; }
+  .system circle { opacity: 0; animation: appear 0.9s ease-out 1.4s forwards; }
+
+  @keyframes trace { to { stroke-dashoffset: 0; } }
+  @keyframes appear { to { opacity: 1; } }
+
+  .drift { position: relative; margin: 0 auto; padding: 0 clamp(18px, 5vw, 72px); max-width: 1320px; }
+
+  .thread { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  .thread path {
+    fill: none;
+    stroke: var(--violet);
+    stroke-width: 1;
+    opacity: 0.45;
+    stroke-dasharray: 2200;
+    stroke-dashoffset: 2200;
+    animation: trace 3s ease-out 0.4s forwards;
+  }
+
+  .stage {
+    position: relative;
+    z-index: 1;
+    padding: clamp(56px, 8vw, 120px) 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(26px, 5vw, 70px);
+  }
+
+  .stage--wide-left { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); }
+  .stage--wide-right { grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr); }
+  .stage--shift { padding-left: clamp(0px, 6vw, 110px); }
+  .stage--shift-back { padding-right: clamp(0px, 6vw, 110px); }
+
+  .stage h2 {
+    margin: 0 0 20px;
+    font-family: var(--display);
+    font-size: clamp(30px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+  }
+
+  .stage p { margin: 0 0 18px; max-width: 54ch; color: var(--muted); }
+  .stage p.strong { color: var(--ink); font-size: 20px; }
+
+  .stage__scheme { margin: 0; }
+  .stage__scheme svg { width: 100%; height: auto; overflow: visible; }
+  .stage__scheme figcaption { margin-top: 14px; font-size: 15px; color: var(--muted); max-width: 42ch; }
+
+  .sketch-stroke { fill: none; stroke: var(--blue); stroke-width: 1.4; }
+  .sketch-dash { fill: none; stroke: var(--line); stroke-width: 1.2; stroke-dasharray: 6 6; }
+  .sketch-violet { fill: none; stroke: var(--violet); stroke-width: 1.6; }
+  .sketch-amber { fill: none; stroke: var(--amber); stroke-width: 1.6; }
+  .sketch-dot { fill: var(--amber); }
+  .sketch-label { fill: var(--muted); font-family: var(--sans); font-size: 13px; }
+
+  .record { position: relative; }
+
+  .record__date { margin: 0 0 14px; font-size: 15px; letter-spacing: 0.08em; color: var(--amber); }
+
+  .record h3 {
+    margin: 0 0 20px;
+    font-family: var(--display);
+    font-size: clamp(26px, 3.2vw, 40px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .record p { color: var(--ink); }
+  .record p.muted { color: var(--muted); }
+
+  .peek { position: absolute; right: -6px; bottom: -40px; width: 128px; }
+
+  .quiet { padding: clamp(48px, 7vw, 92px) 0; border-top: 1px solid var(--line); }
+
+  .quiet h2 {
+    margin: 0 0 18px;
+    font-family: var(--display);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  .quiet__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 60px); }
+  .quiet p { margin: 0; max-width: 46ch; color: var(--muted); }
+  .quiet p strong { display: block; margin-bottom: 10px; color: var(--ink); font-size: 19px; font-weight: 700; }
+
+  .invite {
+    margin: clamp(40px, 6vw, 90px) 0 0;
+    padding: clamp(28px, 4vw, 52px);
+    border-radius: 3px;
+    background-color: var(--violet-soft);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 26px;
+  }
+
+  .invite h2 { margin: 0 0 10px; font-family: var(--display); font-size: clamp(24px, 3vw, 34px); font-weight: 800; letter-spacing: -0.025em; }
+  .invite p { margin: 0; max-width: 56ch; color: var(--muted); }
+  .invite__buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .act {
+    border: 1px solid var(--violet);
+    border-radius: 999px;
+    background-color: transparent;
+    color: var(--violet);
+    font: inherit;
+    font-weight: 600;
+    padding: 12px 22px;
+    cursor: pointer;
+  }
+  .act:hover { background-color: color-mix(in srgb, var(--violet) 16%, transparent); }
+  .act--solid { background-color: var(--violet); color: #FAFAFF; }
+  .act--solid:hover { background-color: var(--violet); }
+
+  .answer { margin: 20px 0 0; color: var(--muted); font-size: 16px; }
+  .answer:empty { display: none; }
+
+  .end {
+    margin-top: clamp(48px, 7vw, 96px);
+    padding: 26px clamp(18px, 5vw, 72px) 40px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .end nav { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+  .end a { text-decoration: none; }
+  .end a:hover { color: var(--ink); }
+
+  @media (max-width: 1100px) {
+    .system { position: relative; right: auto; top: auto; width: min(520px, 90%); margin: 40px auto 0; }
+    .stage, .stage--wide-left, .stage--wide-right { grid-template-columns: minmax(0, 1fr); }
+    .stage--shift, .stage--shift-back { padding-left: 0; padding-right: 0; }
+    .thread { display: none; }
+    .quiet__grid { grid-template-columns: minmax(0, 1fr); }
+    .invite { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 17px; }
+    .bar { flex-wrap: wrap; gap: 12px; padding-top: 16px; }
+    .bar nav { order: 3; width: 100%; margin-left: 0; overflow-x: auto; flex-wrap: nowrap; font-size: 15px; }
+    .bar nav a { white-space: nowrap; }
+    .bar__logo img { width: 158px; height: auto; }
+    .opening { padding-bottom: 60px; }
+    .peek { position: static; display: block; width: 104px; margin-top: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .system ellipse, .system circle, .thread path { animation: none; stroke-dashoffset: 0; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Перейти к содержанию</a>
+
+<header class="bar">
+  <a class="bar__logo" href="direction-3-lab.html" aria-label="МосПолиФизикс, на главную">
+    <span><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="186" height="24"></span>
+  </a>
+  <nav aria-label="Разделы ресурса">
+    <a href="direction-3-lab.html" aria-current="page">Главная</a>
+    <a href="#about">О нас</a>
+    <a href="#news">Новости</a>
+    <a href="#projects">Проекты</a>
+    <a href="#tests">Тесты</a>
+    <a href="#account">Аккаунт</a>
+  </nav>
+  <button class="toggle" type="button" id="theme-switch" aria-pressed="false">Дневное небо</button>
+</header>
+
+<main id="content">
+  <section class="field opening">
+    <div class="opening__text">
+      <h1>Физика<em>как обсерватория</em></h1>
+      <p class="opening__lead">Смотрим на явления внимательно: откуда берётся радуга, почему спутник не падает и как из формулы получается понятный ответ. Ресурс кафедральной практики Московского политехнического университета для студентов и абитуриентов.</p>
+      <ul class="opening__nav">
+        <li><a href="#news">Свежая запись проекта</a></li>
+        <li><a href="#about">О проекте</a></li>
+        <li><a href="#projects">Что появится дальше</a></li>
+      </ul>
+    </div>
+
+    <figure class="system" aria-hidden="true">
+      <svg viewBox="0 0 640 640">
+        <ellipse cx="320" cy="320" rx="300" ry="118" stroke="#7C4DFF" transform="rotate(18 320 320)"></ellipse>
+        <ellipse cx="320" cy="320" rx="262" ry="98" stroke="#6FA8FF" transform="rotate(-32 320 320)"></ellipse>
+        <ellipse cx="320" cy="320" rx="222" ry="222" stroke="#FFB25E" transform="rotate(6 320 320)"></ellipse>
+        <ellipse cx="320" cy="320" rx="186" ry="70" stroke="#9098B4" transform="rotate(64 320 320)"></ellipse>
+        <circle cx="620" cy="270" r="7" fill="#FFB25E"></circle>
+        <circle cx="330" cy="98" r="5" fill="#6FA8FF"></circle>
+        <circle cx="98" cy="320" r="5" fill="#7C4DFF"></circle>
+        <circle cx="520" cy="520" r="4" fill="#9098B4"></circle>
+        <circle cx="320" cy="320" r="4" fill="#EDEFF7"></circle>
+      </svg>
+    </figure>
+  </section>
+
+  <div class="drift">
+    <svg class="thread" viewBox="0 0 1200 2400" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M40 0 C 340 220, 900 260, 1150 520 C 900 760, 180 820, 60 1120 C 200 1420, 980 1460, 1140 1760 C 900 2020, 260 2060, 120 2400"></path>
+    </svg>
+
+    <section class="stage stage--wide-left stage--shift" id="about">
+      <div>
+        <h2>Мир вокруг нас объясним</h2>
+        <p class="strong">«МосПолиФизикс» создаётся в Московском политехническом университете как образовательный ресурс по физике.</p>
+        <p>Здесь появятся объяснения явлений, задачи с разбором и материалы о проекте. Разделы открываются по одному и только с проверенным материалом: придумывать наполнение ради красоты мы не станем.</p>
+        <p>Практика идёт по направлению 09.03.02 «Информационные системы и технологии», куратор — Кореневская Евгения Александровна.</p>
+      </div>
+      <figure class="stage__scheme">
+        <svg viewBox="0 0 420 300" role="img" aria-label="Схема отражения луча от поверхности">
+          <line class="sketch-dash" x1="30" y1="230" x2="390" y2="230"></line>
+          <line class="sketch-dash" x1="210" y1="30" x2="210" y2="280"></line>
+          <line class="sketch-amber" x1="210" y1="230" x2="96" y2="88"></line>
+          <line class="sketch-violet" x1="210" y1="230" x2="330" y2="96"></line>
+          <path class="sketch-stroke" d="M210 190 A 40 40 0 0 1 244 200"></path>
+          <path class="sketch-stroke" d="M210 190 A 40 40 0 0 0 176 200"></path>
+          <circle class="sketch-dot" cx="210" cy="230" r="4"></circle>
+          <text class="sketch-label" x="146" y="150">падающий луч</text>
+          <text class="sketch-label" x="248" y="150">отражённый</text>
+          <text class="sketch-label" x="216" y="252">точка падения</text>
+          <text class="sketch-label" x="36" y="252">поверхность</text>
+        </svg>
+        <figcaption>Так выглядит схема в объяснении: углы падения и отражения измеряются от нормали к поверхности.</figcaption>
+      </figure>
+    </section>
+
+    <section class="stage stage--wide-right stage--shift-back" id="news">
+      <figure class="stage__scheme">
+        <svg viewBox="0 0 420 300" role="img" aria-label="Схема траектории брошенного тела">
+          <path class="sketch-dash" d="M20 250 L400 250"></path>
+          <path class="sketch-violet" d="M40 250 C 140 60, 280 60, 380 250"></path>
+          <circle class="sketch-dot" cx="40" cy="250" r="4"></circle>
+          <circle class="sketch-dot" cx="380" cy="250" r="4"></circle>
+          <circle class="sketch-dot" cx="210" cy="97" r="4"></circle>
+          <text class="sketch-label" x="182" y="82">вершина</text>
+          <text class="sketch-label" x="30" y="272">бросок</text>
+          <text class="sketch-label" x="344" y="272">падение</text>
+        </svg>
+        <figcaption>Разбор задачи начинается со схемы: где тело, куда направлена скорость и что происходит с ускорением.</figcaption>
+      </figure>
+      <article class="record">
+        <p class="record__date">14 сентября 2026</p>
+        <h3>МосПолиФизикс обновил план развития</h3>
+        <p>Команда определила ближайшую цель проекта: наполненные главная страница, раздел «О нас» и новости для демонстрации куратору. Дальше работа продолжается над простым управлением публикациями и одним законченным тестом по физике.</p>
+        <p class="muted">Технологическая основа остаётся прежней: FastAPI, SQLite и интерфейс на HTML, CSS и JavaScript.</p>
+        <img class="peek" src="/assets/brand/mas.svg" alt="Маскот проекта Симплик" width="128" height="128">
+      </article>
+    </section>
+
+    <section class="quiet" id="projects">
+      <h2>Проекты</h2>
+      <div class="quiet__grid">
+        <p><strong>Видео и календарь</strong>Пока материалов нет. Записи и даты появятся вместе с описаниями и разрешёнными ссылками, а календарь заполнится подтверждёнными событиями.</p>
+        <p><strong>Визуальная новелла</strong>История о физике получит галерею, лор и дневник разработки. Ссылку на скачивание добавим, когда сборка будет готова, а не раньше.</p>
+      </div>
+    </section>
+
+    <section class="quiet" id="tests">
+      <h2>Тесты и задачи</h2>
+      <div class="quiet__grid">
+        <p><strong>Тесты по физике</strong>Наборов вопросов пока нет: ищем формулировки и объяснения, которые можно проверить. Тест появится с разбором каждого ответа.</p>
+        <p><strong>Викторина цитат и ЕГЭ</strong>Здесь будут цитаты учёных с источниками и задачи с решением. Разделы откроются после проверки формулировок и разборов.</p>
+      </div>
+    </section>
+
+    <section class="invite" id="account">
+      <div>
+        <h2>О проекте и команде</h2>
+        <p>Расскажем, как устроена практика, кто работает над сайтом и как собрать материалы вместе. Состав и роли появятся после подтверждения командой.</p>
+      </div>
+      <div class="invite__buttons">
+        <button class="act act--solid" type="button" data-answer="Раздел «О нас» появится, когда команда подтвердит состав и роли участников.">Раздел «О нас»</button>
+        <button class="act" type="button" data-answer="Личный кабинет в разработке: гостю будут доступны вход и регистрация, а вошедшему — результаты тестов и выход.">Личный кабинет</button>
+      </div>
+    </section>
+    <p class="answer" id="answer" role="status" aria-live="polite"></p>
+  </div>
+</main>
+
+<footer class="end">
+  <p>МосПолиФизикс — образовательный ресурс по физике Московского политехнического университета</p>
+  <nav aria-label="Разделы в подвале">
+    <a href="#about">О нас</a>
+    <a href="#news">Новости</a>
+    <a href="#projects">Проекты</a>
+    <a href="#tests">Тесты</a>
+    <a href="#account">Аккаунт</a>
+  </nav>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const switchButton = document.getElementById("theme-switch");
+  const stored = localStorage.getItem("mosphysics-preview-theme-observatory");
+
+  function paint(theme) {
+    root.dataset.theme = theme;
+    switchButton.setAttribute("aria-pressed", String(theme === "light"));
+    switchButton.textContent = theme === "light" ? "Ночное небо" : "Дневное небо";
+  }
+
+  paint(stored === "light" ? "light" : "dark");
+
+  switchButton.addEventListener("click", () => {
+    const next = root.dataset.theme === "light" ? "dark" : "light";
+    localStorage.setItem("mosphysics-preview-theme-observatory", next);
+    paint(next);
+  });
+
+  const answer = document.getElementById("answer");
+  document.querySelectorAll("[data-answer]").forEach((control) => {
+    control.addEventListener("click", () => {
+      answer.textContent = control.dataset.answer;
+    });
+  });
+</script>
+</body>
+</html>

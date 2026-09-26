@@ -27,11 +27,11 @@
     <button class="burger" type="button" id="menu-button" aria-expanded="false" aria-controls="main-menu">Меню</button>
     <nav class="menu" id="main-menu" aria-label="Разделы сайта">
       <a href="/">Главная</a>
-      <a href="/about"><img src="/assets/brand/icon-about.svg" alt=""> О нас</a>
-      <a href="/news"><img src="/assets/brand/icon-news.svg" alt=""> Новости</a>
-      <a href="/projects" aria-current="page"><img src="/assets/brand/icon-projects.svg" alt=""> Проекты</a>
-      <a href="/tests"><img src="/assets/brand/icon-tests.svg" alt=""> Тесты</a>
-      <a href="/account"><img src="/assets/brand/icons/user-circle.svg" alt=""> Личный кабинет</a>
+      <a href="/about">О нас</a>
+      <a href="/news">Новости</a>
+      <a href="/projects" aria-current="page">Проекты</a>
+      <a href="/tests">Тесты</a>
+      <a href="/account">Личный кабинет</a>
     </nav>
     <a class="profile" href="/account" aria-label="Личный кабинет">
       <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="2.4">
@@ -52,33 +52,45 @@
   <section class="panel" aria-labelledby="directions-title">
     <h2 id="directions-title">Направления</h2>
     <ul class="rows">
-      <li class="row">
-        <div>
-          <h3><a href="/video">Видео о проекте</a></h3>
-          <p>Записи выступлений и объяснений публикуются с обложкой, описанием и разрешённой ссылкой на источник.</p>
-        </div>
-        <span class="row__side">материалы не переданы</span>
+      <li class="row row--link">
+        <a class="row__link" href="/video">
+          <div>
+            <h3>Видео о проекте</h3>
+            <p>Записи выступлений и объяснений публикуются с обложкой, описанием и разрешённой ссылкой на источник.</p>
+          </div>
+          <span class="row__side">материалы не переданы</span>
+          <span class="row__go" aria-hidden="true"></span>
+        </a>
       </li>
-      <li class="row">
-        <div>
-          <h3><a href="/calendar">Календарь событий</a></h3>
-          <p>Дни открытых дверей, защиты работ и встречи. В календарь попадают только подтверждённые даты.</p>
-        </div>
-        <span class="row__side">события не подтверждены</span>
+      <li class="row row--link">
+        <a class="row__link" href="/calendar">
+          <div>
+            <h3>Календарь событий</h3>
+            <p>Дни открытых дверей, защиты работ и встречи. В календарь попадают только подтверждённые даты.</p>
+          </div>
+          <span class="row__side">события не подтверждены</span>
+          <span class="row__go" aria-hidden="true"></span>
+        </a>
       </li>
-      <li class="row">
-        <div>
-          <h3><a href="/novel">Визуальная новелла</a></h3>
-          <p>История о физике с галереей, лором и дневником разработки. Скачивание появится вместе с готовой сборкой.</p>
-        </div>
-        <span class="row__side">сборка не передана</span>
+      <li class="row row--link">
+        <a class="row__link" href="/novel">
+          <div>
+            <h3>Визуальная новелла</h3>
+            <p>История о физике с галереей, лором и дневником разработки. Скачивание появится вместе с готовой сборкой.</p>
+          </div>
+          <span class="row__side">сборка не передана</span>
+          <span class="row__go" aria-hidden="true"></span>
+        </a>
       </li>
-      <li class="row">
-        <div>
-          <h3><a href="/about">Команда проекта</a></h3>
-          <p>Состав практики и роли участников.</p>
-        </div>
-        <span class="row__side">роли подтверждаются</span>
+      <li class="row row--link">
+        <a class="row__link" href="/about">
+          <div>
+            <h3>Команда проекта</h3>
+            <p>Состав практики и роли участников.</p>
+          </div>
+          <span class="row__side">роли подтверждаются</span>
+          <span class="row__go" aria-hidden="true"></span>
+        </a>
       </li>
     </ul>
   </section>

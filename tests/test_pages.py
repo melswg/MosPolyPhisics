@@ -93,3 +93,32 @@ def test_brand_assets_are_served(client: TestClient) -> None:
 
 def test_missing_static_file_returns_404(client: TestClient) -> None:
     assert client.get("/static/css/absent.css").status_code == 404
+
+
+@pytest.mark.parametrize("path", PUBLIC_PAGES)
+def test_navigation_is_text_only(client: TestClient, path: str) -> None:
+    body = client.get(path).text
+    menu = body.split('class="menu"', 1)[1].split("</nav>", 1)[0]
+
+    assert "<img" not in menu
+    for label in ("Главная", "О нас", "Новости", "Проекты", "Тесты", "Личный кабинет"):
+        assert label in menu
+
+
+def test_projects_rows_are_clickable_links(client: TestClient) -> None:
+    body = client.get("/projects").text
+
+    assert body.count('class="row row--link"') == 4
+    assert body.count('class="row__link"') == 4
+    for target in ("/video", "/calendar", "/novel", "/about"):
+        assert f'class="row__link" href="{target}"' in body
+    assert 'href="#"' not in body
+
+
+def test_styles_describe_clickable_row(client: TestClient) -> None:
+    css = client.get("/static/css/styles.css").text
+
+    assert ".row--link .row__link:hover" in css
+    assert ".row--link .row__link:active" in css
+    assert ".row--link .row__link:focus-visible" in css
+    assert "--tint-hover" in css

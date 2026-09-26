@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МосПолиФизикс — направление 1: журнал</title>
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<style>
+  :root {
+    --paper: #FBFBFD;
+    --ink: #111420;
+    --muted: #5A6076;
+    --line: #D9DCE8;
+    --rule: #111420;
+    --accent: #1B3FCC;
+    --accent-2: #D9377F;
+    --tint: #EDEBFA;
+    --plate: #14161D;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  }
+
+  [data-theme="dark"] {
+    --paper: #101219;
+    --ink: #F2F4FA;
+    --muted: #A2A9BE;
+    --line: #2A2E3E;
+    --rule: #F2F4FA;
+    --accent: #93A9FF;
+    --accent-2: #FF7AB8;
+    --tint: #1A1D29;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  img { max-width: 100%; height: auto; }
+  a { color: inherit; }
+
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  .skip {
+    position: absolute;
+    left: -9999px;
+    background-color: var(--paper);
+    padding: 10px 16px;
+    z-index: 20;
+  }
+  .skip:focus { left: 12px; top: 12px; }
+
+  .wrap {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  .masthead { border-bottom: 3px solid var(--rule); }
+
+  .masthead__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-top: 26px;
+    padding-bottom: 18px;
+  }
+
+  .brand { display: inline-flex; text-decoration: none; }
+  .brand__plate {
+    display: inline-flex;
+    padding: 9px 15px;
+    border-radius: 3px;
+    background-color: var(--plate);
+  }
+  .brand img { width: 232px; height: 30px; }
+
+  .masthead__meta { display: flex; align-items: center; gap: 18px; }
+
+  .masthead__tagline {
+    max-width: 34ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+    text-align: right;
+  }
+
+  .switch {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background-color: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 14px;
+    padding: 9px 13px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .switch:hover { background-color: var(--tint); }
+
+  .topnav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    padding-bottom: 14px;
+    font-size: 15px;
+  }
+
+  .topnav a { text-decoration: none; border-bottom: 2px solid transparent; padding-bottom: 2px; white-space: nowrap; }
+  .topnav a:hover { border-color: var(--accent-2); }
+
+  .topnav__off { color: var(--muted); white-space: nowrap; }
+  .topnav__note { font-style: italic; font-size: 13px; }
+
+  .lead {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 52px;
+    padding-top: 52px;
+    padding-bottom: 40px;
+  }
+
+  .rubric {
+    display: inline-block;
+    margin: 0;
+    padding: 5px 11px;
+    border-radius: 3px;
+    background-color: var(--accent-2);
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  .lead h1 {
+    margin: 20px 0 18px;
+    font-family: var(--serif);
+    font-size: clamp(38px, 5vw, 62px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+  }
+
+  .lead__text p {
+    margin: 0 0 18px;
+    max-width: 60ch;
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .lead__first::first-letter {
+    float: left;
+    margin: 6px 10px 0 0;
+    font-size: 58px;
+    line-height: 0.82;
+    color: var(--accent);
+  }
+
+  .lead__note { color: var(--muted); font-size: 15px; font-family: var(--sans); }
+
+  .cover { margin: 0; }
+  .cover__frame {
+    position: relative;
+    overflow: hidden;
+    padding: 26px;
+    border-radius: 4px;
+    background-color: var(--tint);
+  }
+  .cover__frame::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -60px;
+    width: 300px;
+    height: 300px;
+    background-image: url("/assets/brand/backgrounds/pattern-physics.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .cover__frame img { position: relative; display: block; width: 100%; max-width: 340px; margin: 0 auto; }
+  .cover figcaption {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .constants {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+  }
+
+  .constants div { padding: 22px 26px 22px 0; border-right: 1px solid var(--line); }
+  .constants div:last-child { border-right: 0; }
+  .constants dt { color: var(--muted); font-size: 14px; }
+  .constants dd {
+    margin: 8px 0 0;
+    font-family: var(--serif);
+    font-size: 26px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .block { padding: 46px 0 10px; border-top: 3px solid var(--rule); margin-top: 34px; }
+
+  .block h2 {
+    margin: 0 0 6px;
+    font-family: var(--serif);
+    font-size: clamp(28px, 3.4vw, 38px);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .block__lead { margin: 0 0 30px; max-width: 64ch; color: var(--muted); font-size: 16px; }
+
+  .news {
+    display: grid;
+    grid-template-columns: 8fr 4fr;
+    gap: 46px;
+    padding-bottom: 40px;
+  }
+
+  .story__date { margin: 0; color: var(--accent-2); font-size: 14px; }
+  .story h3 {
+    margin: 10px 0 14px;
+    font-family: var(--serif);
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+  .story p { margin: 0 0 14px; max-width: 62ch; font-size: 17px; text-wrap: pretty; }
+
+  .pending { margin: 0; padding: 0; list-style: none; }
+  .pending li {
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .pending li:last-child { border-bottom: 1px solid var(--line); }
+  .pending strong { display: block; font-size: 16px; font-weight: 600; }
+  .pending span { color: var(--muted); }
+
+  .projects { padding-bottom: 34px; }
+  .projects ul { margin: 0; padding: 0; list-style: none; }
+
+  .projects li {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 22px;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+  }
+  .projects li:last-child { border-bottom: 1px solid var(--line); }
+  .projects img { width: 40px; height: 40px; }
+  .projects h3 { margin: 0; font-size: 19px; font-weight: 600; }
+  .projects p { margin: 4px 0 0; max-width: 62ch; color: var(--muted); font-size: 15px; }
+  .projects .state { color: var(--muted); font-size: 14px; font-style: italic; }
+
+  .band {
+    margin-top: 42px;
+    padding: 44px 0;
+    background-color: var(--tint);
+    border-top: 3px solid var(--rule);
+    border-bottom: 3px solid var(--rule);
+  }
+
+  .band__inner { display: grid; grid-template-columns: 5fr 7fr; gap: 46px; align-items: start; }
+  .band h2 { margin: 0 0 12px; font-family: var(--serif); font-size: clamp(26px, 3vw, 34px); font-weight: 600; }
+  .band p { margin: 0; max-width: 52ch; color: var(--muted); font-size: 16px; }
+
+  .directions { margin: 0; padding: 0; list-style: none; display: grid; gap: 1px; }
+  .directions li {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 2px;
+    border-bottom: 1px solid var(--line);
+    font-size: 16px;
+  }
+  .directions span { color: var(--muted); font-size: 14px; }
+
+  .account { padding: 42px 0 10px; }
+  .account__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .account__row p { margin: 0; flex: 1 1 320px; color: var(--muted); font-size: 16px; }
+
+  .btn {
+    border: 2px solid var(--accent);
+    border-radius: 3px;
+    background-color: var(--accent);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    padding: 11px 20px;
+    cursor: pointer;
+  }
+  .btn--ghost { background-color: transparent; color: var(--accent); }
+
+  .notice {
+    margin: 18px 0 0;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .notice:empty { display: none; }
+
+  .site-footer { margin-top: 46px; border-top: 3px solid var(--rule); }
+  .site-footer__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 26px;
+    padding-bottom: 34px;
+  }
+  .site-footer p { margin: 0; font-size: 15px; }
+  .site-footer .muted { color: var(--muted); }
+  .site-footer nav { display: flex; gap: 20px; flex-wrap: wrap; font-size: 15px; }
+
+  @media (max-width: 980px) {
+    .lead, .news, .band__inner { grid-template-columns: 1fr; gap: 32px; }
+    .constants { grid-template-columns: 1fr; }
+    .constants div { border-right: 0; border-bottom: 1px solid var(--line); }
+    .constants div:last-child { border-bottom: 0; }
+    .projects li { grid-template-columns: 44px 1fr; }
+    .projects .state { grid-column: 2; }
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 0 18px; }
+    .masthead__row { flex-direction: column; align-items: flex-start; }
+    .masthead__tagline { text-align: left; }
+    .topnav { overflow-x: auto; flex-wrap: nowrap; gap: 16px; padding-bottom: 12px; font-size: 14px; }
+    .brand img { width: 190px; height: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Перейти к содержанию</a>
+
+<header class="masthead">
+  <div class="wrap masthead__row">
+    <a class="brand" href="direction-1-magazine.html" aria-label="МосПолиФизикс, на главную">
+      <span class="brand__plate"><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="232" height="30"></span>
+    </a>
+    <div class="masthead__meta">
+      <p class="masthead__tagline">Образовательный ресурс по физике Московского политехнического университета</p>
+      <button class="switch" type="button" id="theme-switch" aria-pressed="false">Тёмная тема</button>
+    </div>
+  </div>
+  <nav class="wrap topnav" aria-label="Разделы ресурса">
+    <a href="#news">Новости</a>
+    <a href="#projects">Проекты</a>
+    <a href="#tests">Тесты</a>
+    <a href="#account">Личный кабинет</a>
+    <span class="topnav__off" aria-disabled="true">О нас <span class="topnav__note">раздел готовится</span></span>
+  </nav>
+</header>
+
+<main id="content">
+  <section class="wrap lead">
+    <div class="lead__text">
+      <p class="rubric">Проект</p>
+      <h1>Разбираем физику теми словами, которыми её объясняют на первой лекции</h1>
+      <p class="lead__first">Это ресурс кафедральной практики: здесь появятся объяснения явлений, материалы о проекте, тесты с разбором ответов и новости команды. Материалы публикуются только после проверки, поэтому раздел открывается тогда, когда в нём есть что читать.</p>
+      <p class="lead__note">Проектная практика по направлению 09.03.02 «Информационные системы и технологии», Московский политехнический университет. Куратор практики: Кореневская Евгения Александровна.</p>
+    </div>
+    <figure class="cover">
+      <div class="cover__frame">
+        <img src="/assets/brand/mas.svg" alt="Маскот проекта Симплик" width="340" height="340">
+      </div>
+      <figcaption>Симплик — маскот проекта. Он остаётся навигационным ориентиром во всех разделах.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap">
+    <dl class="constants">
+      <div>
+        <dt>Скорость света в вакууме</dt>
+        <dd>299 792 458 м/с</dd>
+      </div>
+      <div>
+        <dt>Стандартное ускорение свободного падения</dt>
+        <dd>9,80665 м/с²</dd>
+      </div>
+      <div>
+        <dt>Постоянная Планка</dt>
+        <dd>6,626 070 15·10<sup>−34</sup> Дж·с</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="wrap block" id="news">
+    <h2>Новости</h2>
+    <p class="block__lead">Хроника проекта: что сделано и что дальше. Записи появляются здесь только с подтверждённым источником.</p>
+    <div class="news">
+      <article class="story">
+        <p class="story__date">14 сентября 2026</p>
+        <h3>МосПолиФизикс обновил план развития</h3>
+        <p>Команда определила ближайшую цель проекта: наполненные главная страница, раздел «О нас» и новости для демонстрации куратору. Дальше работа продолжается над простым управлением публикациями и одним законченным тестом по физике.</p>
+        <p>Технологическая основа остаётся прежней: FastAPI, SQLite и интерфейс на HTML, CSS и JavaScript.</p>
+      </article>
+      <div>
+        <ul class="pending">
+          <li><strong>Ещё две новости</strong><span>нужны подтверждённые даты и текст от команды</span></li>
+          <li><strong>Отдельная страница материала</strong><span>появится вместе с публикацией второй новости</span></li>
+          <li><strong>Управление публикациями</strong><span>в работе, доступно администратору проекта</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap block projects" id="projects">
+    <h2>Проекты</h2>
+    <p class="block__lead">Четыре направления практики. Раздел открывается, когда в нём есть настоящий материал: видео, события или сборка.</p>
+    <ul>
+      <li>
+        <img src="/assets/brand/icon-projects.svg" alt="" width="40" height="40">
+        <div>
+          <h3>Видео о проекте</h3>
+          <p>Записи выступлений и объяснений. Публикуются с обложкой, описанием и разрешённой ссылкой на источник.</p>
+        </div>
+        <span class="state">материалы готовятся</span>
+      </li>
+      <li>
+        <img src="/assets/brand/icon-news.svg" alt="" width="40" height="40">
+        <div>
+          <h3>Календарь событий</h3>
+          <p>Дни открытых дверей, защиты и встречи. В календарь попадают только подтверждённые даты.</p>
+        </div>
+        <span class="state">события не подтверждены</span>
+      </li>
+      <li>
+        <img src="/assets/brand/icon-about.svg" alt="" width="40" height="40">
+        <div>
+          <h3>Визуальная новелла</h3>
+          <p>История о физике с галереей, лором и дневником разработки. Скачивание появится вместе с готовой сборкой.</p>
+        </div>
+        <span class="state">сборка не передана</span>
+      </li>
+      <li>
+        <img src="/assets/brand/icon-tests.svg" alt="" width="40" height="40">
+        <div>
+          <h3>О команде</h3>
+          <p>Состав практики и роли участников в проекте.</p>
+        </div>
+        <span class="state">роли подтверждаются</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="band" id="tests">
+    <div class="wrap band__inner">
+      <div>
+        <h2>Тесты и подготовка к экзамену</h2>
+        <p>Каждый тест собирается из проверенных вопросов с объяснением ответа: правильные варианты не показываются до отправки. Пока наборы вопросов не подтверждены, разделы остаются закрытыми.</p>
+      </div>
+      <ul class="directions">
+        <li>Тест по физике <span>вопросы и объяснения готовятся</span></li>
+        <li>Викторина цитат <span>точные формулировки цитат подтверждаются</span></li>
+        <li>Задания ЕГЭ <span>нужны задания и разборы</span></li>
+        <li>Развлекательные тесты <span>материалы готовятся</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap account" id="account">
+    <h2>Личный кабинет</h2>
+    <div class="account__row">
+      <p>В кабинете появятся результаты тестов и сохранённые материалы. Вход и регистрация открываются вместе с разделом аккаунта.</p>
+      <button class="btn" type="button" data-soon="Вход откроется вместе с разделом аккаунта. Мы покажем это же действие, когда backend будет готов.">Войти</button>
+      <button class="btn btn--ghost" type="button" data-soon="Регистрация откроется вместе с разделом аккаунта: имя, почта и пароль проверяются на сервере.">Зарегистрироваться</button>
+    </div>
+    <p class="notice" id="notice" role="status" aria-live="polite"></p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__row">
+    <div>
+      <p><strong>МосПолиФизикс</strong></p>
+      <p class="muted">Московский политехнический университет</p>
+    </div>
+    <nav aria-label="Разделы в подвале">
+      <a href="#news">Новости</a>
+      <a href="#projects">Проекты</a>
+      <a href="#tests">Тесты</a>
+      <a href="#account">Личный кабинет</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const switchButton = document.getElementById("theme-switch");
+  const saved = localStorage.getItem("mosphysics-preview-theme");
+
+  function applyTheme(theme) {
+    root.dataset.theme = theme;
+    switchButton.setAttribute("aria-pressed", String(theme === "dark"));
+    switchButton.textContent = theme === "dark" ? "Светлая тема" : "Тёмная тема";
+  }
+
+  applyTheme(saved === "dark" ? "dark" : "light");
+
+  switchButton.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.setItem("mosphysics-preview-theme", next);
+    applyTheme(next);
+  });
+
+  const notice = document.getElementById("notice");
+  document.querySelectorAll("[data-soon]").forEach((control) => {
+    control.addEventListener("click", () => {
+      notice.textContent = control.dataset.soon;
+    });
+  });
+</script>
+</body>
+</html>
