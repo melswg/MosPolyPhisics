@@ -1,196 +1,167 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="О проекте МосПоли ФИЗИКС">
-    <title>О нас - МосПоли ФИЗИКС</title>
-    
-    <!-- Подключение шрифтов -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Roboto+Mono:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
-    
-    <!-- Подключение стилей -->
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../figma.css">
-    <link rel="stylesheet" href="../about.css">
-    
-    <!-- Иконки -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>О нас — МосПолиФизикс</title>
+<meta name="description" content="О проекте «МосПолиФизикс»: назначение, направление практики, куратор и команда.">
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<script src="/static/js/theme-init.js"></script>
+<link rel="stylesheet" href="/static/css/styles.css">
+<script src="/static/js/site.js" defer></script>
 </head>
 <body>
+<a class="skip" href="#content">Перейти к содержанию</a>
 
-    <!-- Шапка сайта (Header) -->
-    <header class="header">
-        <div class="container header__container">
-            <div class="header__left">
-                <button type="button" class="theme-toggle" aria-label="Переключить тему">
-                    <i class="fa-regular fa-sun"></i>
-                </button>
-                <a href="../index.html" class="logo">
-                    <img src="../media/logo.svg" alt="МосПоли ФИЗИКС">
-                </a>
-            </div>
-            <nav class="nav">
-                <ul class="nav__list">
-                    <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
-                    <li class="nav__item"><a href="news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
-                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
-                    <li class="nav__item"><a href="tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
-                    <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
-                </ul>
-            </nav>
-            <div class="header__actions">
-                <a href="account.html" class="header-profile" aria-label="Личный кабинет">
-                    <img src="../media/icons/user-circle.svg" alt="">
-                </a>
-                <button type="button" class="mobile-menu-btn" aria-label="Открыть меню">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
+<header class="header">
+  <div class="wrap header__row">
+    <button class="theme" type="button" id="theme-switch" aria-pressed="true" aria-label="Включить светлую тему">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.5"></circle>
+        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"></path>
+      </svg>
+    </button>
+    <a class="logo" href="/" aria-label="МосПолиФизикс, на главную">
+      <span><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="188" height="24"></span>
+    </a>
+    <button class="burger" type="button" id="menu-button" aria-expanded="false" aria-controls="main-menu">Меню</button>
+    <nav class="menu" id="main-menu" aria-label="Разделы сайта">
+      <a href="/">Главная</a>
+      <a href="/about" aria-current="page">О нас</a>
+      <a href="/news">Новости</a>
+      <a href="/projects">Проекты</a>
+      <a href="/tests">Тесты</a>
+      <a href="/account">Личный кабинет</a>
+    </nav>
+    <a class="profile" href="/account" aria-label="Личный кабинет">
+      <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="2.4">
+        <circle cx="24" cy="24" r="21"></circle>
+        <circle cx="24" cy="18" r="7" fill="#FFFFFF" stroke="none"></circle>
+        <path d="M10 41c1.6-8.4 8.6-12.6 14-12.6S36.4 32.6 38 41" fill="#FFFFFF" stroke="none"></path>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<main id="content" class="wrap">
+  <div class="page-head">
+    <h1>О нас</h1>
+    <p>«МосПолиФизикс» создаётся в Московском политехническом университете как образовательный ресурс по физике. Здесь мы рассказываем о проекте, практикуме и команде, которая его делает.</p>
+  </div>
+
+  <section class="panel" aria-labelledby="project-title">
+    <h2 id="project-title">О проекте</h2>
+    <ul class="rows">
+      <li class="row">
+        <div>
+          <h3>Назначение</h3>
+          <p>Образовательный веб-ресурс по физике для студентов и абитуриентов: объяснения явлений, задачи с разбором, проверочные тесты и материалы о проекте.</p>
         </div>
-    </header>
-
-    <main class="surface-deco">
-        <!-- Секция "О нас" (Purple Block) -->
-        <section class="about-hero">
-            <div class="container">
-                <h1 class="about-hero__title">О нас</h1>
-                <div class="about-hero__text">
-                    <p>«МосПолиФизикс» — образовательный веб-ресурс по физике для студентов и абитуриентов. Проект создан в Московском политехническом университете в рамках проектной практики по направлению 09.03.02 «Информационные системы и технологии» в период с 3 февраля по 24 мая 2025 года. На сайте собраны новости, видео, тесты и другие форматы, которые помогают связать физику с повседневными явлениями, техникой и инженерными задачами. Куратор проекта — Кореневская Евгения Александровна.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Секция "Наши рубрики" (Categories Grid) -->
-        <section class="categories">
-            <div class="container">
-                <h2 class="section-title">Наши рубрики</h2>
-                
-                <div class="categories-grid choice-grid">
-                    <!-- Карточка 1: Видео -->
-                    <a href="video.html" class="category-card choice-card">
-                        <h3 class="category-card__title">Видео</h3>
-                        <div class="category-card__icon">
-                            <!-- SVG Placeholder -->
-                            <i class="fa-solid fa-video"></i>
-                        </div>
-                    </a>
-
-                    <!-- Карточка 2: Комиксы -->
-                    <a href="maintenance.html" class="category-card choice-card">
-                        <h3 class="category-card__title">Комиксы</h3>
-                        <div class="category-card__icon">
-                            <i class="fa-solid fa-book-open"></i>
-                        </div>
-                    </a>
-
-                    <!-- Карточка 3: Календари -->
-                    <a href="calendar.html" class="category-card choice-card">
-                        <h3 class="category-card__title">Календари</h3>
-                        <div class="category-card__icon">
-                            <i class="fa-regular fa-calendar"></i>
-                        </div>
-                    </a>
-
-                    <!-- Карточка 4: Дни рождения -->
-                    <a href="maintenance.html" class="category-card choice-card">
-                        <h3 class="category-card__title">Дни рождения</h3>
-                        <div class="category-card__icon">
-                            <i class="fa-solid fa-cake-candles"></i>
-                        </div>
-                    </a>
-
-                    <!-- Карточка 5: Историческая справка -->
-                    <a href="maintenance.html" class="category-card choice-card">
-                        <h3 class="category-card__title">Историческая справка</h3>
-                        <div class="category-card__icon">
-                            <i class="fa-solid fa-scroll"></i>
-                        </div>
-                    </a>
-
-                    <!-- Карточка 6: Физики говорят -->
-                    <a href="maintenance.html" class="category-card choice-card">
-                        <h3 class="category-card__title">Физики говорят</h3>
-                        <div class="category-card__icon">
-                            <i class="fa-solid fa-microphone"></i>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Секция "Команда проекта" -->
-        <section class="team">
-            <div class="container">
-                <h2 class="section-title">Команда проекта</h2>
-                
-                <div class="team-visual">
-                    <!-- Левая фигура (меньше, серая) -->
-                    <div class="team-member team-member--side">
-                        <div class="member-shape"></div>
-                    </div>
-                    
-                    <!-- Центральная фигура (больше, белая) -->
-                    <div class="team-member team-member--center">
-                        <div class="member-shape"></div>
-                    </div>
-                    
-                    <!-- Правая фигура (меньше, серая) -->
-                    <div class="team-member team-member--side">
-                        <div class="member-shape"></div>
-                    </div>
-                </div>
-
-                <div class="team-caption">
-                    <p>Амхадов Малик Магометович, группа 251-339</p>
-                    <p>Коробейников Матвей Алексеевич, группа 251-332</p>
-                    <p>Ефремов Никита Алексеевич, группа 251-338</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Подвал сайта (Footer) -->
-    <footer class="footer">
-        <div class="container footer__container">
-            <div class="footer__col footer__col--main">
-                <div class="logo footer__logo">
-                    <img src="../media/logo.svg" alt="МосПоли ФИЗИКС Лого" style="filter: brightness(0) invert(1);">
-                </div>
-                <p class="footer__email">@MosPolyPhysics@gmail.com</p>
-                <div class="social-links">
-                    <a href="#" class="social-link" data-social="tiktok" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="#" class="social-link" data-social="pinterest" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
-                    <a href="#" class="social-link" data-social="rutube" aria-label="RuTube"><i class="fa-solid fa-circle-play"></i></a>
-                    <a href="#" class="social-link" data-social="youtube" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="social-link" data-social="telegram" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
-                </div>
-            </div>
-
-            <div class="footer__col">
-                <h4 class="footer__title">Разделы</h4>
-                <ul class="footer__list">
-                    <li><a href="../index.html">Главная</a></li>
-                    <li><a href="news.html">Новости</a></li>
-                </ul>
-            </div>
-
-            <div class="footer__col">
-                <h4 class="footer__title">Ещё</h4>
-                <ul class="footer__list">
-                    <li><a href="tests.html">Тесты</a></li>
-                    <li><a href="project.html">Проекты</a></li>
-                    <li><a href="account.html">Личный кабинет</a></li>
-                </ul>
-            </div>
+      </li>
+      <li class="row">
+        <div>
+          <h3>Университет</h3>
+          <p>Московский политехнический университет.</p>
         </div>
-        <div class="footer__bottom">
-            <p>&copy; 2026 МосПоли ФИЗИКС. Все права защищены.</p>
+      </li>
+      <li class="row">
+        <div>
+          <h3>Формат работы</h3>
+          <p>Проектная практика по направлению 09.03.02 «Информационные системы и технологии».</p>
         </div>
-    </footer>
+      </li>
+      <li class="row">
+        <div>
+          <h3>Период практики</h3>
+          <p>3 февраля — 24 мая 2025 года.</p>
+        </div>
+      </li>
+      <li class="row">
+        <div>
+          <h3>Куратор практики</h3>
+          <p>Кореневская Евгения Александровна.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
 
-    <script src="../site-config.js"></script>
-    <script src="../api.js"></script>
-    <script src="../scripts.js"></script>
+  <section class="panel" aria-labelledby="team-title">
+    <h2 id="team-title">Команда практики</h2>
+    <p>В материалах проекта подтверждён исторический состав участников. Текущие роли и распределение задач появятся здесь, когда команда их подтвердит: мы не подписываем людей на работу, которую они не делали.</p>
+    <ul class="rows">
+      <li class="row">
+        <div>
+          <h3>Амхадов Малик Магометович</h3>
+          <p>Группа 251-339</p>
+        </div>
+        <span class="row__side">исторический состав</span>
+      </li>
+      <li class="row">
+        <div>
+          <h3>Коробейников Матвей Алексеевич</h3>
+          <p>Группа 251-332</p>
+        </div>
+        <span class="row__side">исторический состав</span>
+      </li>
+      <li class="row">
+        <div>
+          <h3>Ефремов Никита Алексеевич</h3>
+          <p>Группа 251-338</p>
+        </div>
+        <span class="row__side">исторический состав</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="panel" aria-labelledby="contacts-title">
+    <h2 id="contacts-title">Контакты</h2>
+    <div class="state">
+      <h3>Публичные контакты подтверждаются</h3>
+      <p>Почту и ссылки на социальные сети добавим после разрешения владельца проекта. Заглушек вместо адресов на сайте не будет: если контакта нет, его здесь не показывают.</p>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="links-title">
+    <h2 id="links-title">Что посмотреть дальше</h2>
+    <div class="account">
+      <div>
+        <p>Хроника проекта собрана в новостях, материалы практикума — в разделе проектов, проверка знаний — в тестах.</p>
+      </div>
+      <div class="account__buttons">
+        <a class="btn" href="/news">Новости проекта</a>
+        <a class="btn btn--ghost" href="/projects">Проекты</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <span class="footer__logo"><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="180" height="23"></span>
+      <p class="footer__about">Образовательный ресурс по физике Московского политехнического университета. Контакты и социальные ссылки появятся после подтверждения владельцем проекта.</p>
+    </div>
+    <div>
+      <h2>Разделы</h2>
+      <ul>
+        <li><a href="/about">О нас</a></li>
+        <li><a href="/news">Новости</a></li>
+        <li><a href="/projects">Проекты</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Практика</h2>
+      <ul>
+        <li><a href="/tests">Тесты</a></li>
+        <li><a href="/ege">Подготовка к ЕГЭ</a></li>
+        <li><a href="/quotes">Викторина цитат</a></li>
+        <li><a href="/account">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer__bottom">
+    <p>© 2026 МосПолиФизикс. Московский политехнический университет.</p>
+  </div>
+</footer>
 </body>
 </html>

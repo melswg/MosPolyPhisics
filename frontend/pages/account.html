@@ -1,71 +1,125 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет — МосПолиФизикс</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../figma.css?v=20260917-account">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Личный кабинет — МосПолиФизикс</title>
+<meta name="description" content="Личный кабинет «МосПолиФизикс»: вход, регистрация и результаты тестов.">
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<script src="/static/js/theme-init.js"></script>
+<link rel="stylesheet" href="/static/css/styles.css">
+<script src="/static/js/site.js" defer></script>
 </head>
 <body>
-    <header class="header">
-        <div class="container header__container">
-            <div class="header__left">
-                <button type="button" class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
-                <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
-            </div>
-            <nav class="nav">
-                <ul class="nav__list">
-                    <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
-                    <li class="nav__item"><a href="news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
-                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
-                    <li class="nav__item"><a href="tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
-                    <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
-                </ul>
-            </nav>
-            <div class="header__actions">
-                <a href="account.html" class="header-profile" aria-label="Кабинет"><img src="../media/icons/user-circle.svg" alt=""></a>
-                <button type="button" class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
-            </div>
+<a class="skip" href="#content">Перейти к содержанию</a>
+
+<header class="header">
+  <div class="wrap header__row">
+    <button class="theme" type="button" id="theme-switch" aria-pressed="true" aria-label="Включить светлую тему">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.5"></circle>
+        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"></path>
+      </svg>
+    </button>
+    <a class="logo" href="/" aria-label="МосПолиФизикс, на главную">
+      <span><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="188" height="24"></span>
+    </a>
+    <button class="burger" type="button" id="menu-button" aria-expanded="false" aria-controls="main-menu">Меню</button>
+    <nav class="menu" id="main-menu" aria-label="Разделы сайта">
+      <a href="/">Главная</a>
+      <a href="/about">О нас</a>
+      <a href="/news">Новости</a>
+      <a href="/projects">Проекты</a>
+      <a href="/tests">Тесты</a>
+      <a href="/account" aria-current="page">Личный кабинет</a>
+    </nav>
+    <a class="profile" href="/account" aria-label="Личный кабинет">
+      <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="2.4">
+        <circle cx="24" cy="24" r="21"></circle>
+        <circle cx="24" cy="18" r="7" fill="#FFFFFF" stroke="none"></circle>
+        <path d="M10 41c1.6-8.4 8.6-12.6 14-12.6S36.4 32.6 38 41" fill="#FFFFFF" stroke="none"></path>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<main id="content" class="wrap">
+  <div class="page-head">
+    <h1>Личный кабинет</h1>
+    <p>В кабинете собраны результаты тестов и данные аккаунта. Гость видит выбор между входом и регистрацией, вошедший пользователь — свои данные и выход.</p>
+  </div>
+
+  <section class="panel" aria-labelledby="account-title">
+    <h2 id="account-title">Состояние входа</h2>
+    <div data-account>
+      <div class="account">
+        <div>
+          <h2>Вы не вошли в аккаунт</h2>
+          <p>Войдите или зарегистрируйтесь, чтобы открыть личный кабинет.</p>
         </div>
-    </header>
-
-    <main class="content-page surface-deco">
-        <div class="account-figma" id="account-shell">
-            <div class="account-figma__head">
-                <i class="fa-solid fa-pen" style="opacity:.85"></i>
-                Личный кабинет
-            </div>
-            <div class="account-member-profile" id="account-member-profile" hidden>
-                <img class="account-figma__avatar" src="../media/icons/user-circle.svg" alt="" id="account-avatar">
-                <div class="account-figma__meta" id="account-content"><p>Загрузка…</p></div>
-            </div>
-            <div class="account-figma__mascot" id="account-member-mascot" hidden>
-                <img src="../media/mas.svg" alt="Маскот">
-                <p style="margin-top:.5rem;font-size:.9rem;opacity:.95">Это вы!</p>
-            </div>
-            <div class="account-guest" id="account-guest" hidden>
-                <h2>Войдите в аккаунт</h2>
-                <p>Войдите, если уже зарегистрированы, или создайте новый аккаунт.</p>
-                <div class="account-guest__actions">
-                    <a href="login.html" class="account-guest__link account-guest__link--primary">Войти</a>
-                    <a href="register.html" class="account-guest__link">Зарегистрироваться</a>
-                </div>
-            </div>
-            <div class="account-status" id="account-status" role="status">Загрузка…</div>
-            <button type="button" class="btn-logout" id="logout-btn" hidden>Выйти</button>
+        <div class="account__buttons">
+          <a class="btn" href="/login">Войти</a>
+          <a class="btn btn--ghost" href="/register">Зарегистрироваться</a>
         </div>
-    </main>
+      </div>
+    </div>
+  </section>
 
-    <footer class="footer">
-        <div class="container footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
-    </footer>
+  <section class="panel" aria-labelledby="what-title">
+    <h2 id="what-title">Что будет в кабинете</h2>
+    <ul class="rows">
+      <li class="row">
+        <div>
+          <h3>Результаты тестов</h3>
+          <p>Список пройденных тестов с количеством верных ответов и датой прохождения.</p>
+        </div>
+        <span class="row__side">готовится</span>
+      </li>
+      <li class="row">
+        <div>
+          <h3>Восстановление доступа</h3>
+          <p>Если пароль забыт, его можно восстановить одноразовой ссылкой на почту.</p>
+        </div>
+        <span class="row__side">доступно</span>
+      </li>
+      <li class="row">
+        <div>
+          <h3>Права администратора</h3>
+          <p>Права выдаёт только владелец проекта отдельной командой, регистрация их не даёт.</p>
+        </div>
+        <span class="row__side">готовится</span>
+      </li>
+    </ul>
+  </section>
+</main>
 
-    <script src="../site-config.js"></script>
-    <script src="../api.js"></script>
-    <script src="../scripts.js"></script>
-    <script src="../account_page.js?v=20260917-account"></script>
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <span class="footer__logo"><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="180" height="23"></span>
+      <p class="footer__about">Образовательный ресурс по физике Московского политехнического университета. Контакты и социальные ссылки появятся после подтверждения владельцем проекта.</p>
+    </div>
+    <div>
+      <h2>Разделы</h2>
+      <ul>
+        <li><a href="/about">О нас</a></li>
+        <li><a href="/news">Новости</a></li>
+        <li><a href="/projects">Проекты</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Практика</h2>
+      <ul>
+        <li><a href="/tests">Тесты</a></li>
+        <li><a href="/ege">Подготовка к ЕГЭ</a></li>
+        <li><a href="/quotes">Викторина цитат</a></li>
+        <li><a href="/account">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer__bottom">
+    <p>© 2026 МосПолиФизикс. Московский политехнический университет.</p>
+  </div>
+</footer>
 </body>
 </html>

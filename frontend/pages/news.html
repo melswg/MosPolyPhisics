@@ -1,71 +1,106 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Новости — МосПолиФизикс</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Roboto+Mono:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../figma.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Новости — МосПолиФизикс</title>
+<meta name="description" content="Новости проекта «МосПолиФизикс»: записи с подтверждённым источником.">
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<script src="/static/js/theme-init.js"></script>
+<link rel="stylesheet" href="/static/css/styles.css">
+<script src="/static/js/site.js" defer></script>
 </head>
 <body>
-    <header class="header">
-        <div class="container header__container">
-            <div class="header__left">
-                <button type="button" class="theme-toggle" aria-label="Переключить тему"><i class="fa-regular fa-sun"></i></button>
-                <a href="../index.html" class="logo"><img src="../media/logo.svg" alt="МосПолиФизикс"></a>
-            </div>
-            <nav class="nav">
-                <ul class="nav__list">
-                    <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
-                    <li class="nav__item"><a href="news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
-                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
-                    <li class="nav__item"><a href="tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
-                    <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
-                </ul>
-            </nav>
-            <div class="header__actions">
-                <a href="account.html" class="header-profile" aria-label="Личный кабинет"><img src="../media/icons/user-circle.svg" alt=""></a>
-                <button type="button" class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
-            </div>
-        </div>
-    </header>
+<a class="skip" href="#content">Перейти к содержанию</a>
 
-    <main class="content-page surface-deco">
-        <h1 class="page-title">Новости</h1>
-        <div id="news-root" class="news-list" aria-live="polite" aria-busy="true"><p>Загрузка…</p></div>
-    </main>
+<header class="header">
+  <div class="wrap header__row">
+    <button class="theme" type="button" id="theme-switch" aria-pressed="true" aria-label="Включить светлую тему">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.5"></circle>
+        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"></path>
+      </svg>
+    </button>
+    <a class="logo" href="/" aria-label="МосПолиФизикс, на главную">
+      <span><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="188" height="24"></span>
+    </a>
+    <button class="burger" type="button" id="menu-button" aria-expanded="false" aria-controls="main-menu">Меню</button>
+    <nav class="menu" id="main-menu" aria-label="Разделы сайта">
+      <a href="/">Главная</a>
+      <a href="/about">О нас</a>
+      <a href="/news" aria-current="page">Новости</a>
+      <a href="/projects">Проекты</a>
+      <a href="/tests">Тесты</a>
+      <a href="/account">Личный кабинет</a>
+    </nav>
+    <a class="profile" href="/account" aria-label="Личный кабинет">
+      <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="2.4">
+        <circle cx="24" cy="24" r="21"></circle>
+        <circle cx="24" cy="18" r="7" fill="#FFFFFF" stroke="none"></circle>
+        <path d="M10 41c1.6-8.4 8.6-12.6 14-12.6S36.4 32.6 38 41" fill="#FFFFFF" stroke="none"></path>
+      </svg>
+    </a>
+  </div>
+</header>
 
-    <footer class="footer">
-        <div class="container footer__container">
-            <div class="footer__col footer__col--main">
-                <div class="logo footer__logo">
-                    <img src="../media/logo.svg" alt="" style="filter: brightness(0) invert(1);">
-                </div>
-                <p class="footer__email">@MosPolyPhysics@gmail.com</p>
-                <div class="social-links">
-                    <a href="#" class="social-link" data-social="tiktok" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="#" class="social-link" data-social="pinterest" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
-                    <a href="#" class="social-link" data-social="rutube" aria-label="RuTube"><i class="fa-solid fa-circle-play"></i></a>
-                    <a href="#" class="social-link" data-social="youtube" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="social-link" data-social="telegram" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
-                </div>
-            </div>
-            <div class="footer__col">
-                <h4 class="footer__title">Разделы</h4>
-                <ul class="footer__list">
-                    <li><a href="about.html">О нас</a></li>
-                    <li><a href="../index.html">Главная</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
-    </footer>
+<main id="content" class="wrap">
+  <div class="page-head">
+    <h1>Новости</h1>
+    <p>Хроника проекта: что сделано и что дальше. Записи приходят из ленты и публикуются только с подтверждённым источником, поэтому их нельзя переписать «на глаз».</p>
+  </div>
 
-    <script src="../site-config.js"></script>
-    <script src="../api.js"></script>
-    <script src="../scripts.js"></script>
-    <script src="../news.js"></script>
+  <section class="panel" aria-labelledby="feed-title">
+    <h2 id="feed-title">Лента проекта</h2>
+    <div data-news>
+      <div class="state">
+        <h3>Пока нет опубликованных записей</h3>
+        <p>Новости появляются здесь только после проверки материала командой.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="order-title">
+    <h2 id="order-title">Как появляются записи</h2>
+    <div class="cols">
+      <div class="state">
+        <h3>Сначала подтверждение</h3>
+        <p>Команда передаёт дату и текст, после проверки запись публикуется в ленте. Демонстрационных новостей для наполнения на сайте нет.</p>
+      </div>
+      <div class="state">
+        <h3>Отдельная страница записи</h3>
+        <p>Постоянные страницы материалов появятся вместе со второй подтверждённой новостью: тогда на каждую запись можно будет давать ссылку.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <span class="footer__logo"><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="180" height="23"></span>
+      <p class="footer__about">Образовательный ресурс по физике Московского политехнического университета. Контакты и социальные ссылки появятся после подтверждения владельцем проекта.</p>
+    </div>
+    <div>
+      <h2>Разделы</h2>
+      <ul>
+        <li><a href="/about">О нас</a></li>
+        <li><a href="/news">Новости</a></li>
+        <li><a href="/projects">Проекты</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Практика</h2>
+      <ul>
+        <li><a href="/tests">Тесты</a></li>
+        <li><a href="/ege">Подготовка к ЕГЭ</a></li>
+        <li><a href="/quotes">Викторина цитат</a></li>
+        <li><a href="/account">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer__bottom">
+    <p>© 2026 МосПолиФизикс. Московский политехнический университет.</p>
+  </div>
+</footer>
 </body>
 </html>

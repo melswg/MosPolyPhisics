@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 COPY backend /app/backend
 COPY frontend /app/frontend
+COPY assets /app/assets
 
 ENV PYTHONUNBUFFERED=1
 ENV MOSPHYSICS_DATABASE=/data/database.sqlite

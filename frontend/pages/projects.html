@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Тесты — МосПолиФизикс</title>
-<meta name="description" content="Тесты по физике, викторина цитат, задания ЕГЭ и развлекательные тесты.">
+<title>Проекты — МосПолиФизикс</title>
+<meta name="description" content="Проекты «МосПолиФизикс»: видео, календарь событий и визуальная новелла о физике.">
 <link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
 <script src="/static/js/theme-init.js"></script>
 <link rel="stylesheet" href="/static/css/styles.css">
@@ -29,8 +29,8 @@
       <a href="/">Главная</a>
       <a href="/about">О нас</a>
       <a href="/news">Новости</a>
-      <a href="/projects">Проекты</a>
-      <a href="/tests" aria-current="page">Тесты</a>
+      <a href="/projects" aria-current="page">Проекты</a>
+      <a href="/tests">Тесты</a>
       <a href="/account">Личный кабинет</a>
     </nav>
     <a class="profile" href="/account" aria-label="Личный кабинет">
@@ -45,66 +45,66 @@
 
 <main id="content" class="wrap">
   <div class="page-head">
-    <h1>Тесты</h1>
-    <p>Четыре направления проверки знаний: физика, цитаты учёных, задания ЕГЭ и короткие развлекательные тесты. Каждый тест собирается из проверенных вопросов с объяснением ответа.</p>
+    <h1>Проекты</h1>
+    <p>Раздел собирает практику проекта: записи опытов, календарь событий и визуальную новеллу о физике. Направление открывается тогда, когда в нём есть настоящий материал, а не заглушка.</p>
   </div>
 
-  <section class="panel" aria-labelledby="catalog-title">
-    <h2 id="catalog-title">Направления</h2>
+  <section class="panel" aria-labelledby="directions-title">
+    <h2 id="directions-title">Направления</h2>
     <ul class="rows">
-      <li class="row">
-        <div>
-          <h3>Тест по физике</h3>
-          <p>Пять вопросов с разбором каждого ответа: после отправки видно, где именно ошибка и почему верный вариант верный.</p>
-        </div>
-        <span class="row__side">вопросы готовятся</span>
+      <li class="row row--link">
+        <a class="row__link" href="/video">
+          <div>
+            <h3>Видео о проекте</h3>
+            <p>Записи выступлений и объяснений публикуются с обложкой, описанием и разрешённой ссылкой на источник.</p>
+          </div>
+          <span class="row__side">материалы не переданы</span>
+          <span class="row__go" aria-hidden="true"></span>
+        </a>
       </li>
-      <li class="row">
-        <div>
-          <h3><a href="/quotes">Викторина цитат</a></h3>
-          <p>Цитаты учёных с указанием источника. Формулировки и атрибуция проверяются, поэтому раздел пока закрыт.</p>
-        </div>
-        <span class="row__side">формулировки подтверждаются</span>
+      <li class="row row--link">
+        <a class="row__link" href="/calendar">
+          <div>
+            <h3>Календарь событий</h3>
+            <p>Дни открытых дверей, защиты работ и встречи. В календарь попадают только подтверждённые даты.</p>
+          </div>
+          <span class="row__side">события не подтверждены</span>
+          <span class="row__go" aria-hidden="true"></span>
+        </a>
       </li>
-      <li class="row">
-        <div>
-          <h3><a href="/ege">Задания ЕГЭ</a></h3>
-          <p>Задачи с решениями и разбором хода мысли, а не только с ответом.</p>
-        </div>
-        <span class="row__side">задания готовятся</span>
+      <li class="row row--link">
+        <a class="row__link" href="/novel">
+          <div>
+            <h3>Визуальная новелла</h3>
+            <p>История о физике с галереей, лором и дневником разработки. Скачивание появится вместе с готовой сборкой.</p>
+          </div>
+          <span class="row__side">сборка не передана</span>
+          <span class="row__go" aria-hidden="true"></span>
+        </a>
       </li>
-      <li class="row">
-        <div>
-          <h3>Развлекательные тесты</h3>
-          <p>Короткие тесты для паузы между парами: физика в бытовых ситуациях и небольшие головоломки.</p>
-        </div>
-        <span class="row__side">материалы готовятся</span>
+      <li class="row row--link">
+        <a class="row__link" href="/about">
+          <div>
+            <h3>Команда проекта</h3>
+            <p>Состав практики и роли участников.</p>
+          </div>
+          <span class="row__side">роли подтверждаются</span>
+          <span class="row__go" aria-hidden="true"></span>
+        </a>
       </li>
     </ul>
   </section>
 
-  <section class="panel" aria-labelledby="how-title">
-    <h2 id="how-title">Как устроено прохождение</h2>
+  <section class="panel" aria-labelledby="rules-title">
+    <h2 id="rules-title">Правила раздела</h2>
     <div class="cols">
       <div class="state">
-        <h3>Правильные ответы не видны заранее</h3>
-        <p>Вопросы приходят с сервера, выбор отправляется на проверку, и только после отправки приходит результат с объяснениями.</p>
+        <h3>Никаких мёртвых ссылок</h3>
+        <p>Если материала нет, направление остаётся описанием и честным состоянием. Загрузка «для вида» и ссылка на несуществующий файл не появляются.</p>
       </div>
       <div class="state">
-        <h3>Понятные состояния</h3>
-        <p>Загрузка, пустой набор, ошибка соединения и неполные ответы показываются отдельно, чтобы было ясно, что происходит.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="wrap">
-    <div class="account">
-      <div>
-        <h2>Результаты сохраняются в кабинете</h2>
-        <p>После входа результаты тестов будут собираться в личном кабинете. Раздел аккаунта ещё в разработке.</p>
-      </div>
-      <div class="account__buttons">
-        <a class="btn" href="/account">Личный кабинет</a>
+        <h3>Источники проверяются</h3>
+        <p>Внешнее видео встраивается только из разрешённых источников, с обложкой и подписью. Если встраивание недоступно, показываем ссылку и объяснение.</p>
       </div>
     </div>
   </section>

@@ -4,10 +4,11 @@ import logging
 import re
 import secrets
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 from pathlib import Path
@@ -40,6 +41,45 @@ RESET_MINUTES = 30
 USERNAME_PATTERN = re.compile(r"^[A-Za-zА-Яа-яЁё0-9_.-]+$")
 
 app = FastAPI()
+
+project_dir = Path(__file__).resolve().parent.parent
+frontend_dir = project_dir / "frontend"
+assets_dir = project_dir / "assets"
+
+PAGE_FILES = {
+    "/about": "about.html",
+    "/news": "news.html",
+    "/projects": "projects.html",
+    "/video": "video.html",
+    "/calendar": "calendar.html",
+    "/novel": "novel.html",
+    "/tests": "tests.html",
+    "/test": "test.html",
+    "/ege": "ege.html",
+    "/quotes": "quotes.html",
+    "/account": "account.html",
+    "/login": "login.html",
+    "/register": "register.html",
+    "/password-reset": "password-reset.html",
+    "/password-reset/confirm": "password-reset-confirm.html",
+}
+
+LEGACY_PAGE_ROUTES = {
+    "/index.html": "/",
+    "/pages/about.html": "/about",
+    "/pages/news.html": "/news",
+    "/pages/project.html": "/projects",
+    "/pages/video.html": "/video",
+    "/pages/calendar.html": "/calendar",
+    "/pages/novel.html": "/novel",
+    "/pages/tests.html": "/tests",
+    "/pages/test_template.html": "/test",
+    "/pages/account.html": "/account",
+    "/pages/login.html": "/login",
+    "/pages/register.html": "/register",
+    "/pages/forgot_password.html": "/password-reset",
+    "/pages/reset_password.html": "/password-reset/confirm",
+}
 
 cors_origins = [item.strip() for item in os.getenv("CORS_ORIGINS", "").split(",") if item.strip()]
 if cors_origins:
@@ -271,7 +311,7 @@ def request_password_reset(body: PasswordResetRequest, request: Request):
         expires = datetime.now(timezone.utc) + timedelta(minutes=RESET_MINUTES)
         create_password_reset_token(meta["id"], _token_hash(token), expires.isoformat())
         public_base = os.getenv("PUBLIC_BASE_URL", str(request.base_url).rstrip("/")).rstrip("/")
-        reset_url = f"{public_base}/pages/reset_password.html?token={token}"
+        reset_url = f"{public_base}/password-reset/confirm?token={token}"
         try:
             sent = send_password_reset(meta["email"], reset_url)
             if not sent:
@@ -288,6 +328,44 @@ def confirm_password_reset(body: PasswordResetConfirm):
     return {"message": "Пароль изменён. Войдите с новым паролем"}
 
 
-# Статика (фронтенд) — после API-маршрутов
-frontend_dir = Path(__file__).parent.parent.joinpath("frontend").resolve()
-app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="static")
+@app.get("/", include_in_schema=False)
+def index_page() -> FileResponse:
+    return FileResponse(frontend_dir / "index.html", media_type="text/html; charset=utf-8")
+
+
+def _page_response(filename: str) -> FileResponse:
+    return FileResponse(frontend_dir / "pages" / filename, media_type="text/html; charset=utf-8")
+
+
+def _page_handler(filename: str) -> Callable[[], FileResponse]:
+    def handler() -> FileResponse:
+        return _page_response(filename)
+
+    return handler
+
+
+def _redirect_handler(target: str) -> Callable[[], RedirectResponse]:
+    def handler() -> RedirectResponse:
+        return RedirectResponse(target, status_code=308)
+
+    return handler
+
+
+for page_path, page_file in PAGE_FILES.items():
+    app.add_api_route(
+        page_path,
+        _page_handler(page_file),
+        methods=["GET"],
+        include_in_schema=False,
+    )
+
+for legacy_path, target_path in LEGACY_PAGE_ROUTES.items():
+    app.add_api_route(
+        legacy_path,
+        _redirect_handler(target_path),
+        methods=["GET"],
+        include_in_schema=False,
+    )
+
+app.mount("/static", StaticFiles(directory=str(frontend_dir)), name="static")
+app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")

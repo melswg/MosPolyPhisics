@@ -1,89 +1,118 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Визуальная новелла — МосПолиФизикс</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../figma.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Визуальная новелла — МосПолиФизикс</title>
+<meta name="description" content="Визуальная новелла о физике: описание, лор, галерея и дневник разработки.">
+<link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
+<script src="/static/js/theme-init.js"></script>
+<link rel="stylesheet" href="/static/css/styles.css">
+<script src="/static/js/site.js" defer></script>
 </head>
 <body>
-    <header class="header">
-        <div class="container header__container">
-            <div class="header__left">
-                <button type="button" class="theme-toggle" aria-label="Тема"><i class="fa-regular fa-sun"></i></button>
-                <a href="../index.html" class="logo"><img src="../media/logo.svg" alt=""></a>
-            </div>
-            <nav class="nav">
-                <ul class="nav__list">
-                    <li class="nav__item"><a href="about.html" class="nav__link"><i class="fa-solid fa-circle-info"></i> О нас</a></li>
-                    <li class="nav__item"><a href="news.html" class="nav__link"><i class="fa-solid fa-newspaper"></i> Новости</a></li>
-                    <li class="nav__item"><a href="project.html" class="nav__link"><i class="fa-solid fa-rocket"></i> Проекты</a></li>
-                    <li class="nav__item"><a href="tests.html" class="nav__link"><i class="fa-solid fa-clipboard-check"></i> Тесты</a></li>
-                    <li class="nav__item"><a href="account.html" class="nav__link"><i class="fa-solid fa-user"></i> Личный кабинет</a></li>
-                </ul>
-            </nav>
-            <div class="header__actions">
-                <a href="account.html" class="header-profile" aria-label="Кабинет"><img src="../media/icons/user-circle.svg" alt=""></a>
-                <button type="button" class="mobile-menu-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
-            </div>
+<a class="skip" href="#content">Перейти к содержанию</a>
+
+<header class="header">
+  <div class="wrap header__row">
+    <button class="theme" type="button" id="theme-switch" aria-pressed="true" aria-label="Включить светлую тему">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.5"></circle>
+        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"></path>
+      </svg>
+    </button>
+    <a class="logo" href="/" aria-label="МосПолиФизикс, на главную">
+      <span><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="188" height="24"></span>
+    </a>
+    <button class="burger" type="button" id="menu-button" aria-expanded="false" aria-controls="main-menu">Меню</button>
+    <nav class="menu" id="main-menu" aria-label="Разделы сайта">
+      <a href="/">Главная</a>
+      <a href="/about">О нас</a>
+      <a href="/news">Новости</a>
+      <a href="/projects" aria-current="page">Проекты</a>
+      <a href="/tests">Тесты</a>
+      <a href="/account">Личный кабинет</a>
+    </nav>
+    <a class="profile" href="/account" aria-label="Личный кабинет">
+      <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="2.4">
+        <circle cx="24" cy="24" r="21"></circle>
+        <circle cx="24" cy="18" r="7" fill="#FFFFFF" stroke="none"></circle>
+        <path d="M10 41c1.6-8.4 8.6-12.6 14-12.6S36.4 32.6 38 41" fill="#FFFFFF" stroke="none"></path>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<main id="content" class="wrap">
+  <div class="page-head">
+    <h1>Визуальная новелла</h1>
+    <p>История о физике, которую команда готовит как отдельный проект. Сайт не разрабатывает игру сам: он рассказывает о ней и публикует материалы, когда они переданы.</p>
+  </div>
+
+  <section class="panel" aria-labelledby="about-novel-title">
+    <h2 id="about-novel-title">О чём история</h2>
+    <p>Новелла покажет физику через бытовые ситуации и разговоры героев: без формул на первом плане, но с объяснением того, что происходит на экране. Описание и структура глав появятся вместе с материалами от команды.</p>
+    <div class="cols">
+      <div class="state">
+        <h3>Лор и персонажи</h3>
+        <p>Описания мира и героев готовятся. Пока текстов нет, шаблонный лор и подписи-заготовки на сайте не публикуются.</p>
+      </div>
+      <div class="state">
+        <h3>Галерея</h3>
+        <p>Кадры и арты появятся с подписями и указанием автора. Пустых рамок с надписью «превью сцены» здесь не будет.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="diary-title">
+    <h2 id="diary-title">Дневник разработки</h2>
+    <ul class="rows">
+      <li class="row">
+        <div>
+          <h3>Записи о ходе работы</h3>
+          <p>Дневник будет собирать короткие записи о том, как продвигается новелла: решения, находки и планы.</p>
         </div>
-    </header>
+        <span class="row__side">записи не переданы</span>
+      </li>
+    </ul>
+  </section>
 
-    <main class="content-page surface-deco">
-        <h1 class="page-title">Визуальная новелла</h1>
+  <section class="panel" aria-labelledby="download-title">
+    <h2 id="download-title">Сборка</h2>
+    <div class="state">
+      <h3>Скачивание появится вместе со сборкой</h3>
+      <p>Ссылка на скачивание добавляется только после готовности проверенной сборки. Кнопка «скачать» без файла не ставится.</p>
+    </div>
+  </section>
+</main>
 
-        <section class="novel-panel">
-            <div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:space-between">
-                <div>
-                    <a href="maintenance.html" class="btn-primary" style="width:auto;padding:.55rem 1.2rem">
-                        <i class="fa-solid fa-cloud-arrow-down"></i> Скачать
-                    </a>
-                    <p style="margin-top:1rem;max-width:520px;opacity:.95">
-                        История студента, который решает сдавать физику: знакомства, институтские будни и немного магии научного метода.
-                    </p>
-                </div>
-                <div style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap">
-                    <img src="../media/mas.svg" alt="Персонаж" style="width:100px;height:auto">
-                    <div style="width:140px;height:100px;border-radius:12px;background:rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:.75rem;opacity:.8">Комната (арт)</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="novel-panel">
-            <h2>Скриншоты</h2>
-            <div style="text-align:center;padding:1rem 0">
-                <div style="max-width:560px;margin:0 auto;border-radius:12px;overflow:hidden;background:rgba(0,0,0,.2)">
-                    <div style="height:200px;display:flex;align-items:center;justify-content:center;opacity:.85">Превью сцены</div>
-                </div>
-                <div style="margin-top:1rem;display:flex;justify-content:center;align-items:center;gap:1.5rem;font-size:1.25rem">
-                    <span aria-hidden="true">&lsaquo;</span>
-                    <span style="letter-spacing:4px;opacity:.7">•••••</span>
-                    <span aria-hidden="true">&rsaquo;</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="novel-panel">
-            <h2>Дневник разработки</h2>
-            <div id="novel-updates-root"><p>Загрузка…</p></div>
-        </section>
-
-        <section class="novel-panel">
-            <h2>Лор игры</h2>
-            <p style="opacity:.95">Здесь будет краткий лор вселенной (шаблон текста из макета). Дополняйте абзацами по мере готовности сценария.</p>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container footer__bottom"><p>&copy; 2026 МосПолиФизикс</p></div>
-    </footer>
-
-    <script src="../site-config.js"></script>
-    <script src="../api.js"></script>
-    <script src="../scripts.js"></script>
-    <script src="../novel_page.js"></script>
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <span class="footer__logo"><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="180" height="23"></span>
+      <p class="footer__about">Образовательный ресурс по физике Московского политехнического университета. Контакты и социальные ссылки появятся после подтверждения владельцем проекта.</p>
+    </div>
+    <div>
+      <h2>Разделы</h2>
+      <ul>
+        <li><a href="/about">О нас</a></li>
+        <li><a href="/news">Новости</a></li>
+        <li><a href="/projects">Проекты</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Практика</h2>
+      <ul>
+        <li><a href="/tests">Тесты</a></li>
+        <li><a href="/ege">Подготовка к ЕГЭ</a></li>
+        <li><a href="/quotes">Викторина цитат</a></li>
+        <li><a href="/account">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer__bottom">
+    <p>© 2026 МосПолиФизикс. Московский политехнический университет.</p>
+  </div>
+</footer>
 </body>
 </html>
