@@ -74,3 +74,30 @@ def test_projects_rows_are_keyboard_accessible_links(page_client):
     assert body.count('class="row__link"') == 4
     for target in ("/video", "/calendar", "/novel", "/about"):
         assert f'class="row__link" href="{target}"' in body
+
+
+def test_public_content_does_not_describe_project_as_practice(page_client):
+    client, main = page_client
+
+    for path in ["/", *main.PAGE_FILES]:
+        body = client.get(path).text.lower()
+        assert "практик" not in body
+        assert "09.03.02" not in body
+
+
+def test_about_uses_confirmed_project_description_and_rubrics(page_client):
+    client, _ = page_client
+    body = client.get("/about").text
+
+    for rubric in (
+        "Видео",
+        "Комиксы",
+        "Календари",
+        "Дни рождения",
+        "Историческая справка",
+        "Физики говорят",
+    ):
+        assert rubric in body
+
+    assert "Ксения Гудкова" in body
+    assert "Что будет в кабинете" not in client.get("/account").text
