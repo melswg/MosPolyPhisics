@@ -70,14 +70,29 @@ def test_auth_forms_are_connected_to_real_handlers(page_client):
         assert endpoint in script
 
 
-def test_projects_rows_are_keyboard_accessible_links(page_client):
+def test_catalog_cards_use_real_keyboard_accessible_links(page_client):
     client, _ = page_client
-    body = client.get("/projects").text
+    projects = client.get("/projects").text
 
-    assert body.count('class="row row--link"') == 4
-    assert body.count('class="row__link"') == 4
+    assert 'class="cards cards--catalog"' in projects
     for target in ("/video", "/calendar", "/novel", "/about"):
-        assert f'class="row__link" href="{target}"' in body
+        assert f'class="card" href="{target}"' in projects
+
+    about = client.get("/about").text
+    for target in ("/video", "/calendar", "/quotes"):
+        assert f'class="card" href="{target}"' in about
+
+    tests = client.get("/tests").text
+    for target in ("/test", "/quotes", "/ege"):
+        assert f'class="card" href="{target}"' in tests
+
+
+def test_internal_explanation_blocks_are_not_public(page_client):
+    client, _ = page_client
+
+    assert "Правила раздела" not in client.get("/projects").text
+    assert "Как появляются записи" not in client.get("/news").text
+    assert "Как устроено прохождение" not in client.get("/tests").text
 
 
 def test_public_content_does_not_describe_project_as_practice(page_client):
