@@ -231,18 +231,9 @@ a { color: inherit; }
 .card p { margin: 14px 0 0; font-size: 15px; color: rgba(255, 255, 255, 0.86); }
 .card__icon { align-self: flex-end; display: grid; place-items: center; width: 74px; height: 74px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.2); }
 .card__icon img { width: 40px; height: 40px; filter: brightness(0) invert(1); }
-.cards--catalog { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.cards--catalog .card { min-height: 190px; }
-.card__meta {
-  align-self: flex-start;
-  margin-top: 22px;
-  padding: 6px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  border-radius: var(--radius-pill);
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 13px;
-  line-height: 1.3;
-}
+.cards--catalog { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; }
+.cards--catalog > li { height: 100%; }
+.cards--catalog .card { width: 100%; height: 100%; min-height: 190px; }
 .card--static { cursor: default; }
 .card--static:hover { transform: none; box-shadow: none; }
 

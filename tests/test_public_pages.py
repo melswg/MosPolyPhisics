@@ -95,6 +95,26 @@ def test_internal_explanation_blocks_are_not_public(page_client):
     assert "Как устроено прохождение" not in client.get("/tests").text
 
 
+def test_public_catalogs_do_not_show_internal_readiness_labels(page_client):
+    client, _ = page_client
+
+    assert "Пока еще нет" in client.get("/news").text
+    projects = client.get("/projects").text
+    tests = client.get("/tests").text
+    for label in (
+        "Материалы не переданы",
+        "События не подтверждены",
+        "Сборка не передана",
+        "Роли подтверждаются",
+        "Вопросы готовятся",
+        "Формулировки подтверждаются",
+        "Задания готовятся",
+        "Материалы готовятся",
+    ):
+        assert label not in projects
+        assert label not in tests
+
+
 def test_public_content_does_not_describe_project_as_practice(page_client):
     client, main = page_client
 
