@@ -15,6 +15,18 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
+def _record_schema_migration(cursor: sqlite3.Cursor, version: int, name: str) -> None:
+    cursor.execute("PRAGMA table_info(schema_migrations)")
+    columns = {row[1] for row in cursor.fetchall()}
+    if "name" in columns:
+        cursor.execute(
+            "INSERT INTO schema_migrations (version, name) VALUES (?, ?)",
+            (version, name),
+        )
+    else:
+        cursor.execute("INSERT INTO schema_migrations (version) VALUES (?)", (version,))
+
+
 def get_db_path() -> Path:
     """Путь к SQLite. Для Docker: MOSPHYSICS_DATABASE=/data/database.sqlite"""
     override = os.environ.get("MOSPHYSICS_DATABASE", "").strip()
@@ -69,6 +81,11 @@ def connect(db_path: Optional[Union[str, Path]] = None) -> Iterator[sqlite3.Conn
 
 def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
     try:
+        seed_demo = os.getenv("MOSPHYSICS_SEED_DEMO", "false").lower() in {
+            "1",
+            "true",
+            "yes",
+        }
         with connect(db_path) as conn:
             cur = conn.cursor()
             cur.execute("PRAGMA foreign_keys = ON;")
@@ -112,6 +129,7 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 """
                 CREATE TABLE IF NOT EXISTS schema_migrations (
                     version INTEGER PRIMARY KEY,
+                    name TEXT NOT NULL DEFAULT '',
                     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
                 """
@@ -144,7 +162,17 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                     )
                     """
                 )
-                cur.execute("INSERT INTO schema_migrations (version) VALUES (1)")
+                _record_schema_migration(cur, 1, "server sessions and password reset")
+
+            cur.execute("SELECT 1 FROM schema_migrations WHERE version = 2")
+            if not cur.fetchone():
+                cur.execute("PRAGMA table_info(users)")
+                user_columns = {row[1] for row in cur.fetchall()}
+                if "personal_data_consent_at" not in user_columns:
+                    cur.execute("ALTER TABLE users ADD COLUMN personal_data_consent_at TEXT")
+                if "personal_data_consent_version" not in user_columns:
+                    cur.execute("ALTER TABLE users ADD COLUMN personal_data_consent_version TEXT")
+                _record_schema_migration(cur, 2, "personal data consent audit")
 
             cur.execute(
                 """
@@ -208,7 +236,7 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
 
             # цитаты
             cur.execute("SELECT COUNT(*) as cnt FROM quotes")
-            if cur.fetchone()["cnt"] == 0:
+            if seed_demo and cur.fetchone()["cnt"] == 0:
                 demo_quotes = [
                     ("Физика — это то, что продолжается, даже когда выключают свет.", "Неизвестный физик"),
                     ("Всё следует делать настолько простым, насколько это возможно, но не проще.", "Альберт Эйнштейн"),
@@ -218,7 +246,7 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 cur.executemany("INSERT INTO quotes (text, author) VALUES (?, ?)", demo_quotes)
 
             cur.execute("SELECT COUNT(*) as cnt FROM tests")
-            if cur.fetchone()["cnt"] == 0:
+            if seed_demo and cur.fetchone()["cnt"] == 0:
                 cur.execute(
                     "INSERT INTO tests (title, description, slug) VALUES (?, ?, ?)",
                     ("Тест по физике", "Базовые вопросы по механике и термодинамике", "physics"),
@@ -252,7 +280,7 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 )
 
             cur.execute("SELECT COUNT(*) as cnt FROM calendar_events")
-            if cur.fetchone()["cnt"] == 0:
+            if seed_demo and cur.fetchone()["cnt"] == 0:
                 demo_cal = [
                     ("День космонавтики", "2026-04-12", "Тематический стрим и викторина."),
                     ("Выпуск нового видео", "2026-05-20", "Разбор задач по оптике."),
@@ -263,14 +291,14 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 )
 
             cur.execute("SELECT COUNT(*) as cnt FROM videos")
-            if cur.fetchone()["cnt"] == 0:
+            if seed_demo and cur.fetchone()["cnt"] == 0:
                 demo_vid = [
                     ("Демо: введение в проект", "https://www.youtube.com/embed/dQw4w9WgXcQ"),
                 ]
                 cur.executemany("INSERT INTO videos (title, url) VALUES (?, ?)", demo_vid)
 
             cur.execute("SELECT COUNT(*) as cnt FROM novel_updates")
-            if cur.fetchone()["cnt"] == 0:
+            if seed_demo and cur.fetchone()["cnt"] == 0:
                 demo_novel = [
                     ("Версия 0.1", "Собран первый билд, добавлены фоны главы 1.", "2026-05-01"),
                     ("Арт персонажей", "Обновлены спрайты наставника.", "2026-05-08"),
@@ -343,14 +371,18 @@ def _get_user_row(identifier: str, db_path: Optional[Union[str, Path]] = None) -
 
 
 def _hash_password(password: str) -> str:
-    try:
-        from passlib.hash import argon2 as hasher
-    except Exception:
-        from passlib.hash import pbkdf2_sha256 as hasher
+    from passlib.hash import argon2 as hasher
+
     return hasher.hash(password)
 
 
-def create_user(username: str, email: str, password: str, db_path: Optional[Union[str, Path]] = None) -> bool:
+def create_user(
+    username: str,
+    email: str,
+    password: str,
+    consent_version: str,
+    db_path: Optional[Union[str, Path]] = None,
+) -> bool:
     try:
         username = username.strip()
         email = email.strip().lower()
@@ -364,7 +396,24 @@ def create_user(username: str, email: str, password: str, db_path: Optional[Unio
             )
             if cur.fetchone():
                 return False
-            cur.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", (username, email, hashed))
+            cur.execute(
+                """
+                INSERT INTO users (
+                    username,
+                    email,
+                    password,
+                    personal_data_consent_at,
+                    personal_data_consent_version
+                ) VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    username,
+                    email,
+                    hashed,
+                    datetime.now(timezone.utc).isoformat(),
+                    consent_version,
+                ),
+            )
             conn.commit()
         return True
     except sqlite3.IntegrityError:

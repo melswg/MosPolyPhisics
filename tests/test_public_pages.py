@@ -53,6 +53,10 @@ def test_auth_forms_are_connected_to_real_handlers(page_client):
     assert "data-register-form" in client.get("/register").text
     assert "data-password-reset-request" in client.get("/password-reset").text
     assert "data-password-reset-confirm" in client.get("/password-reset/confirm").text
+    register_page = client.get("/register").text
+    assert "accepted_personal_data_processing" in register_page
+    assert 'href="/privacy-consent"' in register_page
+    assert "Согласие на обработку персональных данных" in client.get("/privacy-consent").text
 
     script = client.get("/static/js/site.js").text
     for endpoint in (

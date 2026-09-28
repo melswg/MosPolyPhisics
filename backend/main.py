@@ -38,6 +38,7 @@ logger = logging.getLogger(__name__)
 SESSION_COOKIE = "mospoly_session"
 SESSION_DAYS = 7
 RESET_MINUTES = 30
+PERSONAL_DATA_CONSENT_VERSION = "2026-09-28-1"
 USERNAME_PATTERN = re.compile(r"^[A-Za-zА-Яа-яЁё0-9_.-]+$")
 
 app = FastAPI()
@@ -62,6 +63,7 @@ PAGE_FILES = {
     "/register": "register.html",
     "/password-reset": "password-reset.html",
     "/password-reset/confirm": "password-reset-confirm.html",
+    "/privacy-consent": "privacy-consent.html",
 }
 
 LEGACY_PAGE_ROUTES = {
@@ -96,6 +98,7 @@ class UserRegister(BaseModel):
     username: str = Field(min_length=3, max_length=32)
     email: str = Field(min_length=5, max_length=254)
     password: str = Field(min_length=10, max_length=128)
+    accepted_personal_data_processing: bool
 
     @field_validator("username")
     @classmethod
@@ -118,6 +121,13 @@ class UserRegister(BaseModel):
     def validate_password(cls, value: str) -> str:
         if not any(char.isalpha() for char in value) or not any(char.isdigit() for char in value):
             raise ValueError("Пароль должен содержать буквы и цифры")
+        return value
+
+    @field_validator("accepted_personal_data_processing")
+    @classmethod
+    def validate_personal_data_consent(cls, value: bool) -> bool:
+        if value is not True:
+            raise ValueError("Для регистрации необходимо принять согласие на обработку персональных данных")
         return value
 
 
@@ -244,7 +254,12 @@ def api_novel_updates():
 
 @app.post("/api/register", status_code=201)
 def register(user: UserRegister, response: Response):
-    success = create_user(user.username, user.email, user.password)
+    success = create_user(
+        user.username,
+        user.email,
+        user.password,
+        PERSONAL_DATA_CONSENT_VERSION,
+    )
     if not success:
         raise HTTPException(
             status_code=400,

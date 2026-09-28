@@ -24,7 +24,12 @@ API (для фронтенда):
 - `GET /api/quote`, `GET /api/news`, `GET /api/health`
 - `GET /api/tests`, `GET /api/test/{id}`, `POST /api/test/submit` (тело: `test_id`, `answers`)
 - `GET /api/calendar`, `GET /api/videos`, `GET /api/novel/updates`
-- `POST /api/register`, `POST /api/login` (в теле поле `username` — логин **или** email, плюс `password`) → серверная сессия в `HttpOnly` cookie
+- `POST /api/register` — `username`, `email`, `password` и обязательное
+  `accepted_personal_data_processing: true`; согласие фиксируется с версией и
+  временем, пароль сохраняется только как Argon2id-хэш, сервер создаёт сессию в
+  `HttpOnly` cookie
+- `POST /api/login` (в теле поле `username` — логин **или** email, плюс
+  `password`) → серверная сессия в `HttpOnly` cookie
 - `GET /api/user/me`, `POST /api/logout`; для выхода нужен `X-CSRF-Token`, полученный при входе или из `/api/user/me`
 - `POST /api/password-reset/request`, `POST /api/password-reset/confirm` — восстановление пароля через одноразовую ссылку
 

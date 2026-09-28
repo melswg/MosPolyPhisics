@@ -27,10 +27,16 @@ def test_auth_migration_preserves_existing_user(tmp_path):
     assert init_db(database)
     with sqlite3.connect(database) as conn:
         assert conn.execute("SELECT username FROM users WHERE id = 1").fetchone()[0] == "existing"
-        assert conn.execute("SELECT version FROM schema_migrations").fetchone()[0] == 1
+        assert [row[0] for row in conn.execute("SELECT version FROM schema_migrations ORDER BY version")] == [1, 2]
         assert conn.execute(
             "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'user_sessions'"
         ).fetchone()
+        columns = {row[1] for row in conn.execute("PRAGMA table_info(users)")}
+        assert "personal_data_consent_at" in columns
+        assert "personal_data_consent_version" in columns
+        assert conn.execute(
+            "SELECT personal_data_consent_at FROM users WHERE id = 1"
+        ).fetchone()[0] is None
 
 
 def test_backup_is_valid_and_rotated(tmp_path):
@@ -45,3 +51,28 @@ def test_backup_is_valid_and_rotated(tmp_path):
         assert conn.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
         assert conn.execute("SELECT value FROM sample").fetchone()[0] == "kept"
     assert backup.stat().st_mode & 0o777 == 0o600
+
+
+def test_auth_migration_accepts_hermes_schema_table(tmp_path):
+    database = tmp_path / "hermes.sqlite"
+    with sqlite3.connect(database) as conn:
+        conn.execute(
+            """
+            CREATE TABLE schema_migrations (
+                version INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                applied_at TEXT NOT NULL DEFAULT (datetime('now'))
+            )
+            """
+        )
+        conn.commit()
+
+    assert init_db(database)
+    with sqlite3.connect(database) as conn:
+        migrations = conn.execute(
+            "SELECT version, name FROM schema_migrations ORDER BY version"
+        ).fetchall()
+        assert migrations == [
+            (1, "server sessions and password reset"),
+            (2, "personal data consent audit"),
+        ]

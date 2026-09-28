@@ -3,6 +3,8 @@ import importlib
 import pytest
 from fastapi.testclient import TestClient
 
+from backend.models import connect
+
 
 @pytest.fixture()
 def auth_app(tmp_path, monkeypatch):
@@ -18,24 +20,52 @@ def auth_app(tmp_path, monkeypatch):
 def register(client: TestClient):
     return client.post(
         "/api/register",
-        json={"username": "student_1", "email": "student@example.org", "password": "physics2026"},
+        json={
+            "username": "student_1",
+            "email": "student@example.org",
+            "password": "physics2026",
+            "accepted_personal_data_processing": True,
+        },
     )
 
 
 def test_registration_session_and_csrf_logout(auth_app):
-    client, _ = auth_app
+    client, main = auth_app
 
     weak = client.post(
         "/api/register",
-        json={"username": "ab", "email": "wrong", "password": "123"},
+        json={
+            "username": "ab",
+            "email": "wrong",
+            "password": "123",
+            "accepted_personal_data_processing": True,
+        },
     )
     assert weak.status_code == 422
+
+    missing_consent = client.post(
+        "/api/register",
+        json={"username": "student_1", "email": "student@example.org", "password": "physics2026"},
+    )
+    assert missing_consent.status_code == 422
 
     response = register(client)
     assert response.status_code == 201
     assert "mospoly_session" in response.cookies
     assert "HttpOnly" in response.headers["set-cookie"]
     assert "access_token" not in response.json()
+
+    with connect() as connection:
+        stored = connection.execute(
+            """
+            SELECT password, personal_data_consent_at, personal_data_consent_version
+            FROM users WHERE username = ?
+            """,
+            ("student_1",),
+        ).fetchone()
+    assert stored["password"].startswith("$argon2")
+    assert stored["personal_data_consent_at"]
+    assert stored["personal_data_consent_version"] == main.PERSONAL_DATA_CONSENT_VERSION
 
     profile = client.get("/api/user/me")
     assert profile.status_code == 200

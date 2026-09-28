@@ -67,6 +67,10 @@
         <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required>
         <p class="form__hint">От 10 до 128 знаков, минимум одна буква и одна цифра. Пароль проверяется на сервере, в браузере он не сохраняется.</p>
       </div>
+      <div class="form__check">
+        <input id="register-personal-data-consent" name="accepted_personal_data_processing" type="checkbox" required>
+        <label for="register-personal-data-consent">Я ознакомился и принимаю <a href="/privacy-consent" target="_blank" rel="noopener">согласие на обработку персональных данных</a>.</label>
+      </div>
       <div class="form__actions">
         <button class="btn" type="submit">Создать аккаунт</button>
         <a class="btn btn--ghost" href="/login">У меня уже есть аккаунт</a>

@@ -544,6 +544,7 @@
           username: form.elements.username.value.trim(),
           email: form.elements.email.value.trim(),
           password: form.elements.password.value,
+          accepted_personal_data_processing: form.elements.accepted_personal_data_processing.checked,
         }),
       });
       if (result.state === "ok") {

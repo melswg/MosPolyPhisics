@@ -51,6 +51,10 @@ MOSPHYSICS_DATABASE=/tmp/mospolyphysics-showcase.sqlite uvicorn backend.main:app
 `true`. Настройки SMTP для восстановления пароля перечислены в
 `backend/.env.example`.
 
+Обычный запуск не создаёт демонстрационные цитаты, тесты и события. Если они
+нужны в отдельной учебной БД, их можно явно включить переменной
+`MOSPHYSICS_SEED_DEMO=true`; для production это значение должно оставаться `false`.
+
 ## Docker
 
 Docker использует тот же корневой `requirements.txt`:

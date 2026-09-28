@@ -6,6 +6,7 @@ services:
       - "8000:8000"
     environment:
       MOSPHYSICS_DATABASE: /data/database.sqlite
+      MOSPHYSICS_SEED_DEMO: ${MOSPHYSICS_SEED_DEMO:-false}
       PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:8000}
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
       SMTP_HOST: ${SMTP_HOST:-}

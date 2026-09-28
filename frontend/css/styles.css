@@ -348,6 +348,11 @@ a { color: inherit; }
 }
 .form__field input:focus-visible,
 .form__field textarea:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+.form__check { display: flex; align-items: flex-start; gap: 10px; margin: 4px 0 20px; }
+.form__check input { width: 18px; height: 18px; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--primary); }
+.form__check label { font-size: 15px; line-height: 1.45; }
+.form__check a { color: var(--primary); }
+.form__check input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
 .form__hint { margin: 8px 0 0; font-size: 14px; color: var(--muted); }
 .form__error { margin: 8px 0 0; font-size: 14px; color: var(--danger); }
 .form__error:empty { display: none; }
@@ -358,6 +363,12 @@ a { color: inherit; }
 .form__notice--success { color: var(--success); }
 .form__links { margin: 22px 0 0; font-size: 15px; }
 .form__links a { color: var(--primary); }
+
+.legal-copy { max-width: 920px; }
+.legal-copy h2 { margin-top: 34px; font-size: clamp(21px, 2.3vw, 27px); }
+.legal-copy ul { margin: 0 0 20px; padding-left: 24px; }
+.legal-copy li { margin-bottom: 10px; line-height: 1.65; }
+.legal-copy p { max-width: 88ch; line-height: 1.7; }
 
 /* Календарь */
 
