@@ -55,6 +55,10 @@ def test_auth_forms_are_connected_to_real_handlers(page_client):
     assert "data-register-form" in client.get("/register").text
     assert "data-password-reset-request" in client.get("/password-reset").text
     assert "data-password-reset-confirm" in client.get("/password-reset/confirm").text
+    for path in ("/password-reset", "/password-reset/confirm"):
+        page = client.get(path)
+        assert page.headers["cache-control"] == "no-store"
+        assert page.headers["referrer-policy"] == "no-referrer"
     register_page = client.get("/register").text
     assert "accepted_personal_data_processing" in register_page
     assert 'href="/privacy-consent"' in register_page

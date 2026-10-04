@@ -338,9 +338,10 @@ def request_password_reset(body: PasswordResetRequest, request: Request):
     if meta:
         token = secrets.token_urlsafe(48)
         expires = datetime.now(timezone.utc) + timedelta(minutes=RESET_MINUTES)
-        create_password_reset_token(meta["id"], _token_hash(token), expires.isoformat())
+        if not create_password_reset_token(meta["id"], _token_hash(token), expires.isoformat()):
+            return {"message": "Если адрес зарегистрирован, на него отправлена ссылка для восстановления"}
         public_base = os.getenv("PUBLIC_BASE_URL", str(request.base_url).rstrip("/")).rstrip("/")
-        reset_url = f"{public_base}/password-reset/confirm?token={token}"
+        reset_url = f"{public_base}/password-reset/confirm#token={token}"
         try:
             sent = send_password_reset(meta["email"], reset_url)
             if not sent:
@@ -364,8 +365,11 @@ def index_page() -> FileResponse:
 
 
 def _page_response(filename: str) -> FileResponse:
+    headers = {"Cache-Control": "no-cache"} if filename == "news.html" else None
+    if filename in {"password-reset.html", "password-reset-confirm.html"}:
+        headers = {"Cache-Control": "no-store", "Referrer-Policy": "no-referrer"}
     return FileResponse(frontend_dir / "pages" / filename, media_type="text/html; charset=utf-8",
-                        headers={"Cache-Control": "no-cache"} if filename == "news.html" else None)
+                        headers=headers)
 
 
 def _page_handler(filename: str) -> Callable[[], FileResponse]:

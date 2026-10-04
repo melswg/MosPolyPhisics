@@ -656,7 +656,7 @@
         setFormState(form, result.data.message, "success");
         return;
       }
-      setFormState(form, "Не удалось отправить запрос. Попробуйте снова.", "error");
+      setFormState(form, errorMessage(result, "Не удалось отправить запрос. Попробуйте снова."), "error");
     });
   }
 
@@ -665,10 +665,15 @@
     if (!form) {
       return;
     }
-    const token = new URLSearchParams(window.location.search).get("token") || "";
+    const token = new URLSearchParams(window.location.hash.slice(1)).get("token")
+      || new URLSearchParams(window.location.search).get("token") || "";
     form.elements.token.value = token;
+    if (token) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
     if (!token) {
-      setFormState(form, "В ссылке нет кода восстановления. Запросите новое письмо.", "error");
+      form.querySelector('button[type="submit"]').disabled = true;
+      setFormState(form, "Откройте ссылку из письма или запросите новую ниже.", "error");
     }
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -688,24 +693,23 @@
       });
       setSubmitting(form, false);
       if (result.state === "ok") {
+        form.elements.new_password.value = "";
+        form.elements.new_password_repeat.value = "";
+        form.elements.token.value = "";
+        form.querySelectorAll(".form__field").forEach((field) => { field.hidden = true; });
+        form.querySelector('[type="submit"]').hidden = true;
+        const login = form.querySelector("[data-reset-login]");
+        login.textContent = "Войти с новым паролем";
+        login.classList.remove("btn--ghost");
         setFormState(form, result.data.message, "success");
+        login.focus();
         return;
+      }
+      if (result.status === 400) {
+        form.querySelector('button[type="submit"]').disabled = true;
       }
       setFormState(form, errorMessage(result, "Не удалось изменить пароль."), "error");
     });
-  }
-
-  /* Токен из ссылки восстановления: в интерфейсе не показывается */
-
-  function initResetToken() {
-    const field = document.getElementById("reset-token");
-    if (!field) {
-      return;
-    }
-    const token = new URLSearchParams(window.location.search).get("token");
-    if (token) {
-      field.value = token;
-    }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -720,6 +724,5 @@
     initPasswordResetConfirm();
     initTest();
     initCalendar();
-    initResetToken();
   });
 })();

@@ -4,7 +4,7 @@
 тесты (список, прохождение, проверка ответов), календарь, видео, обновления новеллы.
 """
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import os
 import sqlite3
 from typing import Union, Optional, Iterator, Dict, Any, List
@@ -543,8 +543,16 @@ def create_password_reset_token(
     token_hash: str,
     expires_at: str,
     db_path: Optional[Union[str, Path]] = None,
-) -> None:
+) -> bool:
     with connect(db_path) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        # Expiry is 30 minutes after issuance; throttle without changing the schema.
+        recent_cutoff = (datetime.now(timezone.utc) + timedelta(minutes=29)).isoformat()
+        if conn.execute(
+            "SELECT 1 FROM password_reset_tokens WHERE user_id = ? AND expires_at > ? LIMIT 1",
+            (user_id, recent_cutoff),
+        ).fetchone():
+            return False
         conn.execute(
             "UPDATE password_reset_tokens SET used_at = ? WHERE user_id = ? AND used_at IS NULL",
             (datetime.now(timezone.utc).isoformat(), user_id),
@@ -554,6 +562,7 @@ def create_password_reset_token(
             (user_id, token_hash, expires_at),
         )
         conn.commit()
+        return True
 
 
 def reset_password_with_token(

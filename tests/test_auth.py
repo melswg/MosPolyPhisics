@@ -1,4 +1,5 @@
 import importlib
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from fastapi.testclient import TestClient
@@ -77,6 +78,25 @@ def test_registration_session_and_csrf_logout(auth_app):
     assert client.get("/api/user/me").status_code == 401
 
 
+def test_new_reset_link_replaces_previous_unexpired_link(auth_app, monkeypatch):
+    client, main = auth_app
+    assert register(client).status_code == 201
+    sent = []
+    monkeypatch.setattr(main, "send_password_reset", lambda email, url: sent.append(url) or True)
+    client.post("/api/password-reset/request", json={"email": "student@example.org"})
+    old_token = sent[-1].split("#token=", 1)[1]
+    with connect() as connection:
+        connection.execute("UPDATE password_reset_tokens SET expires_at = ?", (
+            (datetime.now(timezone.utc) + timedelta(minutes=28)).isoformat(),
+        ))
+        connection.commit()
+    client.post("/api/password-reset/request", json={"email": "student@example.org"})
+    assert len(sent) == 2
+    assert client.post("/api/password-reset/confirm", json={
+        "token": old_token, "new_password": "newphysics2026",
+    }).status_code == 400
+
+
 def test_password_reset_is_single_use_and_revokes_sessions(auth_app, monkeypatch):
     client, main = auth_app
     assert register(client).status_code == 201
@@ -103,3 +123,48 @@ def test_password_reset_is_single_use_and_revokes_sessions(auth_app, monkeypatch
     assert client.post(
         "/api/login", json={"username": "student_1", "password": "newphysics2026"}
     ).status_code == 200
+
+
+def test_reset_email_link_and_cooldown_do_not_expose_accounts(auth_app, monkeypatch):
+    client, main = auth_app
+    assert register(client).status_code == 201
+    sent = []
+    monkeypatch.setenv("PUBLIC_BASE_URL", "https://mospolyphysics.ru")
+    monkeypatch.setattr(main, "send_password_reset", lambda email, url: sent.append((email, url)) or True)
+    first = client.post("/api/password-reset/request", json={"email": "student@example.org"})
+    repeated = client.post("/api/password-reset/request", json={"email": "student@example.org"})
+    unknown = client.post("/api/password-reset/request", json={"email": "unknown@example.org"})
+    assert first.json() == repeated.json() == unknown.json()
+    assert len(sent) == 1
+    assert sent[0][1].startswith("https://mospolyphysics.ru/password-reset/confirm#token=")
+    token = sent[0][1].split("#token=", 1)[1]
+    with connect() as connection:
+        stored = connection.execute("SELECT token_hash FROM password_reset_tokens").fetchone()[0]
+    assert stored == main._token_hash(token)
+    assert stored != token
+
+
+def test_reset_expiry_replacement_and_validation(auth_app, monkeypatch):
+    client, main = auth_app
+    assert register(client).status_code == 201
+    sent = []
+    monkeypatch.setattr(main, "send_password_reset", lambda email, url: sent.append(url) or True)
+    client.post("/api/password-reset/request", json={"email": "student@example.org"})
+    old_token = sent[-1].split("#token=", 1)[1]
+    with connect() as connection:
+        connection.execute("UPDATE password_reset_tokens SET expires_at = '2000-01-01T00:00:00+00:00'")
+        connection.commit()
+    assert client.post("/api/password-reset/confirm", json={
+        "token": old_token, "new_password": "newphysics2026",
+    }).status_code == 400
+    client.post("/api/password-reset/request", json={"email": "student@example.org"})
+    token = sent[-1].split("#token=", 1)[1]
+    assert token != old_token
+    assert client.post("/api/password-reset/confirm", json={
+        "token": token, "new_password": "weak",
+    }).status_code == 422
+    assert client.get("/api/user/me").status_code == 200
+    assert client.post("/api/password-reset/confirm", json={
+        "token": token, "new_password": "newphysics2026",
+    }).status_code == 200
+    assert client.get("/api/user/me").status_code == 401
