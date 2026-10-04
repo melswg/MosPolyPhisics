@@ -10,6 +10,7 @@ import sqlite3
 from typing import Union, Optional, Iterator, Dict, Any, List
 import logging
 import contextlib
+import json
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -173,6 +174,33 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 if "personal_data_consent_version" not in user_columns:
                     cur.execute("ALTER TABLE users ADD COLUMN personal_data_consent_version TEXT")
                 _record_schema_migration(cur, 2, "personal data consent audit")
+
+            cur.execute("SELECT 1 FROM schema_migrations WHERE version = 3")
+            if not cur.fetchone():
+                cur.execute("""
+                    CREATE TABLE sheet_news (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        sheet_key TEXT NOT NULL,
+                        row_key TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        content TEXT NOT NULL,
+                        date TEXT NOT NULL,
+                        source TEXT NOT NULL,
+                        category TEXT NOT NULL DEFAULT '',
+                        images TEXT NOT NULL DEFAULT '[]',
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        UNIQUE(sheet_key, row_key)
+                    )
+                """)
+                cur.execute("""
+                    CREATE TABLE news_sync_state (
+                        sheet_key TEXT PRIMARY KEY,
+                        last_attempt REAL NOT NULL,
+                        last_success REAL,
+                        error TEXT
+                    )
+                """)
+                _record_schema_migration(cur, 3, "hourly Google Sheets news sync")
 
             cur.execute(
                 """
@@ -356,6 +384,16 @@ def get_all_news(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, A
             if "created_at" not in d:
                 d["created_at"] = None
             result.append(d)
+        cur.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='sheet_news'")
+        if cur.fetchone():
+            for row in conn.execute("SELECT * FROM sheet_news"):
+                item = dict(row)
+                item["id"] = -item["id"]
+                item["images"] = json.loads(item["images"])
+                item.pop("sheet_key")
+                item.pop("row_key")
+                result.append(item)
+        result.sort(key=lambda item: (item["date"], item["id"]), reverse=True)
         return result
 
 

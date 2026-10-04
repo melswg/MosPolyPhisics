@@ -27,7 +27,7 @@ def test_auth_migration_preserves_existing_user(tmp_path):
     assert init_db(database)
     with sqlite3.connect(database) as conn:
         assert conn.execute("SELECT username FROM users WHERE id = 1").fetchone()[0] == "existing"
-        assert [row[0] for row in conn.execute("SELECT version FROM schema_migrations ORDER BY version")] == [1, 2]
+        assert [row[0] for row in conn.execute("SELECT version FROM schema_migrations ORDER BY version")] == [1, 2, 3]
         assert conn.execute(
             "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'user_sessions'"
         ).fetchone()
@@ -75,4 +75,5 @@ def test_auth_migration_accepts_hermes_schema_table(tmp_path):
         assert migrations == [
             (1, "server sessions and password reset"),
             (2, "personal data consent audit"),
+            (3, "hourly Google Sheets news sync"),
         ]

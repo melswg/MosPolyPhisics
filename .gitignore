@@ -13,6 +13,7 @@ __pycache__/
 
 # SQLite DB
 database.sqlite
+news-media/
 
 # Test / cache
 .pytest_cache/

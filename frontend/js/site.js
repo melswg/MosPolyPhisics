@@ -199,17 +199,95 @@
   function renderNews(host, items) {
     clear(host);
     const grid = createElement("div", "news");
+    if (host.dataset.news === "carousel") {
+      grid.classList.add("news--carousel");
+      grid.tabIndex = 0;
+      grid.setAttribute("aria-label", "Новости проекта, горизонтальная прокрутка");
+    }
+    const dialog = createElement("dialog", "news-dialog");
+    const close = createElement("button", "news-dialog__close", "Закрыть ×");
+    close.type = "button";
+    close.addEventListener("click", () => dialog.close());
+    const body = createElement("div", "news-dialog__body");
+    dialog.append(close, body);
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
     items.forEach((item) => {
-      const article = createElement("article", "news__item");
+      const article = createElement("article", "news-detail");
       article.appendChild(createElement("p", "news__date", formatDate(item.date)));
       article.appendChild(createElement("h3", null, item.title));
+      if (Array.isArray(item.images) && item.images.length) {
+        const gallery = createElement("div", "news__images");
+        item.images.forEach((url, index) => {
+          if (!/^\/news-media\/[a-f0-9]{64}\.jpg$/.test(url)) return;
+          const link = createElement("a");
+          link.href = url;
+          const image = createElement("img", "news__image");
+          image.src = url;
+          image.alt = `${item.title} — изображение ${index + 1}`;
+          image.loading = "lazy";
+          link.appendChild(image);
+          gallery.appendChild(link);
+        });
+        article.appendChild(gallery);
+      }
       String(item.content || "")
         .split(/\n{2,}/)
         .filter((part) => part.trim())
         .forEach((part) => article.appendChild(createElement("p", null, part.trim())));
-      grid.appendChild(article);
+      if (typeof item.source === "string" && /^https:\/\/t\.me\/[A-Za-z0-9_]+\/[0-9]+$/.test(item.source)) {
+        const source = createElement("a", "news__source", "Открыть в Telegram");
+        source.href = item.source;
+        source.target = "_blank";
+        source.rel = "noopener noreferrer";
+        article.appendChild(source);
+      }
+      const card = createElement("article", "news__item");
+      const open = createElement("button", "news__open");
+      open.type = "button";
+      open.setAttribute("aria-label", `Читать новость: ${item.title}`);
+      open.appendChild(createElement("span", "news__date", formatDate(item.date)));
+      open.appendChild(createElement("span", "news__title", item.title));
+      const cover = createElement("span", "news__cover");
+      const imageUrl = Array.isArray(item.images) && item.images.find((url) => /^\/news-media\/[a-f0-9]{64}\.jpg$/.test(url));
+      if (imageUrl) {
+        const image = createElement("img", "news__cover-image");
+        image.src = imageUrl;
+        image.alt = "";
+        image.loading = "lazy";
+        const blur = image.cloneNode();
+        blur.className = "news__cover-blur";
+        cover.append(image, blur);
+      } else {
+        cover.classList.add("news__cover--empty");
+        cover.textContent = "МосПолиФизикс";
+      }
+      open.appendChild(cover);
+      open.addEventListener("click", () => {
+        clear(body);
+        body.appendChild(article);
+        dialog.setAttribute("aria-label", item.title);
+        dialog.showModal();
+      });
+      card.appendChild(open);
+      grid.appendChild(card);
     });
-    host.appendChild(grid);
+    if (host.dataset.news === "carousel") {
+      const controls = createElement("div", "news__controls");
+      [-1, 1].forEach((direction) => {
+        const button = createElement("button", "news__arrow", direction < 0 ? "←" : "→");
+        button.type = "button";
+        button.setAttribute("aria-label", direction < 0 ? "Предыдущие новости" : "Следующие новости");
+        button.addEventListener("click", () => {
+          grid.scrollBy({left: direction * (grid.firstElementChild.getBoundingClientRect().width + 20),
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth"});
+        });
+        controls.appendChild(button);
+      });
+      host.appendChild(controls);
+    }
+    host.append(grid, dialog);
   }
 
   async function loadNews(host) {

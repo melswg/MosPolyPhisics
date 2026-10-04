@@ -98,7 +98,7 @@ def test_internal_explanation_blocks_are_not_public(page_client):
 def test_public_catalogs_do_not_show_internal_readiness_labels(page_client):
     client, _ = page_client
 
-    assert "Пока еще нет" in client.get("/news").text
+    assert "Пока еще нет" not in client.get("/news").text
     projects = client.get("/projects").text
     tests = client.get("/tests").text
     for label in (

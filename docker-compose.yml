@@ -15,6 +15,10 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD:-}
       SMTP_FROM: ${SMTP_FROM:-}
       SMTP_USE_TLS: ${SMTP_USE_TLS:-true}
+      MOSPHYSICS_NEWS_SHEET_ID: ${MOSPHYSICS_NEWS_SHEET_ID:-}
+      MOSPHYSICS_NEWS_SHEET_GID: ${MOSPHYSICS_NEWS_SHEET_GID:-0}
+      MOSPHYSICS_NEWS_MEDIA: /data/news-media
+      GOOGLE_DRIVE_API_KEY: ${GOOGLE_DRIVE_API_KEY:-}
     volumes:
       - mosphysics_data:/data
     healthcheck:

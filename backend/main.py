@@ -3,6 +3,8 @@ import hashlib
 import logging
 import re
 import secrets
+import asyncio
+import contextlib
 from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Dict, List, Optional
 
@@ -14,6 +16,7 @@ from pydantic import BaseModel, Field, field_validator
 from pathlib import Path
 
 from backend.email_service import send_password_reset
+from backend.news_sync import media_directory, sheet_config, sync_loop
 from backend.models import (
     init_db,
     get_random_quote,
@@ -189,9 +192,20 @@ async def get_current_user(mospoly_session: Optional[str] = Cookie(None)) -> Dic
 
 
 @app.on_event("startup")
-def startup():
+async def startup():
     if not init_db():
         raise RuntimeError("Database initialization failed")
+    media_directory().mkdir(parents=True, exist_ok=True)
+    app.state.news_sync_task = asyncio.create_task(sync_loop()) if sheet_config() else None
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    task = getattr(app.state, "news_sync_task", None)
+    if task:
+        task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await task
 
 
 @app.get("/api/quote")
@@ -384,3 +398,4 @@ for legacy_path, target_path in LEGACY_PAGE_ROUTES.items():
 
 app.mount("/static", StaticFiles(directory=str(frontend_dir)), name="static")
 app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+app.mount("/news-media", StaticFiles(directory=str(media_directory()), check_dir=False), name="news-media")
