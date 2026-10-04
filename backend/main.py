@@ -359,11 +359,13 @@ def confirm_password_reset(body: PasswordResetConfirm):
 
 @app.get("/", include_in_schema=False)
 def index_page() -> FileResponse:
-    return FileResponse(frontend_dir / "index.html", media_type="text/html; charset=utf-8")
+    return FileResponse(frontend_dir / "index.html", media_type="text/html; charset=utf-8",
+                        headers={"Cache-Control": "no-cache"})
 
 
 def _page_response(filename: str) -> FileResponse:
-    return FileResponse(frontend_dir / "pages" / filename, media_type="text/html; charset=utf-8")
+    return FileResponse(frontend_dir / "pages" / filename, media_type="text/html; charset=utf-8",
+                        headers={"Cache-Control": "no-cache"} if filename == "news.html" else None)
 
 
 def _page_handler(filename: str) -> Callable[[], FileResponse]:

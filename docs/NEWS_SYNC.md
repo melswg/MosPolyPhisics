@@ -89,9 +89,9 @@ python -m backend.news_sync
 ## VPS: настройка от 04.10.2026
 
 Синхронизация включена в контейнере `mosphysics-hermes-rebuild-prod`,
-образ `mosphysics:news-sync-20261004-093950`, порт `9090`.
+образ `mosphysics:news-sync-20261004-155157`, порт `9090`.
 Настройки сохранены в закрытом файле
-`/srv/apps/mosphysics-hermes-rebuild/news-sync-20261004-093950.env` (права 600).
+`/srv/apps/mosphysics-hermes-rebuild/news-sync-20261004-155157.env` (права 600).
 Не выводите его содержимое в журнал и не коммитьте.
 Рабочие данные: `/srv/apps/mosphysics-hermes-rebuild/production-data`.
 Ключ Drive API не задан: используйте отдельные файлы вместо папок.
@@ -110,9 +110,9 @@ python -m backend.news_sync
 
 Для отката приложения остановите текущий контейнер, переименуйте его,
 верните имя `mosphysics-hermes-rebuild-prod` сохранённому контейнеру
-`mosphysics-before-news-sync-20261004-093950` и запустите его.
+`mosphysics-before-news-sync-20261004-155157` и запустите его.
 Схему БД откатывать для старой сборки не требуется.
 Проверенная резервная копия находится в
-`production-data/.news-sync-backups/before-20261004-093950.sqlite`.
+`production-data/.news-sync-backups/before-20261004-155158.sqlite`.
 Не восстанавливайте её поверх рабочей БД без отдельного согласования:
 это удалит изменения после копирования.

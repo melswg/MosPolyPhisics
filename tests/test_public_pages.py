@@ -21,6 +21,8 @@ def test_approved_public_pages_and_assets_are_served(page_client):
         response = client.get(path)
         assert response.status_code == 200
         assert response.headers["content-type"].startswith("text/html")
+        if path in {"/", "/news"}:
+            assert response.headers["cache-control"] == "no-cache"
         assert 'class="header"' in response.text
         assert 'class="footer"' in response.text
         assert "/static/css/styles.css" in response.text

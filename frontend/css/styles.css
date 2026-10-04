@@ -255,10 +255,10 @@ a { color: inherit; }
 /* Новости */
 
 .news { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.news--carousel { display: flex; overflow-x: auto; gap: 20px; padding: 4px 4px 18px; scroll-snap-type: x mandatory; }
-.news--carousel .news__item { flex: 0 0 clamp(280px, 31%, 380px); scroll-snap-align: start; }
-.news__controls { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 14px; }
-.news__arrow { width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg-surface); color: var(--text); font-size: 24px; cursor: pointer; }
+.news-slider { display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; gap: 16px; align-items: center; }
+.news--carousel { display: flex; flex-wrap: nowrap; min-width: 0; overflow-x: auto; gap: 20px; padding: 4px 0 14px; scroll-snap-type: x mandatory; }
+.news--carousel .news__item { flex: 0 0 calc((100% - 40px) / 3); scroll-snap-align: start; }
+.news__arrow { width: 52px; height: 52px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg-surface); color: var(--text); font-size: 32px; cursor: pointer; }
 
 .news__item {
   min-width: 0;
@@ -489,6 +489,7 @@ a { color: inherit; }
 /* Адаптивность */
 
 @media (max-width: 1000px) {
+  .news--carousel .news__item { flex-basis: calc((100% - 20px) / 2); }
   .news:not(.news--carousel) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero__row { grid-template-columns: minmax(0, 1fr); }
   .hero__graphic { width: min(300px, 70%); }
@@ -526,6 +527,8 @@ a { color: inherit; }
 }
 
 @media (max-width: 620px) {
+  .news-slider { grid-template-columns: 32px minmax(0, 1fr) 32px; gap: 8px; }
+  .news__arrow { width: 32px; height: 40px; font-size: 24px; }
   .news:not(.news--carousel) { grid-template-columns: minmax(0, 1fr); }
   .news--carousel .news__item { flex-basis: 85%; }
   .cards { grid-template-columns: minmax(0, 1fr); }

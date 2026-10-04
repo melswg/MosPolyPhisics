@@ -199,7 +199,8 @@
   function renderNews(host, items) {
     clear(host);
     const grid = createElement("div", "news");
-    if (host.dataset.news === "carousel") {
+    const isCarousel = host.dataset.news === "carousel" || window.location.pathname === "/" || window.location.pathname === "/index.html";
+    if (isCarousel) {
       grid.classList.add("news--carousel");
       grid.tabIndex = 0;
       grid.setAttribute("aria-label", "Новости проекта, горизонтальная прокрутка");
@@ -273,8 +274,8 @@
       card.appendChild(open);
       grid.appendChild(card);
     });
-    if (host.dataset.news === "carousel") {
-      const controls = createElement("div", "news__controls");
+    if (isCarousel) {
+      const slider = createElement("div", "news-slider");
       [-1, 1].forEach((direction) => {
         const button = createElement("button", "news__arrow", direction < 0 ? "←" : "→");
         button.type = "button";
@@ -283,11 +284,13 @@
           grid.scrollBy({left: direction * (grid.firstElementChild.getBoundingClientRect().width + 20),
             behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth"});
         });
-        controls.appendChild(button);
+        if (direction < 0) slider.append(button, grid);
+        else slider.appendChild(button);
       });
-      host.appendChild(controls);
+      host.append(slider, dialog);
+    } else {
+      host.append(grid, dialog);
     }
-    host.append(grid, dialog);
   }
 
   async function loadNews(host) {
