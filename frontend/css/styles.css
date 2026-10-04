@@ -234,6 +234,7 @@ a { color: inherit; }
 .cards--catalog { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; }
 .cards--catalog > li { height: 100%; }
 .cards--catalog .card { width: 100%; height: 100%; min-height: 190px; }
+.cards--pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .card--static { cursor: default; }
 .card--static:hover { transform: none; box-shadow: none; }
 

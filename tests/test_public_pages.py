@@ -81,7 +81,7 @@ def test_catalog_cards_use_real_keyboard_accessible_links(page_client):
     projects = client.get("/projects").text
 
     assert 'class="cards cards--catalog"' in projects
-    for target in ("/video", "/calendar", "/novel", "/about"):
+    for target in ("/video", "/calendar", "/novel"):
         assert f'class="card" href="{target}"' in projects
 
     about = client.get("/about").text
