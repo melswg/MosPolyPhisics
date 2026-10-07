@@ -196,6 +196,45 @@
 
   /* Новости */
 
+  async function loadQuote() {
+    const text = document.querySelector("[data-quote-text]");
+    if (!text) return;
+    const author = document.querySelector("[data-quote-author]");
+    const source = document.querySelector("[data-quote-source]");
+    const status = document.querySelector("[data-quote-status]");
+    const retry = document.querySelector("[data-quote-retry]");
+    retry.hidden = true;
+    status.textContent = "";
+    const result = await requestJson("/api/quote");
+    author.textContent = "";
+    source.hidden = true;
+    source.removeAttribute("href");
+    if (result.state === "error") {
+      text.textContent = "Цитата пока недоступна";
+      status.textContent = "Проверьте соединение и попробуйте снова.";
+      retry.hidden = false;
+      return;
+    }
+    const quote = result.data;
+    if (!quote || !quote.text || !quote.author || !/^https:\/\//.test(quote.source || "")) {
+      text.textContent = "Новые идеи начинаются с вопросов";
+      status.textContent = "Цитаты учёных появятся после проверки источников.";
+      return;
+    }
+    text.textContent = quote.text;
+    author.textContent = quote.author;
+    source.href = quote.source;
+    source.hidden = false;
+  }
+
+  function initQuote() {
+    const retry = document.querySelector("[data-quote-retry]");
+    if (retry) {
+      retry.addEventListener("click", loadQuote);
+      loadQuote();
+    }
+  }
+
   function renderNews(host, items) {
     clear(host);
     const grid = createElement("div", "news");
@@ -734,6 +773,7 @@
     initMenu();
     initNotices();
     initNews();
+    initQuote();
     initAccount();
     initLogin();
     initRegister();

@@ -211,6 +211,19 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                     cur.execute("UPDATE sheet_news SET section=? WHERE id=?", (section, row["id"]))
                 _record_schema_migration(cur, 4, "news sections")
 
+            cur.execute("SELECT 1 FROM schema_migrations WHERE version = 5")
+            if not cur.fetchone():
+                cur.execute("""CREATE TABLE sheet_quotes (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    sheet_key TEXT NOT NULL,
+                    row_key TEXT NOT NULL,
+                    text TEXT NOT NULL,
+                    author TEXT NOT NULL,
+                    source TEXT NOT NULL,
+                    UNIQUE(sheet_key, row_key)
+                )""")
+                _record_schema_migration(cur, 5, "sourced quotes from Google Sheets")
+
             cur.execute(
                 """
                 CREATE TABLE IF NOT EXISTS tests (
@@ -373,6 +386,14 @@ def get_random_quote(db_path: Optional[Union[str, Path]] = None) -> str:
             return ""
         author = row["author"] or ""
         return f"{row['text']} — {author}" if author else row['text']
+
+
+def get_random_sourced_quote(db_path: Optional[Union[str, Path]] = None) -> Dict[str, str]:
+    with connect(db_path) as conn:
+        row = conn.execute("SELECT text,author,source FROM sheet_quotes ORDER BY RANDOM() LIMIT 1").fetchone()
+        if not row:
+            return {"quote": "", "text": "", "author": "", "source": ""}
+        return {"quote": f"{row['text']} — {row['author']}", **dict(row)}
 
 
 def get_all_news(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:

@@ -13,7 +13,7 @@
 <link rel="icon" href="/assets/brand/icon-about.svg" type="image/svg+xml">
 <script src="/static/js/theme-init.js"></script>
 <link rel="stylesheet" href="/static/css/styles.css?v=20261007-curator">
-<script src="/static/js/site.js?v=20261007-sections" defer></script>
+<script src="/static/js/site.js?v=20261007-quotes" defer></script>
 </head>
 <body>
 <a class="skip" href="#content">Перейти к содержанию</a>
@@ -53,9 +53,12 @@
     <div class="wrap hero__row">
       <div>
         <h1>Цитата дня</h1>
-        <blockquote>Цитату публикуем только с указанием источника. Как только команда подтвердит формулировку и автора, она появится здесь.</blockquote>
+        <blockquote data-quote-text>Загружаем цитату…</blockquote>
         <div class="hero__rule"></div>
-        <cite>Автор и источник указываются вместе с цитатой</cite>
+        <cite data-quote-author></cite>
+        <p class="hero__source"><a data-quote-source hidden target="_blank" rel="noopener noreferrer">Источник цитаты</a></p>
+        <p data-quote-status role="status" class="muted"></p>
+        <button class="btn btn--ghost" data-quote-retry type="button" hidden>Повторить</button>
         <p class="hero__note">«МосПолиФизикс» — образовательный ресурс по физике Московского политехнического университета для студентов и абитуриентов.</p>
       </div>
       <div class="hero__graphic">

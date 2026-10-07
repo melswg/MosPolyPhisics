@@ -17,9 +17,11 @@ from pathlib import Path
 
 from backend.email_service import send_password_reset
 from backend.news_sync import media_directory, sheet_config, sync_loop
+from backend import quote_sync
 from backend.models import (
     init_db,
     get_random_quote,
+    get_random_sourced_quote,
     get_all_news,
     create_user,
     verify_user,
@@ -197,20 +199,26 @@ async def startup():
         raise RuntimeError("Database initialization failed")
     media_directory().mkdir(parents=True, exist_ok=True)
     app.state.news_sync_task = asyncio.create_task(sync_loop()) if sheet_config() else None
+    app.state.quote_sync_task = asyncio.create_task(quote_sync.sync_loop()) if quote_sync.sheet_config() else None
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    task = getattr(app.state, "news_sync_task", None)
-    if task:
-        task.cancel()
-        with contextlib.suppress(asyncio.CancelledError):
-            await task
+    for name in ("news_sync_task", "quote_sync_task"):
+        task = getattr(app.state, name, None)
+        if task:
+            task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await task
 
 
 @app.get("/api/quote")
-def get_quote():
-    return {"quote": get_random_quote()}
+def get_quote(response: Response):
+    response.headers["Cache-Control"] = "no-store"
+    result = get_random_sourced_quote()
+    if not result["quote"]:
+        result["quote"] = get_random_quote()
+    return result
 
 
 @app.get("/api/news")
