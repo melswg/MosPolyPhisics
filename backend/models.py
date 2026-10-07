@@ -202,6 +202,15 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 """)
                 _record_schema_migration(cur, 3, "hourly Google Sheets news sync")
 
+            cur.execute("SELECT 1 FROM schema_migrations WHERE version = 4")
+            if not cur.fetchone():
+                cur.execute("ALTER TABLE sheet_news ADD COLUMN section TEXT NOT NULL DEFAULT 'publications'")
+                for row in conn.execute("SELECT id,category FROM sheet_news").fetchall():
+                    category = row["category"].strip().casefold()
+                    section = "announcements" if category in {"анонс", "анонсы"} else "memes" if category in {"мем", "мемы"} else "publications"
+                    cur.execute("UPDATE sheet_news SET section=? WHERE id=?", (section, row["id"]))
+                _record_schema_migration(cur, 4, "news sections")
+
             cur.execute(
                 """
                 CREATE TABLE IF NOT EXISTS tests (
@@ -383,6 +392,7 @@ def get_all_news(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, A
             # гарантируем, что created_at существует и равен None, если он отсутствует
             if "created_at" not in d:
                 d["created_at"] = None
+            d["section"] = "publications"
             result.append(d)
         cur.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='sheet_news'")
         if cur.fetchone():

@@ -217,3 +217,37 @@ def test_worker_waits_until_existing_hourly_deadline(sync_database, monkeypatch)
     with pytest.raises(asyncio.CancelledError):
         asyncio.run(news_sync.sync_loop())
     assert delays == [1800]
+
+
+def test_sections_preserve_rubrics_and_reject_unknown_values(sync_database, monkeypatch):
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["title", "date", "text", "source", "images", "status", "category", "section"])
+    writer.writerow(post(1) + ["Публикации"])
+    writer.writerow(post(2) + ["Анонсы"])
+    writer.writerow(post(3) + ["Мемы"])
+    data = output.getvalue().encode()
+    monkeypatch.setattr(news_sync, "download", lambda *_: (data, "text/csv"))
+    assert news_sync.sync_once(now=10000)
+    rows = get_all_news(sync_database)
+    assert {row["section"] for row in rows} == {"publications", "announcements", "memes"}
+    assert all(row["category"] == "Физика" for row in rows)
+    data = data.replace("Мемы".encode(), "Неизвестно".encode())
+    assert not news_sync.sync_once(now=13600)
+    assert get_all_news(sync_database) == rows
+
+
+def test_news_sections_upgrade_preserves_existing_sheet_rows(tmp_path):
+    database = tmp_path / "previous.sqlite"
+    assert init_db(database)
+    with sqlite3.connect(database) as conn:
+        conn.execute("ALTER TABLE sheet_news DROP COLUMN section")
+        conn.execute("DELETE FROM schema_migrations WHERE version=4")
+        conn.execute("INSERT INTO sheet_news(sheet_key,row_key,title,content,date,source,category) VALUES ('s','r','Existing','Keep','2026-10-01','https://t.me/physics/1','Мемы')")
+    assert init_db(database)
+    rows = get_all_news(database)
+    assert len(rows) == 1
+    assert rows[0]["title"] == "Existing"
+    assert rows[0]["section"] == "memes"
+    assert init_db(database)
+    assert get_all_news(database) == rows

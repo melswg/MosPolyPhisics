@@ -300,6 +300,23 @@
       renderError(host, "Лента недоступна. Проверьте соединение и попробуйте снова.", () => loadNews(host));
       return;
     }
+    if (host.dataset.news === "sections") {
+      clear(host);
+      const items = Array.isArray(result.data) ? result.data : [];
+      [["publications", "Публикации"], ["announcements", "Анонсы"], ["memes", "Мемы"]].forEach(([key, title]) => {
+        const section = createElement("section", "news-section");
+        const heading = createElement("h2", null, title);
+        heading.id = `news-${key}`;
+        section.setAttribute("aria-labelledby", heading.id);
+        const content = createElement("div");
+        const selected = items.filter((item) => (item.section || "publications") === key);
+        if (selected.length) renderNews(content, selected);
+        else renderEmpty(content, "Пока нет записей", "Новые материалы появятся здесь после публикации.");
+        section.append(heading, content);
+        host.appendChild(section);
+      });
+      return;
+    }
     if (result.state === "empty" || !Array.isArray(result.data) || result.data.length === 0) {
       renderEmpty(host, "Пока нет опубликованных записей", "Новости появляются здесь только после проверки материала командой.");
       return;

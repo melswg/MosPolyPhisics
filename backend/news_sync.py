@@ -121,9 +121,16 @@ def parse_sheet(data: bytes) -> list[dict]:
         # Validate every link before starting downloads or touching the snapshot.
         for link in image_links:
             drive_reference(link)
+        sections = {"публикация": "publications", "публикации": "publications",
+                    "анонс": "announcements", "анонсы": "announcements",
+                    "мем": "memes", "мемы": "memes"}
+        section_value = row.get("section", "").casefold()
+        if section_value and section_value not in sections:
+            raise ValueError(f"Row {number}: section must be Публикации, Анонсы or Мемы")
+        section = sections.get(section_value or row.get("category", "").casefold(), "publications")
         result.append({"row_key": key, "title": row["title"], "content": row["text"],
                        "date": date.isoformat(), "source": source,
-                       "category": row.get("category", "")[:200], "image_links": image_links})
+                       "category": row.get("category", "")[:200], "section": section, "image_links": image_links})
     return result
 
 
@@ -223,13 +230,13 @@ def apply_snapshot(rows: list[dict], sheet_key: str, database: Path, now: float)
             for row in rows:
                 keys.add(row["row_key"])
                 conn.execute("""
-                    INSERT INTO sheet_news (sheet_key,row_key,title,content,date,source,category,images)
-                    VALUES (?,?,?,?,?,?,?,?)
+                    INSERT INTO sheet_news (sheet_key,row_key,title,content,date,source,category,images,section)
+                    VALUES (?,?,?,?,?,?,?,?,?)
                     ON CONFLICT(sheet_key,row_key) DO UPDATE SET
                     title=excluded.title,content=excluded.content,date=excluded.date,
-                    source=excluded.source,category=excluded.category,images=excluded.images
+                    source=excluded.source,category=excluded.category,images=excluded.images,section=excluded.section
                 """, (sheet_key, row["row_key"], row["title"], row["content"], row["date"],
-                      row["source"], row["category"], json.dumps(row["images"])))
+                      row["source"], row["category"], json.dumps(row["images"]), row["section"]))
             for record in conn.execute("SELECT id,row_key FROM sheet_news WHERE sheet_key=?", (sheet_key,)).fetchall():
                 if record["row_key"] not in keys:
                     conn.execute("DELETE FROM sheet_news WHERE id=?", (record["id"],))

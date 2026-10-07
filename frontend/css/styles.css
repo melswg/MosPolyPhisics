@@ -257,6 +257,7 @@ a { color: inherit; }
 /* Новости */
 
 .news { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.news-section + .news-section { margin-top: 48px; }
 .news-slider { display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; gap: 16px; align-items: center; }
 .news--carousel { display: flex; flex-wrap: nowrap; min-width: 0; overflow-x: auto; gap: 20px; padding: 4px 0 14px; scroll-snap-type: x mandatory; }
 .news--carousel .news__item { flex: 0 0 calc((100% - 40px) / 3); scroll-snap-align: start; }
