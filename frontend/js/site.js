@@ -419,6 +419,134 @@
     box.appendChild(buttons);
     box.appendChild(notice);
     host.appendChild(box);
+    if (window.MosAvatar) {
+      updateHeaderAvatar(user.avatar);
+      initAvatarEditor(host, user);
+    }
+  }
+
+  function updateHeaderAvatar(config) {
+    const profile = document.querySelector(".profile");
+    if (!profile || !window.MosAvatar || !config) return;
+    clear(profile);
+    const image = createElement("span", "profile__avatar");
+    image.setAttribute("aria-hidden", "true");
+    window.MosAvatar.render(image, config);
+    profile.appendChild(image);
+  }
+
+  async function initAvatarEditor(host, user) {
+    const editor = createElement("section", "avatar-editor");
+    editor.setAttribute("aria-label", "Настройка аватара Симплик");
+    host.appendChild(editor);
+    renderLoading(editor, "Загружаем варианты Симплика.");
+    const result = await requestJson("/api/avatar/options");
+    if (result.state !== "ok" || !result.data) {
+      renderError(editor, "Не удалось загрузить варианты аватара.", () => { editor.remove(); initAvatarEditor(host, user); });
+      return;
+    }
+    clear(editor);
+    editor.appendChild(createElement("h2", null, "Ваш Симплик"));
+    editor.appendChild(createElement("p", "muted", "Соберите своего спутника: выберите цвет, настроение и детали образа."));
+    const layout = createElement("div", "avatar-editor__layout");
+    const previewPanel = createElement("div", "avatar-editor__preview");
+    const preview = createElement("div", "avatar-editor__image");
+    preview.setAttribute("role", "img");
+    const saved = createElement("p", "muted", "Изменения появятся в профиле после сохранения.");
+    previewPanel.append(preview, saved);
+    const form = createElement("form", "avatar-editor__form");
+    const presets = createElement("div", "avatar-editor__presets");
+    const controls = {};
+    let selection = { ...result.data.default, ...user.avatar };
+    let savedConfig = { ...selection };
+    function paint() {
+      window.MosAvatar.render(preview, selection);
+      preview.setAttribute("aria-label", "Симплик: " + Object.entries(result.data.fields).map(([key, field]) => field.choices.find(([value]) => value === selection[key])?.[1]).join(", "));
+      Object.entries(controls).forEach(([key, control]) => { control.value = selection[key]; });
+      saved.textContent = JSON.stringify(selection) === JSON.stringify(savedConfig) ? "Этот образ сохранён в вашем профиле." : "Есть несохранённые изменения.";
+      presets.querySelectorAll("button").forEach((button, index) => button.setAttribute("aria-pressed", String(JSON.stringify(selection) === JSON.stringify(result.data.presets[index].config))));
+    }
+    result.data.presets.forEach((preset) => {
+      const button = createElement("button", "btn btn--ghost", preset.label);
+      button.type = "button";
+      button.addEventListener("click", () => { selection = { ...preset.config }; paint(); });
+      presets.appendChild(button);
+    });
+    form.appendChild(createElement("h3", null, "Готовые образы"));
+    form.appendChild(presets);
+    const fields = createElement("div", "avatar-editor__fields");
+    Object.entries(result.data.fields).forEach(([key, field]) => {
+      const group = createElement("div", "form__field");
+      const label = createElement("label", null, field.label);
+      label.htmlFor = `avatar-${key}`;
+      const select = createElement("select");
+      select.id = label.htmlFor;
+      select.name = key;
+      field.choices.forEach(([value, title]) => {
+        const option = createElement("option", null, title);
+        option.value = value;
+        select.appendChild(option);
+      });
+      controls[key] = select;
+      select.addEventListener("change", () => { selection[key] = select.value; paint(); });
+      group.append(label, select);
+      fields.appendChild(group);
+    });
+    const actions = createElement("div", "avatar-editor__actions");
+    const save = createElement("button", "btn", "Сохранить аватар");
+    save.type = "submit";
+    const reset = createElement("button", "btn btn--ghost", "Отменить изменения");
+    reset.type = "button";
+    reset.addEventListener("click", () => { selection = { ...savedConfig }; paint(); notice.textContent = ""; });
+    const notice = createElement("p", "form__notice");
+    notice.setAttribute("role", "status");
+    actions.append(save, reset);
+    form.append(fields, actions, notice);
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submitted = { ...selection };
+      form.querySelectorAll("button, select").forEach((control) => { control.disabled = true; });
+      notice.textContent = "Сохраняем…";
+      const send = () => requestJson("/api/user/avatar", {
+        method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-Token": user.csrf_token || "" },
+        body: JSON.stringify(submitted),
+      });
+      let response = await send();
+      if (response.status === 403) {
+        const current = await requestJson("/api/user/me");
+        if (current.state === "ok" && current.data.id === user.id) {
+          user.csrf_token = current.data.csrf_token;
+          response = await send();
+        }
+      }
+      form.querySelectorAll("button, select").forEach((control) => { control.disabled = false; });
+      if (response.state === "ok") {
+        user.avatar = response.data.avatar;
+        savedConfig = { ...user.avatar };
+        selection = { ...savedConfig };
+        updateHeaderAvatar(user.avatar);
+        paint();
+        notice.textContent = "Аватар сохранён.";
+      } else {
+        notice.textContent = response.status === 401 ? "Войдите снова, чтобы сохранить аватар." : "Не удалось сохранить. Ваш выбор остался здесь — попробуйте ещё раз.";
+        if (response.status === 401) {
+          const login = createElement("a", null, " Открыть вход в новой вкладке");
+          login.href = "/login";
+          login.target = "_blank";
+          login.rel = "noopener noreferrer";
+          notice.appendChild(login);
+        }
+      }
+    });
+    layout.append(previewPanel, form);
+    editor.appendChild(layout);
+    paint();
+  }
+
+  async function initHeaderAvatar() {
+    if (document.querySelector("[data-account]") || !window.MosAvatar) return;
+    const result = await requestJson("/api/user/me");
+    if (result.state === "ok") updateHeaderAvatar(result.data.avatar);
   }
 
   async function loadAccount(host) {
@@ -775,6 +903,7 @@
     initNews();
     initQuote();
     initAccount();
+    initHeaderAvatar();
     initLogin();
     initRegister();
     initPasswordResetRequest();

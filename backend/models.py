@@ -224,6 +224,11 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
                 )""")
                 _record_schema_migration(cur, 5, "sourced quotes from Google Sheets")
 
+            cur.execute("SELECT 1 FROM schema_migrations WHERE version = 6")
+            if not cur.fetchone():
+                cur.execute("ALTER TABLE users ADD COLUMN avatar_config TEXT NOT NULL DEFAULT '{}'")
+                _record_schema_migration(cur, 6, "Simplik user avatars")
+
             cur.execute(
                 """
                 CREATE TABLE IF NOT EXISTS tests (
@@ -552,7 +557,7 @@ def get_session_user(
     with connect(db_path) as conn:
         row = conn.execute(
             """
-            SELECT u.id, u.username, u.email, u.created_at, s.csrf_token
+            SELECT u.id, u.username, u.email, u.created_at, u.avatar_config, s.csrf_token
             FROM user_sessions AS s
             JOIN users AS u ON u.id = s.user_id
             WHERE s.token_hash = ? AND s.expires_at > ?
@@ -561,6 +566,11 @@ def get_session_user(
             (token_hash, now),
         ).fetchone()
         return dict(row) if row else None
+
+
+def save_user_avatar(user_id: int, config: Dict[str, str], db_path: Optional[Union[str, Path]] = None) -> None:
+    with connect(db_path) as conn, conn:
+        conn.execute("UPDATE users SET avatar_config=? WHERE id=?", (json.dumps(config), user_id))
 
 
 def delete_session(token_hash: str, db_path: Optional[Union[str, Path]] = None) -> None:

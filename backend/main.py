@@ -5,6 +5,7 @@ import re
 import secrets
 import asyncio
 import contextlib
+import json
 from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Dict, List, Optional
 
@@ -18,10 +19,12 @@ from pathlib import Path
 from backend.email_service import send_password_reset
 from backend.news_sync import media_directory, sheet_config, sync_loop
 from backend import quote_sync
+from backend.avatars import AvatarConfig, AVATAR_OPTIONS, AVATAR_PRESETS
 from backend.models import (
     init_db,
     get_random_quote,
     get_random_sourced_quote,
+    save_user_avatar,
     get_all_news,
     create_user,
     verify_user,
@@ -213,7 +216,7 @@ async def shutdown():
 
 
 @app.get("/api/quote")
-def get_quote(response: Response):
+def get_quote(response: Response) -> Dict[str, str]:
     response.headers["Cache-Control"] = "no-store"
     result = get_random_sourced_quote()
     if not result["quote"]:
@@ -323,7 +326,26 @@ def user_me(user: Dict[str, Any] = Depends(get_current_user)):
         "email": user["email"],
         "created_at": user["created_at"],
         "csrf_token": user["csrf_token"],
+        "avatar": AvatarConfig.model_validate(json.loads(user["avatar_config"])).model_dump(),
     }
+
+
+@app.get("/api/avatar/options")
+def avatar_options() -> Dict[str, Any]:
+    return {"fields": AVATAR_OPTIONS, "presets": AVATAR_PRESETS, "default": AvatarConfig().model_dump()}
+
+
+@app.post("/api/user/avatar")
+def update_avatar(
+    body: AvatarConfig,
+    user: Dict[str, Any] = Depends(get_current_user),
+    x_csrf_token: Optional[str] = Header(None),
+) -> Dict[str, Dict[str, str]]:
+    if not x_csrf_token or not secrets.compare_digest(x_csrf_token, user["csrf_token"]):
+        raise HTTPException(status_code=403, detail="Проверка запроса не пройдена")
+    config = body.model_dump()
+    save_user_avatar(user["id"], config)
+    return {"avatar": config}
 
 
 @app.post("/api/logout", status_code=204)
