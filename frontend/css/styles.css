@@ -233,6 +233,13 @@ a { color: inherit; }
 .choices h2 { margin: 0 0 24px; font-size: clamp(24px, 3vw, 34px); font-weight: 800; letter-spacing: -0.01em; }
 
 .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin: 0; padding: 0; list-style: none; }
+.choices .cards { grid-auto-rows: 1fr; }
+.choices .cards > li { display: flex; min-width: 0; }
+.choices .card { width: 100%; min-height: 190px; padding: 20px; }
+.choices .card h3 { font-size: 22px; margin-bottom: 12px; }
+.choices .card p { font-size: 16px; margin-top: 0; }
+.choices .card__icon { width: 54px; height: 54px; margin-top: 14px; }
+.choices .card__icon img { width: 30px; height: 30px; }
 
 .card {
   display: flex;
