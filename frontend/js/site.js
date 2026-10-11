@@ -344,7 +344,7 @@
     if (host.dataset.news === "sections" && (rubric === "comics" || rubric === "history")) {
       host.classList.add("news-columns--filtered");
       const [title, category] = rubrics[rubric];
-      const heading = document.querySelector("#feed-title");
+      const heading = document.querySelector("#news-page-title");
       if (heading) heading.textContent = title;
       const items = (result.data || []).filter((item) => (item.category || "").trim().toLowerCase() === category);
       if (items.length) renderNews(host, items);
@@ -362,7 +362,10 @@
         const heading = createElement("h2", null, title);
         heading.id = `news-${key}`;
         section.setAttribute("aria-labelledby", heading.id);
-        const content = createElement("div");
+        const content = createElement("div", "news-section__content");
+        content.tabIndex = 0;
+        content.setAttribute("role", "region");
+        content.setAttribute("aria-labelledby", heading.id);
         const selected = items.filter((item) => (item.section || "publications") === key);
         if (selected.length) renderNews(content, selected);
         else renderEmpty(content, "Пока нет записей", "Новые материалы появятся здесь после публикации.");
