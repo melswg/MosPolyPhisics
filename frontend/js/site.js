@@ -726,6 +726,14 @@
     const params = new URLSearchParams(window.location.search);
     const kind = params.get("kind");
     if (kind === "physics" || kind === "fun") {
+      const heading = document.querySelector(".page-head h1");
+      const intro = document.querySelector(".page-head p");
+      if (heading) heading.textContent = kind === "fun" ? "Развлекательные тесты" : "Тесты по физике";
+      if (intro) intro.textContent = "Этот раздел в разработке. Новые задания появятся после проверки вопросов и объяснений.";
+      const help = document.querySelector('[aria-labelledby="help-title"]');
+      if (help) help.hidden = true;
+      const runnerTitle = document.querySelector("#runner-title");
+      if (runnerTitle) runnerTitle.textContent = "Статус раздела";
       const state = renderEmpty(host, kind === "fun" ? "Развлекательные тесты в разработке" : "Новые тесты по физике в разработке", "Пока можно пройти первый опубликованный тест с разбором ответов.");
       const link = createElement("a", "btn", "Перейти к готовому тесту");
       link.href = "/tests#published-title";
