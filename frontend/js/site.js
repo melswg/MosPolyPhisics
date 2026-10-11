@@ -708,7 +708,16 @@
   }
 
   async function loadTest(host) {
-    const testId = new URLSearchParams(window.location.search).get("id");
+    const params = new URLSearchParams(window.location.search);
+    const kind = params.get("kind");
+    if (kind === "physics" || kind === "fun") {
+      const state = renderEmpty(host, kind === "fun" ? "Развлекательные тесты в разработке" : "Новые тесты по физике в разработке", "Пока можно пройти первый опубликованный тест с разбором ответов.");
+      const link = createElement("a", "btn", "Перейти к готовому тесту");
+      link.href = "/tests#published-title";
+      state.appendChild(link);
+      return;
+    }
+    const testId = params.get("id");
     if (!testId) {
       const state = renderEmpty(host, "Тест не выбран", "Выберите опубликованный тест из каталога.");
       const link = createElement("a", "btn", "Выбрать тест");
