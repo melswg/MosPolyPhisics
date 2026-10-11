@@ -341,7 +341,7 @@
     }
     const rubric = new URLSearchParams(window.location.search).get("rubric");
     const rubrics = { comics: ["Комиксы", "комиксы"], history: ["Историческая справка", "историческая справка"] };
-    if (host.dataset.news === "sections" && rubrics[rubric]) {
+    if (host.dataset.news === "sections" && (rubric === "comics" || rubric === "history")) {
       host.classList.add("news-columns--filtered");
       const [title, category] = rubrics[rubric];
       const heading = document.querySelector("#feed-title");
