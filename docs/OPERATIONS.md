@@ -1,10 +1,19 @@
 # Эксплуатация МосПолиФизикс
 
-Актуальная схема VPS: репозиторий `/home/hermes/MosPolyPhisics`, виртуальное
-окружение `.venv`, systemd-сервис `mosphysics.service`, локальный порт 9090 и
-SQLite-файл `data/database.sqlite`. Перенос в Docker для автодеплоя не требуется.
+Последний подтверждённый production-выпуск работает в Docker: контейнер
+`mosphysics-hermes-rebuild-prod`, порт 9090 → 8000, данные в
+`/srv/apps/mosphysics-hermes-rebuild/production-data`.
+Схема, проверенные резервные копии и откат описаны в [CURATOR_DEPLOY.md](CURATOR_DEPLOY.md).
+Перед новым выпуском состояние VPS нужно проверить заново.
 
-## Автодеплой из GitHub
+Ниже сохранена инструкция для прежней установки systemd/venv
+(`/home/hermes/MosPolyPhisics`, `mosphysics.service`). Она не обновляет рабочий
+Docker-контейнер. Не включайте `VPS_AUTO_DEPLOY` для текущего production:
+workflow и `deploy/deploy-vps.sh` требуют отдельной адаптации к Docker.
+Резервные копии и HTTPS для контейнера настраиваются по его фактическим путям,
+а не установкой приведённых ниже systemd-таймеров.
+
+## Прежняя установка: автодеплой из GitHub
 
 Workflow `.github/workflows/test-and-deploy.yml` запускает тесты на каждый push в
 `main` и только после успеха обновляет VPS через SSH. В GitHub Environment

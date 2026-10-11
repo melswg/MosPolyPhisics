@@ -6,6 +6,11 @@ APP_USER="${APP_USER:-hermes}"
 SERVICE_NAME="${SERVICE_NAME:-mosphysics.service}"
 HEALTH_URL="${HEALTH_URL:-http://127.0.0.1:9090/api/health}"
 
+if ! systemctl is-active --quiet "${SERVICE_NAME}"; then
+    echo "Refusing deployment: ${SERVICE_NAME} is not active. This script supports systemd/venv only; see docs/CURATOR_DEPLOY.md for Docker production." >&2
+    exit 1
+fi
+
 runuser -u "${APP_USER}" -- "${APP_DIR}/.venv/bin/pip" install \
     --disable-pip-version-check -r "${APP_DIR}/requirements.txt"
 systemctl restart "${SERVICE_NAME}"
