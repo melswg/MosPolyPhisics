@@ -906,26 +906,31 @@
   function initMaterials() {
     const videos = document.querySelector("[data-videos]");
     if (videos) loadMaterials(videos, "/api/videos", "Видео пока не опубликованы", "Новые записи появятся здесь после публикации.", (video) => {
-      const item = createElement("article", "state");
-      item.appendChild(createElement("h3", null, video.title));
-      if (video.date) item.appendChild(createElement("p", "muted", formatDate(video.date)));
+      const href = publicLink(video.url);
+      const item = createElement(href ? "a" : "article", "video-tile");
+      if (href) {
+        item.href = href;
+        item.target = "_blank";
+        item.rel = "noopener noreferrer";
+        item.setAttribute("aria-label", `${video.title}. Смотреть на исходной площадке, откроется новая вкладка`);
+      }
       const cover = (video.images || []).find((value) => /^\/news-media\/[a-f0-9]{64}\.jpg$/.test(value));
       if (cover) {
-        const image = createElement("img", "news__image");
+        const image = createElement("img", "video-tile__cover");
         image.src = cover;
-        image.alt = `Обложка: ${video.title}`;
+        image.alt = "";
         image.loading = "lazy";
         item.appendChild(image);
       }
-      if (video.description) item.appendChild(createElement("p", null, video.description));
-      const href = publicLink(video.url);
-      if (href) {
-        const link = createElement("a", "btn", "Смотреть видео на исходной площадке");
-        link.href = href;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        item.appendChild(link);
-      } else item.appendChild(createElement("p", null, "Ссылка на видео временно недоступна."));
+      const play = createElement("span", "video-tile__play", "▶");
+      play.setAttribute("aria-hidden", "true");
+      item.appendChild(play);
+      const caption = createElement("div", "video-tile__caption");
+      if (video.date) caption.appendChild(createElement("p", "video-tile__date", formatDate(video.date)));
+      caption.appendChild(createElement("h3", null, video.title));
+      if (video.description) caption.appendChild(createElement("p", "video-tile__description", video.description));
+      caption.appendChild(createElement("span", "video-tile__action", href ? "Смотреть ↗" : "Ссылка недоступна"));
+      item.appendChild(caption);
       return item;
     });
     const novel = document.querySelector("[data-novel-updates]");
