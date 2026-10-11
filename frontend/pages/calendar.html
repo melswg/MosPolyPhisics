@@ -47,7 +47,7 @@
 <main id="content" class="wrap">
   <div class="page-head">
     <h1>Календарь событий</h1>
-    <p>Дни открытых дверей, защиты работ и встречи команды. В календарь попадают только подтверждённые даты: пустой месяц это нормальное и понятное состояние.</p>
+    <p>Выберите месяц и день, чтобы посмотреть опубликованные события проекта. Точка рядом с числом отмечает день с событием.</p>
   </div>
 
   <section class="panel" aria-labelledby="month-title">
@@ -58,23 +58,11 @@
       <button class="month-nav__button" type="button" data-month-next aria-label="Следующий месяц">→</button>
     </div>
     <div data-calendar></div>
-    <div class="state" style="margin-top: 20px;">
-      <h3>Подтверждённых событий пока нет</h3>
-      <p>Команда передаст даты и описания, после чего события появятся в календаре и в списке ниже. Придуманных дат в календаре не будет.</p>
-    </div>
   </section>
 
   <section class="panel" aria-labelledby="list-title">
     <h2 id="list-title">Список событий</h2>
-    <ul class="rows">
-      <li class="row">
-        <div>
-          <h3>Ближайшие даты</h3>
-          <p>Как только появится три подтверждённых события, раздел откроется списком с датой, местом и коротким описанием.</p>
-        </div>
-        <span class="row__side">события не подтверждены</span>
-      </li>
-    </ul>
+    <div data-events><p>Загружаем события…</p></div>
   </section>
 </main>
 

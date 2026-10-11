@@ -744,7 +744,7 @@
 
   /* Календарь */
 
-  function renderCalendar(host, monthDate) {
+  function renderCalendar(host, monthDate, events, selectDay, selectedDay) {
     clear(host);
     const year = monthDate.getFullYear();
     const month = monthDate.getMonth();
@@ -763,11 +763,19 @@
       grid.appendChild(createElement("div", "calendar__day calendar__day--outside"));
     }
     for (let day = 1; day <= daysInMonth; day += 1) {
-      const cell = createElement("div", "calendar__day", String(day));
+      const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      const dayEvents = (events || []).filter((event) => event.event_date === date);
+      const cell = createElement("button", "calendar__day", String(day) + (dayEvents.length ? " ·" : ""));
+      cell.type = "button";
+      cell.setAttribute("aria-label", formatDate(date) + (dayEvents.length ? `, событий: ${dayEvents.length}` : ", нет событий"));
+      cell.setAttribute("aria-pressed", String(selectedDay === date));
+      if (dayEvents.length) cell.classList.add("calendar__day--event");
+      if (selectDay) cell.addEventListener("click", () => selectDay(date));
       const isToday =
         day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
       if (isToday) {
         cell.classList.add("calendar__day--today");
+        cell.setAttribute("aria-current", "date");
       }
       grid.appendChild(cell);
     }
@@ -787,12 +795,53 @@
     }
 
     let current = new Date();
+    let events = [];
+    let eventsReady = false;
+    let selectedDay = null;
+    const list = document.querySelector("[data-events]");
     const previous = document.querySelector("[data-month-previous]");
     const next = document.querySelector("[data-month-next]");
 
+    function paint() {
+      renderCalendar(host, current, events, (date) => {
+        selectedDay = date;
+        paint();
+        list.focus();
+      }, selectedDay);
+      if (!list || !eventsReady) return;
+      list.tabIndex = -1;
+      const month = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
+      const selected = events.filter((event) => selectedDay ? event.event_date === selectedDay : event.event_date.startsWith(month));
+      if (!selected.length) {
+        renderEmpty(list, selectedDay ? "В этот день нет событий" : "В этом месяце нет событий", "Выберите другую дату или следите за новостями проекта.");
+        return;
+      }
+      clear(list);
+      selected.forEach((event) => {
+        const item = createElement("article", "state");
+        item.appendChild(createElement("p", "muted", formatDate(event.event_date)));
+        item.appendChild(createElement("h3", null, event.title));
+        item.appendChild(createElement("p", null, event.description || ""));
+        list.appendChild(item);
+      });
+    }
+
+    async function loadEvents() {
+      renderLoading(list, "Проверяем календарь событий.");
+      const result = await requestJson("/api/calendar");
+      if (result.state !== "ok" || !Array.isArray(result.data)) {
+        renderError(list, "Не удалось загрузить события.", loadEvents);
+        return;
+      }
+      events = result.data;
+      eventsReady = true;
+      paint();
+    }
+
     function shift(step) {
       current = new Date(current.getFullYear(), current.getMonth() + step, 1);
-      renderCalendar(host, current);
+      selectedDay = null;
+      paint();
     }
 
     if (previous) {
@@ -801,7 +850,68 @@
     if (next) {
       next.addEventListener("click", () => shift(1));
     }
-    renderCalendar(host, current);
+    renderCalendar(host, current, events);
+    if (list) loadEvents();
+  }
+
+  function publicLink(value) {
+    try {
+      const url = new URL(value);
+      return url.protocol === "https:" && !url.username && !url.password ? url.href : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async function loadMaterials(host, url, emptyTitle, emptyText, renderItem) {
+    renderLoading(host, "Проверяем опубликованные материалы.");
+    const result = await requestJson(url);
+    const retry = () => loadMaterials(host, url, emptyTitle, emptyText, renderItem);
+    if (result.state !== "ok" || !Array.isArray(result.data)) {
+      renderError(host, "Не удалось загрузить материалы. Попробуйте снова.", retry);
+      return;
+    }
+    if (!result.data.length) {
+      renderEmpty(host, emptyTitle, emptyText);
+      return;
+    }
+    clear(host);
+    result.data.forEach((item) => host.appendChild(renderItem(item)));
+  }
+
+  function initMaterials() {
+    const videos = document.querySelector("[data-videos]");
+    if (videos) loadMaterials(videos, "/api/videos", "Видео пока не опубликованы", "Новые записи появятся здесь после публикации.", (video) => {
+      const item = createElement("article", "state");
+      item.appendChild(createElement("h3", null, video.title));
+      if (video.date) item.appendChild(createElement("p", "muted", formatDate(video.date)));
+      const cover = (video.images || []).find((value) => /^\/news-media\/[a-f0-9]{64}\.jpg$/.test(value));
+      if (cover) {
+        const image = createElement("img", "news__image");
+        image.src = cover;
+        image.alt = `Обложка: ${video.title}`;
+        image.loading = "lazy";
+        item.appendChild(image);
+      }
+      if (video.description) item.appendChild(createElement("p", null, video.description));
+      const href = publicLink(video.url);
+      if (href) {
+        const link = createElement("a", "btn", "Смотреть видео на исходной площадке");
+        link.href = href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        item.appendChild(link);
+      } else item.appendChild(createElement("p", null, "Ссылка на видео временно недоступна."));
+      return item;
+    });
+    const novel = document.querySelector("[data-novel-updates]");
+    if (novel) loadMaterials(novel, "/api/novel/updates", "Дневник пока не опубликован", "Новелла в разработке. Новые записи появятся здесь по мере публикации.", (entry) => {
+      const item = createElement("article", "state");
+      item.appendChild(createElement("p", "muted", formatDate(entry.update_date)));
+      item.appendChild(createElement("h3", null, entry.title));
+      item.appendChild(createElement("p", null, entry.body || ""));
+      return item;
+    });
   }
 
   /* Авторизация и восстановление доступа */
@@ -978,5 +1088,6 @@
     initPasswordResetConfirm();
     initTest();
     initCalendar();
+    initMaterials();
   });
 })();

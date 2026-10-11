@@ -725,7 +725,18 @@ def get_all_videos(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str,
     with connect(db_path) as conn:
         cur = conn.cursor()
         cur.execute("SELECT id, title, url FROM videos ORDER BY id ASC")
-        return [dict(r) for r in cur.fetchall()]
+        videos = [dict(r) for r in cur.fetchall()]
+        known_urls = {item["url"] for item in videos}
+        for row in conn.execute("""SELECT id,title,content,date,source,images,category FROM sheet_news
+            ORDER BY date DESC,id DESC"""):
+            if row["category"].strip().casefold() not in {"video", "видео"}:
+                continue
+            if row["source"] not in known_urls:
+                videos.append({"id": -row["id"], "title": row["title"], "url": row["source"],
+                               "description": row["content"], "date": row["date"],
+                               "images": json.loads(row["images"])})
+                known_urls.add(row["source"])
+        return videos
 
 
 def get_novel_updates(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:
