@@ -89,7 +89,8 @@ def test_catalog_cards_use_real_keyboard_accessible_links(page_client):
         assert f'class="card" href="{target}"' in about
 
     tests = client.get("/tests").text
-    for target in ("/test", "/quotes", "/ege"):
+    assert "data-tests" in tests
+    for target in ("/quotes", "/ege"):
         assert f'class="card" href="{target}"' in tests
 
 

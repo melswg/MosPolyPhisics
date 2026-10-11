@@ -13,7 +13,7 @@ from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Request, Re
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, StrictInt, field_validator
 from pathlib import Path
 
 from backend.email_service import send_password_reset
@@ -162,7 +162,7 @@ class PasswordResetConfirm(BaseModel):
 
 class TestSubmitBody(BaseModel):
     test_id: int
-    answers: Dict[str, int] = Field(default_factory=dict)
+    answers: Dict[str, StrictInt] = Field(default_factory=dict)
 
 
 def _token_hash(token: str) -> str:
@@ -249,14 +249,13 @@ def api_test_detail(test_id: int):
 
 @app.post("/api/test/submit")
 def api_test_submit(body: TestSubmitBody):
-    raw = body.answers or {}
-    answers: Dict[int, int] = {}
-    for k, v in raw.items():
-        try:
-            answers[int(k)] = int(v)
-        except (TypeError, ValueError):
-            continue
-    result = grade_test_submission(body.test_id, answers)
+    try:
+        if any(not re.fullmatch(r"[1-9][0-9]*", key) for key in body.answers):
+            raise ValueError("Некорректный номер вопроса")
+        answers = {int(key): value for key, value in body.answers.items()}
+        result = grade_test_submission(body.test_id, answers)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
     if result is None:
         raise HTTPException(status_code=404, detail="Тест не найден")
     return result

@@ -572,6 +572,34 @@
 
   /* Прохождение теста */
 
+  async function loadTestCatalog(host) {
+    renderLoading(host, "Проверяем опубликованные тесты.");
+    const result = await requestJson("/api/tests");
+    if (result.state !== "ok" || !Array.isArray(result.data)) {
+      renderError(host, "Каталог тестов недоступен. Попробуйте снова.", () => loadTestCatalog(host));
+      return;
+    }
+    if (!result.data.length) {
+      renderEmpty(host, "Тесты пока не опубликованы", "Здесь появятся проверенные наборы вопросов.");
+      return;
+    }
+    clear(host);
+    const list = createElement("ul", "cards cards--catalog cards--pairs");
+    result.data.forEach((test) => {
+      const item = createElement("li");
+      const link = createElement("a", "card");
+      link.href = `/test?id=${encodeURIComponent(test.id)}`;
+      const content = createElement("div");
+      content.appendChild(createElement("h3", null, test.title));
+      content.appendChild(createElement("p", null, test.description || "Проверьте знания по физике."));
+      content.appendChild(createElement("p", "muted", `Вопросов: ${test.question_count}`));
+      link.appendChild(content);
+      item.appendChild(link);
+      list.appendChild(item);
+    });
+    host.appendChild(list);
+  }
+
   function renderQuestions(host, test) {
     clear(host);
     const form = createElement("form", "form");
@@ -601,7 +629,10 @@
     submit.type = "submit";
     actions.appendChild(submit);
     form.appendChild(actions);
-    form.appendChild(createElement("p", "form__notice"));
+    const notice = createElement("p", "form__notice");
+    notice.setAttribute("role", "status");
+    notice.setAttribute("aria-live", "polite");
+    form.appendChild(notice);
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       submitAnswers(form, test, submit);
@@ -645,12 +676,44 @@
 
     notice.classList.add("form__notice--success");
     notice.textContent = `Верных ответов: ${result.data.correct} из ${result.data.total} (${result.data.percent}%).`;
+    form.querySelectorAll("input").forEach((input) => { input.disabled = true; });
+    button.disabled = true;
+    button.textContent = "Ответы проверены";
+    const review = createElement("section", "panel");
+    review.tabIndex = -1;
+    review.setAttribute("aria-label", "Результат и разбор ответов");
+    review.appendChild(createElement("h2", null, "Разбор ответов"));
+    (result.data.review || []).forEach((answer, index) => {
+      const item = createElement("article", "state");
+      item.appendChild(createElement("h3", null, `${index + 1}. ${answer.prompt}`));
+      item.appendChild(createElement("p", null, answer.is_correct ? "Верно" : "Неверно"));
+      item.appendChild(createElement("p", null, `Ваш ответ: ${answer.options[answer.chosen_index]}`));
+      item.appendChild(createElement("p", null, `Правильный ответ: ${answer.options[answer.correct_index]}`));
+      item.appendChild(createElement("p", null, answer.explanation || "Объяснение для этого вопроса пока не опубликовано."));
+      if (/^https:\/\//.test(answer.source || "")) {
+        const source = createElement("a", null, "Учебный источник");
+        source.href = answer.source;
+        source.target = "_blank";
+        source.rel = "noopener noreferrer";
+        item.appendChild(source);
+      }
+      review.appendChild(item);
+    });
+    const retry = createElement("button", "btn btn--ghost", "Пройти ещё раз");
+    retry.type = "button";
+    retry.addEventListener("click", () => loadTest(form.parentElement));
+    review.appendChild(retry);
+    form.parentElement.appendChild(review);
+    review.focus();
   }
 
   async function loadTest(host) {
     const testId = new URLSearchParams(window.location.search).get("id");
     if (!testId) {
-      renderEmpty(host, "Тест не выбран", "Откройте тест из каталога: сейчас наборы вопросов готовятся, поэтому каталог ведёт сюда только после публикации.");
+      const state = renderEmpty(host, "Тест не выбран", "Выберите опубликованный тест из каталога.");
+      const link = createElement("a", "btn", "Выбрать тест");
+      link.href = "/tests";
+      state.appendChild(link);
       return;
     }
 
@@ -661,13 +724,18 @@
       return;
     }
     if (result.state === "empty" || !result.data) {
-      renderEmpty(host, "Набор вопросов готовится", "Тест откроется, когда формулировки и объяснения ответов будут проверены.");
+      const state = renderEmpty(host, "Тест не найден", "Возможно, он был удалён. Выберите другой тест из каталога.");
+      const link = createElement("a", "btn", "Открыть каталог");
+      link.href = "/tests";
+      state.appendChild(link);
       return;
     }
     renderQuestions(host, result.data);
   }
 
   function initTest() {
+    const catalog = document.querySelector("[data-tests]");
+    if (catalog) loadTestCatalog(catalog);
     const host = document.querySelector("[data-test]");
     if (host) {
       loadTest(host);

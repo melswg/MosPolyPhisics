@@ -47,17 +47,22 @@
 <main id="content" class="wrap">
   <div class="page-head">
     <h1>Тесты</h1>
-    <p>Четыре направления проверки знаний: физика, цитаты учёных, задания ЕГЭ и короткие развлекательные тесты. Каждый тест собирается из проверенных вопросов с объяснением ответа.</p>
+    <p>Выберите опубликованный тест и проверьте знания. Вход не нужен; после отправки вы увидите результат и объяснения.</p>
   </div>
+
+  <section class="panel" aria-labelledby="published-title">
+    <h2 id="published-title">Опубликованные тесты</h2>
+    <div data-tests><p>Загружаем тесты…</p></div>
+  </section>
 
   <section class="panel" aria-labelledby="catalog-title">
     <h2 id="catalog-title">Направления</h2>
     <ul class="cards cards--catalog cards--pairs">
       <li>
-        <a class="card" href="/test">
+        <a class="card" href="#published-title">
           <div>
           <h3>Тест по физике</h3>
-          <p>Пять вопросов с разбором каждого ответа: после отправки видно, где именно ошибка и почему верный вариант верный.</p>
+          <p>Опубликованные наборы вопросов — в каталоге выше. После проверки доступен разбор ответов.</p>
           </div>
         </a>
       </li>

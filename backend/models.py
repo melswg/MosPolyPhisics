@@ -290,6 +290,12 @@ def init_db(db_path: Optional[Union[str, Path]] = None) -> bool:
             )
 
             # цитаты
+            cur.execute("SELECT 1 FROM schema_migrations WHERE version = 7")
+            if not cur.fetchone():
+                cur.execute("ALTER TABLE test_questions ADD COLUMN explanation TEXT NOT NULL DEFAULT ''")
+                cur.execute("ALTER TABLE test_questions ADD COLUMN source TEXT NOT NULL DEFAULT ''")
+                _record_schema_migration(cur, 7, "test answer explanations and sources")
+
             cur.execute("SELECT COUNT(*) as cnt FROM quotes")
             if seed_demo and cur.fetchone()["cnt"] == 0:
                 demo_quotes = [
@@ -634,7 +640,9 @@ def reset_password_with_token(
 def get_all_tests(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:
     with connect(db_path) as conn:
         cur = conn.cursor()
-        cur.execute("SELECT id, title, description, slug FROM tests ORDER BY id ASC")
+        cur.execute("""SELECT t.id, t.title, t.description, t.slug, COUNT(q.id) AS question_count
+            FROM tests t JOIN test_questions q ON q.test_id=t.id
+            GROUP BY t.id ORDER BY t.id ASC""")
         return [dict(r) for r in cur.fetchall()]
 
 
@@ -674,13 +682,17 @@ def grade_test_submission(
         if not cur.fetchone():
             return None
         cur.execute(
-            "SELECT id, correct_index FROM test_questions WHERE test_id = ? ORDER BY sort_order ASC, id ASC",
+            "SELECT * FROM test_questions WHERE test_id = ? ORDER BY sort_order ASC, id ASC",
             (test_id,),
         )
         rows = cur.fetchall()
         if not rows:
-            return {"correct": 0, "total": 0, "percent": 0}
+            raise ValueError("У теста нет опубликованных вопросов")
+        question_ids = {row["id"] for row in rows}
+        if set(answers) != question_ids or any(type(value) is not int or value not in range(4) for value in answers.values()):
+            raise ValueError("Выберите один допустимый ответ на каждый вопрос теста")
         correct = 0
+        review = []
         for r in rows:
             qid = r["id"]
             chosen = answers.get(qid)
@@ -688,9 +700,16 @@ def grade_test_submission(
                 continue
             if int(chosen) == int(r["correct_index"]):
                 correct += 1
+            review.append({
+                "id": qid, "prompt": r["prompt"],
+                "options": [r["option_a"], r["option_b"], r["option_c"], r["option_d"]],
+                "chosen_index": chosen, "correct_index": r["correct_index"],
+                "is_correct": chosen == r["correct_index"],
+                "explanation": r["explanation"], "source": r["source"],
+            })
         total = len(rows)
         percent = round(100 * correct / total) if total else 0
-        return {"correct": correct, "total": total, "percent": percent}
+        return {"correct": correct, "total": total, "percent": percent, "review": review}
 
 
 def get_calendar_events(db_path: Optional[Union[str, Path]] = None) -> List[Dict[str, Any]]:
