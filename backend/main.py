@@ -9,7 +9,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Dict, List, Optional
 
-from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -19,6 +19,7 @@ from pathlib import Path
 from backend.email_service import send_password_reset
 from backend.news_sync import media_directory, sheet_config, sync_loop
 from backend import quote_sync
+from backend.physics_calendar import annual_physics_events
 from backend.avatars import AvatarConfig, AVATAR_OPTIONS, AVATAR_PRESETS
 from backend.models import (
     init_db,
@@ -262,8 +263,9 @@ def api_test_submit(body: TestSubmitBody):
 
 
 @app.get("/api/calendar")
-def api_calendar():
-    return get_calendar_events()
+def api_calendar(year: Optional[int] = Query(None, ge=1900, le=2100)):
+    events = get_calendar_events() + annual_physics_events(year or datetime.now().year)
+    return sorted(events, key=lambda event: event["event_date"])
 
 
 @app.get("/api/videos")

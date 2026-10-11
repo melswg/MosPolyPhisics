@@ -831,13 +831,24 @@
         item.appendChild(createElement("p", "muted", formatDate(event.event_date)));
         item.appendChild(createElement("h3", null, event.title));
         item.appendChild(createElement("p", null, event.description || ""));
+        const source = publicLink(event.source);
+        if (source) {
+          const link = createElement("a", null, "Источник даты");
+          link.href = source;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          item.appendChild(link);
+        }
         list.appendChild(item);
       });
     }
 
     async function loadEvents() {
       renderLoading(list, "Проверяем календарь событий.");
-      const result = await requestJson("/api/calendar");
+      const requestedYear = current.getFullYear();
+      eventsReady = false;
+      const result = await requestJson(`/api/calendar?year=${requestedYear}`);
+      if (requestedYear !== current.getFullYear()) return;
       if (result.state !== "ok" || !Array.isArray(result.data)) {
         renderError(list, "Не удалось загрузить события.", loadEvents);
         return;
@@ -848,8 +859,12 @@
     }
 
     function shift(step) {
+      const previousYear = current.getFullYear();
       current = new Date(current.getFullYear(), current.getMonth() + step, 1);
       selectedDay = null;
+      if (previousYear !== current.getFullYear() && list) {
+        loadEvents();
+      }
       paint();
     }
 
