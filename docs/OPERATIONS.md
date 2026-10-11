@@ -3,7 +3,10 @@
 Последний подтверждённый production-выпуск работает в Docker: контейнер
 `mosphysics-hermes-rebuild-prod`, порт 9090 → 8000, данные в
 `/srv/apps/mosphysics-hermes-rebuild/production-data`.
-Схема, проверенные резервные копии и откат описаны в [CURATOR_DEPLOY.md](CURATOR_DEPLOY.md).
+Текущий образ — `mosphysics:prototype-ba9042b`, рабочая база — `mosphysics.sqlite`.
+Схема, проверенные резервные копии и откат описаны в
+[PROTOTYPE_DEPLOY_2026-10-11.md](PROTOTYPE_DEPLOY_2026-10-11.md).
+[CURATOR_DEPLOY.md](CURATOR_DEPLOY.md) сохраняет историю предыдущего выпуска.
 Перед новым выпуском состояние VPS нужно проверить заново.
 
 Ниже сохранена инструкция для прежней установки systemd/venv
