@@ -127,7 +127,8 @@ def parse_sheet(data: bytes) -> list[dict]:
         section_value = row.get("section", "").casefold()
         if section_value and section_value not in sections:
             raise ValueError(f"Row {number}: section must be Публикации, Анонсы or Мемы")
-        section = sections.get(section_value or row.get("category", "").casefold(), "publications")
+        rubric_sections = {**sections, "мемный понедельник": "memes"}
+        section = rubric_sections.get(section_value or row.get("category", "").casefold(), "publications")
         result.append({"row_key": key, "title": row["title"], "content": row["text"],
                        "date": date.isoformat(), "source": source,
                        "category": row.get("category", "")[:200], "section": section, "image_links": image_links})

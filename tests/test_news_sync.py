@@ -251,3 +251,16 @@ def test_news_sections_upgrade_preserves_existing_sheet_rows(tmp_path):
     assert rows[0]["section"] == "memes"
     assert init_db(database)
     assert get_all_news(database) == rows
+
+
+def test_existing_meme_rubric_is_classified_without_guessing_title():
+    meme = post(title="Реальная рубрика")
+    meme[-1] = "Мемный Понедельник"
+    publication = post(2, title="Мем в названии не определяет раздел")
+    rows = news_sync.parse_sheet(sheet(meme, publication))
+    assert [row["section"] for row in rows] == ["memes", "publications"]
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["title", "date", "text", "source", "images", "status", "category", "section"])
+    writer.writerow(meme + ["Публикации"])
+    assert news_sync.parse_sheet(output.getvalue().encode())[0]["section"] == "publications"
