@@ -339,6 +339,21 @@
       renderError(host, "Лента недоступна. Проверьте соединение и попробуйте снова.", () => loadNews(host));
       return;
     }
+    const rubric = new URLSearchParams(window.location.search).get("rubric");
+    const rubrics = { comics: ["Комиксы", "комиксы"], history: ["Историческая справка", "историческая справка"] };
+    if (host.dataset.news === "sections" && rubrics[rubric]) {
+      host.classList.add("news-columns--filtered");
+      const [title, category] = rubrics[rubric];
+      const heading = document.querySelector("#feed-title");
+      if (heading) heading.textContent = title;
+      const items = (result.data || []).filter((item) => (item.category || "").trim().toLowerCase() === category);
+      if (items.length) renderNews(host, items);
+      else renderEmpty(host, "Материалы рубрики пока не опубликованы", "Загляните в общую ленту: там уже есть другие материалы проекта.");
+      const link = createElement("a", "btn btn--ghost", "Все новости");
+      link.href = "/news";
+      host.appendChild(link);
+      return;
+    }
     if (host.dataset.news === "sections") {
       clear(host);
       const items = Array.isArray(result.data) ? result.data : [];
