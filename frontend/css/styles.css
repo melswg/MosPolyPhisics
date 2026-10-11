@@ -516,6 +516,7 @@ a { color: inherit; }
 .footer__logo { display: inline-flex; padding: 7px 12px; border-radius: var(--radius-plate); background-color: var(--plate); }
 .footer__logo img { width: 180px; height: 23px; }
 .footer__about { margin: 16px 0 0; color: var(--muted); font-size: 17px; }
+.footer__about a { display: block; margin-top: 8px; }
 .footer h2 { margin: 0 0 12px; font-size: 17px; font-weight: 800; }
 .footer ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
 .footer a { text-decoration: none; color: var(--muted); }
