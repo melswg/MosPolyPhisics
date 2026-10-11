@@ -265,6 +265,14 @@ a { color: inherit; }
 .cards--pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .card--static { cursor: default; }
 .card--static:hover { transform: none; box-shadow: none; }
+.home-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.home-tile { position: relative; display: block; min-height: 160px; padding: 20px 54px 20px 20px; border-radius: 22px; background: var(--accent); color: var(--on-accent); text-decoration: none; }
+.home-tile h3 { font-size: 20px; }
+.home-tile p { font-size: 16px; line-height: 1.45; }
+.home-tile > span { position: absolute; bottom: 16px; right: 16px; font-size: 24px; }
+.home-tile:hover { box-shadow: var(--shadow-card); }
+.home-tile:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 4px; }
+@media (max-width: 760px) { .home-tiles { grid-template-columns: minmax(0, 1fr); gap: 12px; } .home-tile { min-height: 120px; } }
 
 .panel { padding: clamp(30px, 4vw, 54px) 0; }
 .wrap.panel, .wrap.choices { padding-left: clamp(18px, 4vw, 40px); padding-right: clamp(18px, 4vw, 40px); }
