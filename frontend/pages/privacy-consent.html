@@ -7,7 +7,7 @@
 <meta name="description" content="Согласие на обработку персональных данных при регистрации на сайте проекта «МосПолиФизикс».">
 <link rel="icon" href="/assets/brand/favicon.svg?v=20261021" type="image/svg+xml">
 <script src="/static/js/theme-init.js"></script>
-<link rel="stylesheet" href="/static/css/styles.css?v=20261021-social-logos">
+<link rel="stylesheet" href="/static/css/styles.css?v=20261021-unified-ui">
 <script src="/static/js/avatar.js?v=20261007-avatar" defer></script>
 <script src="/static/js/site.js?v=20261021-polish" defer></script>
 </head>
@@ -16,12 +16,6 @@
 
 <header class="header">
   <div class="wrap header__row">
-    <button class="theme" type="button" id="theme-switch" aria-pressed="true" aria-label="Включить светлую тему">
-      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="4.5"></circle>
-        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"></path>
-      </svg>
-    </button>
     <a class="logo" href="/" aria-label="МосПолиФизикс, на главную">
       <span><img src="/assets/brand/logo.svg" alt="МосПолиФизикс" width="188" height="24"></span>
     </a>
@@ -34,13 +28,21 @@
       <a href="/tests">Тесты</a>
       <a href="/account">Личный кабинет</a>
     </nav>
-    <a class="profile" href="/account" aria-label="Личный кабинет">
-      <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="2.4">
-        <circle cx="24" cy="24" r="21"></circle>
-        <circle cx="24" cy="18" r="7" fill="#FFFFFF" stroke="none"></circle>
-        <path d="M10 41c1.6-8.4 8.6-12.6 14-12.6S36.4 32.6 38 41" fill="#FFFFFF" stroke="none"></path>
-      </svg>
-    </a>
+    <div class="header__actions">
+      <button class="theme" type="button" id="theme-switch" aria-pressed="true" aria-label="Включить светлую тему">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4.5"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"></path>
+        </svg>
+      </button>
+      <a class="profile" href="/account" aria-label="Личный кабинет">
+        <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="2.4">
+          <circle cx="24" cy="24" r="21"></circle>
+          <circle cx="24" cy="18" r="7" fill="#FFFFFF" stroke="none"></circle>
+          <path d="M10 41c1.6-8.4 8.6-12.6 14-12.6S36.4 32.6 38 41" fill="#FFFFFF" stroke="none"></path>
+        </svg>
+      </a>
+    </div>
   </div>
 </header>
 
