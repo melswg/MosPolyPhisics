@@ -25,6 +25,7 @@ jobs:
       - run: pytest -q
       - run: node tests/account_navigation.test.js
       - run: node tests/typography.test.js
+      - run: node tests/avatar_renderer.test.js
       - run: python -m compileall -q backend
 
   deploy:
