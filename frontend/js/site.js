@@ -597,13 +597,18 @@
       renderError(host, "Каталог тестов недоступен. Попробуйте снова.", () => loadTestCatalog(host));
       return;
     }
-    if (!result.data.length) {
+    const kind = host.dataset.testKind;
+    const items = result.data.filter((test) => {
+      const category = (test.slug || "").startsWith("quotes-") ? "quotes" : (test.slug || "").startsWith("fun-") ? "fun" : "physics";
+      return !kind || category === kind;
+    });
+    if (!items.length) {
       renderEmpty(host, "Тесты пока не опубликованы", "Здесь появятся проверенные наборы вопросов.");
       return;
     }
     clear(host);
     const list = createElement("ul", "cards cards--catalog cards--pairs");
-    result.data.forEach((test) => {
+    items.forEach((test) => {
       const item = createElement("li");
       const link = createElement("a", "card");
       link.href = `/test?id=${encodeURIComponent(test.id)}`;
@@ -732,15 +737,13 @@
       const heading = document.querySelector(".page-head h1");
       const intro = document.querySelector(".page-head p");
       if (heading) heading.textContent = kind === "fun" ? "Развлекательные тесты" : "Тесты по физике";
-      if (intro) intro.textContent = "Этот раздел в разработке. Новые задания появятся после проверки вопросов и объяснений.";
+      if (intro) intro.textContent = "Выберите набор. После отправки ответов вы увидите результат и объяснение каждого вопроса. Вход не нужен.";
       const help = document.querySelector('[aria-labelledby="help-title"]');
       if (help) help.hidden = true;
       const runnerTitle = document.querySelector("#runner-title");
-      if (runnerTitle) runnerTitle.textContent = "Статус раздела";
-      const state = renderEmpty(host, kind === "fun" ? "Развлекательные тесты в разработке" : "Новые тесты по физике в разработке", "Пока можно пройти первый опубликованный тест с разбором ответов.");
-      const link = createElement("a", "btn", "Перейти к готовому тесту");
-      link.href = "/tests#published-title";
-      state.appendChild(link);
+      if (runnerTitle) runnerTitle.textContent = "Выберите тест";
+      host.dataset.testKind = kind;
+      await loadTestCatalog(host);
       return;
     }
     const testId = params.get("id");
