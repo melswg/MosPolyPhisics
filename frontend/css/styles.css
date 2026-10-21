@@ -272,6 +272,26 @@ a { color: inherit; }
 .cards--catalog > li { height: 100%; }
 .cards--catalog .card { width: 100%; height: 100%; min-height: 190px; }
 .cards--pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.social-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 24px auto 0; }
+.social-link {
+  display: grid;
+  place-items: center;
+  flex: 0 0 96px;
+  height: 96px;
+  padding: 8px;
+  border-radius: 16px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+.social-link:hover { box-shadow: var(--shadow-card); }
+@media (max-width: 760px) {
+  .social-links { max-width: 300px; }
+  .social-link { flex-basis: 80px; height: 80px; font-size: 12px; }
+}
 .card--static { cursor: default; }
 .card--static:hover { transform: none; box-shadow: none; }
 .home-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
