@@ -161,6 +161,11 @@ class PasswordResetConfirm(BaseModel):
         return UserRegister.validate_password(value)
 
 
+class EgeSubmitBody(BaseModel):
+    task_id: StrictInt
+    answer: str = Field(min_length=1, max_length=64)
+
+
 class TestSubmitBody(BaseModel):
     test_id: int
     answers: Dict[str, StrictInt] = Field(default_factory=dict)
@@ -266,6 +271,24 @@ def api_test_submit(body: TestSubmitBody):
 def api_calendar(year: Optional[int] = Query(None, ge=1900, le=2100)):
     events = get_calendar_events() + annual_physics_events(year or datetime.now().year)
     return sorted(events, key=lambda event: event["event_date"])
+
+
+@app.get("/api/ege")
+def api_ege():
+    from backend.ege import public_tasks
+    return public_tasks()
+
+
+@app.post("/api/ege/submit")
+def api_ege_submit(body: EgeSubmitBody):
+    from backend.ege import grade_answer
+    try:
+        result = grade_answer(body.task_id, body.answer)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if result is None:
+        raise HTTPException(status_code=404, detail="Задание не найдено")
+    return result
 
 
 @app.get("/api/videos")

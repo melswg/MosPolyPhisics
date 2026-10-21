@@ -768,6 +768,85 @@
     renderQuestions(host, result.data);
   }
 
+  async function loadEge(host) {
+    renderLoading(host, "Загружаем тренировочные задания.");
+    const result = await requestJson("/api/ege");
+    if (result.state !== "ok" || !Array.isArray(result.data)) {
+      renderError(host, "Задания недоступны. Попробуйте снова.", () => loadEge(host));
+      return;
+    }
+    if (!result.data.length) {
+      renderEmpty(host, "Задания пока не опубликованы", "Загляните позже или откройте банк ФИПИ ниже.");
+      return;
+    }
+    clear(host);
+    result.data.forEach((task, index) => {
+      const card = createElement("article", "panel");
+      card.appendChild(createElement("h3", null, `${index + 1}. ${task.topic}`));
+      card.appendChild(createElement("p", null, task.prompt));
+      const form = createElement("form", "form");
+      const label = createElement("label", "form__field", `Ответ (${task.unit})`);
+      const input = createElement("input");
+      input.type = "text";
+      input.inputMode = "decimal";
+      input.name = "answer";
+      input.maxLength = 64;
+      input.required = true;
+      input.autocomplete = "off";
+      label.appendChild(input);
+      form.appendChild(label);
+      const button = createElement("button", "btn", "Проверить ответ");
+      button.type = "submit";
+      form.appendChild(button);
+      const notice = createElement("p", "form__notice");
+      notice.setAttribute("role", "status");
+      notice.setAttribute("aria-live", "polite");
+      form.appendChild(notice);
+      const review = createElement("div", "state");
+      review.hidden = true;
+      review.tabIndex = -1;
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        button.disabled = true;
+        button.setAttribute("aria-busy", "true");
+        notice.textContent = "Проверяем ответ…";
+        review.hidden = true;
+        const response = await requestJson("/api/ege/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ task_id: task.id, answer: input.value }),
+        });
+        button.disabled = false;
+        button.removeAttribute("aria-busy");
+        if (response.state !== "ok" || !response.data) {
+          notice.textContent = errorMessage(response, "Ответ не проверен. Проверьте соединение и попробуйте снова.");
+          return;
+        }
+        notice.textContent = response.data.is_correct ? "Верно!" : "Пока неверно. Посмотрите разбор и попробуйте ещё раз.";
+        clear(review);
+        review.appendChild(createElement("h4", null, "Разбор решения"));
+        review.appendChild(createElement("p", null, `Ответ: ${response.data.correct_answer} ${response.data.unit}`));
+        review.appendChild(createElement("p", null, response.data.explanation));
+        if (/^https:\/\//.test(response.data.source || "")) {
+          const source = createElement("a", null, "Учебный источник (на английском)");
+          source.href = response.data.source;
+          source.target = "_blank";
+          source.rel = "noopener noreferrer";
+          review.appendChild(source);
+        }
+        review.hidden = false;
+        review.focus();
+      });
+      input.addEventListener("input", () => {
+        review.hidden = true;
+        notice.textContent = "";
+      });
+      card.appendChild(form);
+      card.appendChild(review);
+      host.appendChild(card);
+    });
+  }
+
   function initTest() {
     const catalog = document.querySelector("[data-tests]");
     if (catalog) loadTestCatalog(catalog);
@@ -1142,6 +1221,8 @@
     initPasswordResetRequest();
     initPasswordResetConfirm();
     initTest();
+    const ege = document.querySelector("[data-ege]");
+    if (ege) loadEge(ege);
     initCalendar();
     initMaterials();
   });
