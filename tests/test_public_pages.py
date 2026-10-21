@@ -35,6 +35,13 @@ def test_approved_public_pages_and_assets_are_served(page_client):
         "/static/js/theme-init.js",
         "/assets/brand/logo.svg",
         "/assets/brand/mas.svg",
+        "/assets/avatar/happy.png",
+        "/assets/avatar/wink.png",
+        "/assets/avatar/wow.png",
+        "/assets/avatar/hoodie.png",
+        "/assets/avatar/labcoat.png",
+        "/assets/avatar/graduate.png",
+        "/assets/avatar/space.png",
     ):
         assert client.get(path).status_code == 200
 
@@ -145,5 +152,6 @@ def test_about_uses_confirmed_project_description_and_rubrics(page_client):
     ):
         assert rubric in body
 
-    assert "Ксения Гудкова" in body
+    assert "Команда проекта" not in body
+    assert 'id="team-title"' not in body
     assert "Что будет в кабинете" not in client.get("/account").text
