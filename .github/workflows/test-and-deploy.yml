@@ -24,6 +24,7 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: pytest -q
       - run: node tests/account_navigation.test.js
+      - run: node tests/typography.test.js
       - run: python -m compileall -q backend
 
   deploy:
