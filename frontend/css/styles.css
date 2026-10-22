@@ -222,6 +222,10 @@ a { color: inherit; }
 .hero__note { margin: 14px 0 0; color: var(--muted); font-size: 18px; }
 
 .hero__graphic { justify-self: center; width: min(360px, 82%); }
+.hero__visual { align-self: stretch; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.hero__socials { align-self: flex-end; }
+.hero__visual .hero__graphic { margin: auto 0; }
+#socials-title { scroll-margin-top: 150px; }
 .hero__graphic img { display: block; width: 100%; }
 
 /* Полоса описания */
