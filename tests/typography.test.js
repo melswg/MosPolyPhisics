@@ -2,11 +2,11 @@ const assert = require("node:assert/strict");
 const { formatText } = require("../frontend/js/typography.js");
 
 assert.equal(formatText("Описание проекта."), "Описание проекта");
-assert.equal(formatText("Первое предложение. Второе предложение."), "Первое предложение Второе предложение");
-assert.equal(formatText("Объяснение. В школе."), "Объяснение В\u00a0школе");
+assert.equal(formatText("Первое предложение. Второе предложение."), "Первое предложение. Второе предложение");
+assert.equal(formatText("Объяснение. В школе."), "Объяснение. В\u00a0школе");
 assert.equal(formatText("Ответ: 3.14."), "Ответ: 3.14");
-assert.equal(formatText("За 20 с. Найдите скорость в м/с."), "За\u00a020 с Найдите скорость в\u00a0м/с");
-assert.equal(formatText("Сила 6 Н. Ответ в м/с²."), "Сила 6 Н Ответ в\u00a0м/с²");
+assert.equal(formatText("За 20 с. Найдите скорость в м/с."), "За\u00a020 с. Найдите скорость в\u00a0м/с");
+assert.equal(formatText("Сила 6 Н. Ответ в м/с²."), "Сила 6 Н. Ответ в\u00a0м/с²");
 assert.equal(formatText("Скорость 2 м/с за 3 с"), "Скорость 2 м/с за\u00a03 с");
 assert.equal(formatText("А. Эйнштейн, 1905 г. Подробнее: https://example.org/a.b"), "А. Эйнштейн, 1905 г. Подробнее: https://example.org/a.b");
 assert.equal(formatText("Файл main.js и сайт example.org доступны"), "Файл main.js и\u00a0сайт example.org доступны");
@@ -19,3 +19,5 @@ assert.equal(formatText("Загрузка…"), "Загрузка…");
 const formatted = formatText("Материалы по физике. Ответ: 2.");
 assert.equal(formatText(formatted), formatted);
 console.log("Typography checks passed");
+
+assert.equal(formatText("Первое предложение. ", false), "Первое предложение. ");

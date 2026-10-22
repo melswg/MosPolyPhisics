@@ -5,14 +5,14 @@
   const abbreviations = new Set(["г", "гг", "ул", "д", "т", "е", "др", "им", "см", "рис", "руб", "шт", "гл"]);
   const excluded = "script, style, pre, code, textarea, input, svg, math, [contenteditable]:not([contenteditable='false']), [data-typography='off']";
 
-  function formatText(text) {
-    let result = text.replace(/([\p{L}]+|[)»”])\.(?=[»”"]?(?:[ \t\u00a0]+[«“"]?[А-ЯЁA-Z]|[\s\u00a0]*$))/gu, (match, word, offset) => {
+  function formatText(text, terminal = true) {
+    let result = text.replace(/([\p{L}]+|[)»”])\.(?=[»”"]?[\s\u00a0]*$)/gu, (match, word, offset) => {
       const initial = /^[А-ЯЁA-Z]$/u.test(word) && !/\d[ \t\u00a0]+$/u.test(text.slice(0, offset));
-      if (initial || abbreviations.has(word.toLowerCase())) return match;
+      if (!terminal || initial || abbreviations.has(word.toLowerCase())) return match;
       return word;
     });
-    result = result.replace(/(?<=[\d²³])\.(?=\s*$)/gu, "");
-    if (result.trim() === ".") result = result.replace(".", "");
+    if (terminal) result = result.replace(/(?<=[\d²³])\.(?=\s*$)/gu, "");
+    if (terminal && result.trim() === ".") result = result.replace(".", "");
     return result.replace(/(?<![\p{L}\p{N}_/])((?:без|в|во|для|до|за|из|из-за|из-под|к|ко|между|на|над|о|об|обо|от|перед|по|под|при|про|с|со|у|через|и|а|но|не))[ \t]+(?=\S|$)/giu, (match, word, offset) => {
       if (word.length === 1 && /\d[ \t\u00a0]+$/u.test(result.slice(0, offset))) return match;
       return word + "\u00a0";
@@ -25,7 +25,13 @@
   function formatNode(node) {
     if (node.nodeType === Node.TEXT_NODE) {
       if (!node.parentElement || node.parentElement.closest(excluded)) return;
-      const text = formatText(node.data);
+      const block = node.parentElement.closest("p, h1, h2, h3, h4, li, button, blockquote, figcaption, td, th, option, label") || node.parentElement;
+      const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      let last = null;
+      while (walker.nextNode()) {
+        if (walker.currentNode.data.trim() && !walker.currentNode.parentElement.closest(excluded)) last = walker.currentNode;
+      }
+      const text = formatText(node.data, node === last);
       if (text !== node.data) node.data = text;
       return;
     }
