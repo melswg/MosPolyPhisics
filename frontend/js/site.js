@@ -473,7 +473,7 @@
     let selection = { ...result.data.default, ...user.avatar };
     let savedConfig = { ...selection };
     function paint() {
-      window.MosAvatar.render(preview, selection);
+      window.MosAvatar.render(preview, selection, { orbits: true });
       preview.setAttribute("aria-label", "Симплик: " + Object.entries(result.data.fields).map(([key, field]) => field.choices.find(([value]) => value === selection[key])?.[1]).join(", "));
       Object.entries(controls).forEach(([key, control]) => { control.value = selection[key]; });
       saved.textContent = JSON.stringify(selection) === JSON.stringify(savedConfig) ? "Этот образ сохранён в вашем профиле." : "Есть несохранённые изменения.";

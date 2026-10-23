@@ -12,11 +12,11 @@
     return element;
   }
 
-  function render(host, config) {
+  function render(host, config, { orbits = false } = {}) {
     host.replaceChildren();
     host.classList.add("simplik");
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "240 220 520 520");
+    svg.setAttribute("viewBox", orbits ? "0 0 1000 1000" : "240 220 520 520");
     svg.setAttribute("aria-hidden", "true");
     host.appendChild(svg);
     const skinId = `simplik-skin-${renderId++}`;
@@ -25,7 +25,15 @@
     shape(gradient, "stop", { offset: 0, "stop-color": "#D9A3EF" });
     shape(gradient, "stop", { offset: .55, "stop-color": "#B472CF" });
     shape(gradient, "stop", { offset: 1, "stop-color": "#713E91" });
-    // Чистая сфера без исходной картинки с орбитами — одинакова в шапке и редакторе
+    // Орбиты рисуются отдельно только в большом предпросмотре
+    if (orbits) {
+      const rings = shape(svg, "g", { "data-orbits": "", fill: "none", stroke: "#B483D1", "stroke-width": 6, style: `filter:hue-rotate(${hues[config.color] || 0}deg)` });
+      [0, 60, -60].forEach((angle) => {
+        const ring = shape(rings, "g", { transform: `rotate(${angle} 500 490)` });
+        shape(ring, "ellipse", { cx: 500, cy: 490, rx: 390, ry: 135 });
+        shape(ring, "circle", { cx: 890, cy: 490, r: 13, fill: "#B483D1", stroke: "none" });
+      });
+    }
     shape(svg, "circle", { cx: 500, cy: 490, r: 180, fill: `url(#${skinId})`, style: `filter:hue-rotate(${hues[config.color] || 0}deg)` });
 
     function layer(name, attributes = {}) {

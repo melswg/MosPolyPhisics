@@ -38,6 +38,13 @@ for (const face of ["smile", "happy", "wink", "wow"]) {
   }
 }
 assert.deepEqual(found, expected);
+const preview = element();
+context.window.MosAvatar.render(preview, { color: "gold", outfit: "hoodie" }, { orbits: true });
+assert.equal(preview.children[0].attributes.viewBox, "0 0 1000 1000");
+assert.equal(nodes(preview).filter((node) => "data-orbits" in node.attributes).length, 1);
+const miniature = element();
+context.window.MosAvatar.render(miniature, { color: "gold", outfit: "hoodie" });
+assert.equal(nodes(miniature).filter((node) => "data-orbits" in node.attributes).length, 0);
 const host = element();
 context.window.MosAvatar.render(host, { face: "../../bad", outfit: "https://example.org", hat: "<svg>" });
 assert.ok(nodes(host).every((node) => !node.attributes.href));
