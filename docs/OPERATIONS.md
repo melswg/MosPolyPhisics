@@ -3,9 +3,9 @@
 Последний подтверждённый production-выпуск работает в Docker: контейнер
 `mosphysics-hermes-rebuild-prod`, порт 9090 → 8000, данные в
 `/srv/apps/mosphysics-hermes-rebuild/production-data`.
-Текущий образ — `mosphysics:prototype-ba9042b`, рабочая база — `mosphysics.sqlite`.
-Схема, проверенные резервные копии и откат описаны в
-[PROTOTYPE_DEPLOY_2026-10-11.md](PROTOTYPE_DEPLOY_2026-10-11.md).
+Текущий образ — `mosphysics:avatar-set-35830d1`, рабочая база — `mosphysics.sqlite`.
+Последний выпуск, проверенные резервные копии и откат описаны в
+[DEPLOY_2026-10-26.md](DEPLOY_2026-10-26.md).
 [CURATOR_DEPLOY.md](CURATOR_DEPLOY.md) сохраняет историю предыдущего выпуска.
 Перед новым выпуском состояние VPS нужно проверить заново.
 
