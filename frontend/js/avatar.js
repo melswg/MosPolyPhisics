@@ -13,6 +13,7 @@
   }
 
   function render(host, config, { orbits = false } = {}) {
+    const space = config.hat === "space";
     host.replaceChildren();
     host.classList.add("simplik");
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -37,10 +38,10 @@
     shape(svg, "circle", { cx: 500, cy: 490, r: 180, fill: `url(#${skinId})`, style: `filter:hue-rotate(${hues[config.color] || 0}deg)` });
 
     function layer(name, attributes = {}) {
-      shape(svg, "image", { href: `/assets/avatar/${name}.png`, x: 0, y: 0, width: 1000, height: 1000, ...attributes });
+      shape(svg, "image", { href: `/assets/avatar/${name}.png?v=20261024`, x: 0, y: 0, width: 1000, height: 1000, ...attributes });
     }
 
-    if (config.outfit === "labcoat" || config.outfit === "hoodie") layer(config.outfit);
+    if (!space && (config.outfit === "labcoat" || config.outfit === "hoodie")) layer(config.outfit);
     if (["happy", "wink", "wow"].includes(config.face)) {
       layer(config.face);
     } else {
@@ -53,15 +54,12 @@
     }
 
     if (config.accessory === "glasses" || config.accessory === "goggles") {
-      const goggles = config.accessory === "goggles";
-      [444, 556].forEach((x) => shape(svg, "rect", { x: x - 40, y: 455, width: 80, height: 75, rx: goggles ? 16 : 30, fill: goggles ? "#75DAEB" : "none", "fill-opacity": .2, stroke: goggles ? "#EAF8FF" : "#292B41", "stroke-width": goggles ? 10 : 8 }));
-      shape(svg, "path", { d: "M484 478Q500 468 516 478M404 480L367 470M596 480L633 470", fill: "none", stroke: goggles ? "#EAF8FF" : "#292B41", "stroke-width": 8 });
-    } else if (config.accessory === "headphones") {
-      shape(svg, "path", { d: "M335 499C321 262 679 262 665 499", fill: "none", stroke: "#292B41", "stroke-width": 24 });
-      [334, 644].forEach((x) => shape(svg, "rect", { x, y: 451, width: 32, height: 93, rx: 15, fill: "#FFBA5B", stroke: "#292B41", "stroke-width": 8 }));
+      layer(config.accessory);
+    } else if (config.accessory === "headphones" && !space) {
+      layer("headphones");
     }
     if (config.hat === "graduate") layer("graduate");
-    else if (config.hat === "space") layer("space", { transform: "translate(-75 -75) scale(1.15)" });
+    else if (space) layer("space");
   }
 
   window.MosAvatar = { render };

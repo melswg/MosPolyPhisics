@@ -466,7 +466,9 @@
     const preview = createElement("div", "avatar-editor__image");
     preview.setAttribute("role", "img");
     const saved = createElement("p", "muted", "Изменения появятся в профиле после сохранения.");
-    previewPanel.append(preview, saved);
+    const compatibility = createElement("p", "muted", "Скафандр — цельный образ. Одежда и наушники в нём скрыты, но их выбор сохранится и вернётся после снятия шлема.");
+    compatibility.hidden = true;
+    previewPanel.append(preview, saved, compatibility);
     const form = createElement("form", "avatar-editor__form");
     const presets = createElement("div", "avatar-editor__presets");
     const controls = {};
@@ -474,6 +476,7 @@
     let savedConfig = { ...selection };
     function paint() {
       window.MosAvatar.render(preview, selection, { orbits: true });
+      compatibility.hidden = selection.hat !== "space";
       preview.setAttribute("aria-label", "Симплик: " + Object.entries(result.data.fields).map(([key, field]) => field.choices.find(([value]) => value === selection[key])?.[1]).join(", "));
       Object.entries(controls).forEach(([key, control]) => { control.value = selection[key]; });
       saved.textContent = JSON.stringify(selection) === JSON.stringify(savedConfig) ? "Этот образ сохранён в вашем профиле." : "Есть несохранённые изменения.";
