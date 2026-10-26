@@ -3,7 +3,7 @@
 Последний подтверждённый production-выпуск работает в Docker: контейнер
 `mosphysics-hermes-rebuild-prod`, порт 9090 → 8000, данные в
 `/srv/apps/mosphysics-hermes-rebuild/production-data`.
-Текущий образ — `mosphysics:avatar-set-35830d1`, рабочая база — `mosphysics.sqlite`.
+Текущий образ — `mosphysics:orbit-depth-38555f9`, рабочая база — `mosphysics.sqlite`.
 Последний выпуск, проверенные резервные копии и откат описаны в
 [DEPLOY_2026-10-26.md](DEPLOY_2026-10-26.md).
 [CURATOR_DEPLOY.md](CURATOR_DEPLOY.md) сохраняет историю предыдущего выпуска.
